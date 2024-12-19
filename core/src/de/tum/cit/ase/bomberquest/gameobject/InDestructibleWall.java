@@ -1,4 +1,4 @@
 package de.tum.cit.ase.bomberquest.gameobject;
 
-public class InDestructibleWall {
+public class InDestructibleWall extends Wall {
 }
