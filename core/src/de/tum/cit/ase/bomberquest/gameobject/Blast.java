@@ -1,5 +1,4 @@
 package de.tum.cit.ase.bomberquest.gameobject;
 
-public class Testklasse {
-
+public class Blast {
 }
