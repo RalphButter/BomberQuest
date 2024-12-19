@@ -26,7 +26,7 @@ public class BomberQuestGame extends Game {
 
     /** The game's UI skin. This is used to style the game's UI elements. */
     private Skin skin;
-    
+//    Ralph und Jonas
     /**
      * The file chooser for loading map files from the user's computer.
      * This will give you access to a {@link com.badlogic.gdx.files.FileHandle} object,
