@@ -62,6 +62,11 @@ public abstract class GameObject {
         this.textureRegion = textureRegion;
     }
 
+    public Texture getTexture2() {
+        return texture2;
+    }
+
+
     // Abstract method for specific updates (to be implemented by subclasses)
     public abstract void update(float deltaTime);
 
