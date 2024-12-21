@@ -102,4 +102,27 @@ public class GameMap {
     public List<Flowers> getFlowers() {
         return Arrays.stream(flowers).flatMap(Arrays::stream).toList();
     }
+
+    //NEEDS TO BE FIXED
+    public boolean isWithinBounds(float nextX, float nextY) {
+        int mapWidth = 7;  // Assuming the map width is 7 tiles
+        int mapHeight = 7; // Assuming the map height is 7 tiles
+
+        return nextX >= 0 && nextX < mapWidth && nextY >= 0 && nextY < mapHeight;
+
+    }
+
+    //NEEDS TO BE FIXED
+    public boolean isIndestructibleWall(float x, float y) {
+        return false;
+    }
+
+    //NEEDS TO BE FIXED
+    public boolean isDestructibleWall(float nextX, float nextY) {
+        return false;
+    }
+
+    //NEEDS TO BE FIXED
+    public void destroyWall(float nextX, float nextY) {
+    }
 }

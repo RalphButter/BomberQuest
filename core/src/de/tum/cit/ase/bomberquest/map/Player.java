@@ -1,10 +1,13 @@
 package de.tum.cit.ase.bomberquest.map;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.World;
+import de.tum.cit.ase.bomberquest.gameobject.GameObject;
 import de.tum.cit.ase.bomberquest.texture.Animations;
 import de.tum.cit.ase.bomberquest.texture.Drawable;
 
@@ -12,7 +15,7 @@ import de.tum.cit.ase.bomberquest.texture.Drawable;
  * Represents the player character in the game.
  * The player has a hitbox, so it can collide with other objects in the game.
  */
-public class Player implements Drawable {
+public class Player extends GameObject implements Drawable {
     
     /** Total time elapsed since the game started. We use this for calculating the player movement and animating it. */
     private float elapsedTime;
@@ -21,6 +24,8 @@ public class Player implements Drawable {
     private final Body hitbox;
     
     public Player(World world, float x, float y) {
+        //Nicht sicher ob das so richtig ist
+        super(x, y, false, false);
         this.hitbox = createHitbox(world, x, y);
     }
     
@@ -87,5 +92,30 @@ public class Player implements Drawable {
     public float getY() {
         // The y-coordinate of the player is the y-coordinate of the hitbox (this can change every frame).
         return hitbox.getPosition().y;
+    }
+
+    @Override
+    public void update(float deltaTime) {
+
+    }
+
+    @Override
+    public void render(SpriteBatch batch) {
+
+    }
+
+    //Needs to be fixed
+    public Rectangle getBoundingRectangle() {
+        return null;
+    }
+
+    @Override
+    public boolean isActive() {
+        return false;
+    }
+
+
+    //Needs to be fixed
+    public void die() {
     }
 }
