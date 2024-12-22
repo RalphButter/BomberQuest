@@ -16,23 +16,32 @@ import de.tum.cit.ase.bomberquest.texture.Drawable;
  * The player has a hitbox, so it can collide with other objects in the game.
  */
 public class Player extends GameObject implements Drawable {
-    
-    /** Total time elapsed since the game started. We use this for calculating the player movement and animating it. */
+
+    /**
+     * Total time elapsed since the game started. We use this for calculating the player movement and animating it.
+     */
     private float elapsedTime;
-    
-    /** The Box2D hitbox of the player, used for position and collision detection. */
+
+    /**
+     * The Box2D hitbox of the player, used for position and collision detection.
+     */
     private final Body hitbox;
-    
+
+    private int blastRadius = 1; // Initial blast radius
+    private int maxBlastRadius = 8;
+
+
     public Player(World world, float x, float y) {
         //Nicht sicher ob das so richtig ist
         super(x, y, false, false);
         this.hitbox = createHitbox(world, x, y);
     }
-    
+
     /**
      * Creates a Box2D body for the player.
      * This is what the physics engine uses to move the player around and detect collisions with other bodies.
-     * @param world The Box2D world to add the body to.
+     *
+     * @param world  The Box2D world to add the body to.
      * @param startX The initial X position.
      * @param startY The initial Y position.
      * @return The created body.
@@ -60,10 +69,11 @@ public class Player extends GameObject implements Drawable {
         body.setUserData(this);
         return body;
     }
-    
+
     /**
      * Move the player around in a circle by updating the linear velocity of its hitbox every frame.
      * This doesn't actually move the player, but it tells the physics engine how the player should move next frame.
+     *
      * @param frameTime the time since the last frame.
      */
     public void tick(float frameTime) {
@@ -75,19 +85,19 @@ public class Player extends GameObject implements Drawable {
         float yVelocity = (float) Math.cos(this.elapsedTime) * 2;
         this.hitbox.setLinearVelocity(xVelocity, yVelocity);
     }
-    
+
     @Override
     public TextureRegion getCurrentAppearance() {
         // Get the frame of the walk down animation that corresponds to the current time.
         return Animations.CHARACTER_WALK_DOWN.getKeyFrame(this.elapsedTime, true);
     }
-    
+
     @Override
     public float getX() {
         // The x-coordinate of the player is the x-coordinate of the hitbox (this can change every frame).
         return hitbox.getPosition().x;
     }
-    
+
     @Override
     public float getY() {
         // The y-coordinate of the player is the y-coordinate of the hitbox (this can change every frame).
@@ -118,4 +128,17 @@ public class Player extends GameObject implements Drawable {
     //Needs to be fixed
     public void die() {
     }
+
+    /**
+     * Sets the blast radius of the player.
+     *
+     * @param blastRadius The new blast radius value.
+     */
+    public void setBlastRadius(int blastRadius) {
+        if (blastRadius <= maxBlastRadius) {
+            this.blastRadius = blastRadius;
+            // Update HUD or any other related components if necessary
+        }
+    }
+
 }
