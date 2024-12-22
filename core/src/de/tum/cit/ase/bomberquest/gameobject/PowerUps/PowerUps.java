@@ -25,6 +25,8 @@ abstract class PowerUp  extends GameObject {
         this.gameObjectManager = gameObjectManager;
     }
 
+
+
     /**
      * Applies the power-up effect to the player.
      *

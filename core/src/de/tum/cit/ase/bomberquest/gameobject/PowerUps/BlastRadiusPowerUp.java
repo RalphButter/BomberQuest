@@ -70,7 +70,7 @@ public class BlastRadiusPowerUp extends Blast {
 
     /*@Override
     public void update(Player player) {
-        if (bounds.intersects(player.getBounds())) {
+        if (bounds.overlaps(player.getBounds())) {
             applyEffect(player);
         }
     }*/

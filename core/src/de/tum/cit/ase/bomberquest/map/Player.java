@@ -29,6 +29,9 @@ public class Player extends GameObject implements Drawable {
 
     private int blastRadius = 1; // Initial blast radius
     private int maxBlastRadius = 8;
+    private int concurrentBombs;
+    private Rectangle bounds;
+
 
 
     public Player(World world, float x, float y) {
@@ -123,6 +126,20 @@ public class Player extends GameObject implements Drawable {
     public boolean isActive() {
         return false;
     }
+
+
+    public int getConcurrentBombs() {
+        return concurrentBombs;
+    }
+
+    public void setConcurrentBombs(int concurrentBombs) {
+        this.concurrentBombs = concurrentBombs;
+    }
+
+    public Rectangle getBounds() {
+        return bounds;
+    }
+
 
 
     //Needs to be fixed
