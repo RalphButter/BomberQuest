@@ -19,4 +19,5 @@ public class BlastRadiusPowerUp extends Blast {
     public BlastRadiusPowerUp(float x, float y, int blastRadius, float blastDuration, int blastDamage, GameMap gameMap, GameObjectManager gameObjectManager) {
         super(x, y, blastRadius, blastDuration, blastDamage, gameMap, gameObjectManager);
     }
+
 }
