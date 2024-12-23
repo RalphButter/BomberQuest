@@ -31,7 +31,7 @@ public class Exit extends GameObject {
 
     @Override
     public Rectangle getBoundingRectangle() {
-        return null;
+        return new Rectangle(getX(), getY(), 16, 16);
     }
 
     @Override

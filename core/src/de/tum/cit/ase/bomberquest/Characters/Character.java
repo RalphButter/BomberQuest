@@ -1,25 +1,36 @@
 package de.tum.cit.ase.bomberquest.Characters;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public abstract class Character {
-    private int x;
-    private int y;
-    private float speed;
-    private int health;
-    private boolean alive;
-    private int bombCount;
-    private int bombRange;
+    private int x;  // X-coordinate of the character
+    private int y;  // Y-coordinate of the character
+    private float speed;    // Speed of the character
+    private int health;     // Health of the character
+    private boolean alive;  // Flag indicating if the character is alive
+    private int bombCount; // Number of bombs the character can place
+    private int bombRange;  // Range of the bombs placed by the character
 
-    private boolean moving;
-    private float stateTime;
+    private boolean moving; // Flag indicating if the character is moving
+    private float stateTime;   // Time elapsed since the animation started
 
-    private Animation<TextureRegion> walkUpAnimation;
-    private Animation<TextureRegion> walkDownAnimation;
-    private Animation<TextureRegion> walkLeftAnimation;
-    private Animation<TextureRegion> walkRightAnimation;
+    Texture texture;
 
+    private Direction currentDirection = Direction.STANDING; // Current direction of the character
+    private Animation<TextureRegion> walkUpAnimation;   // Animation for character movement in the up direction
+    private Animation<TextureRegion> walkDownAnimation; // Animation for character movement in the down direction
+    private Animation<TextureRegion> walkLeftAnimation; // Animation for character movement in the left direction
+    private Animation<TextureRegion> walkRightAnimation;   // Animation for character movement in the right direction
+
+    /**
+     * Constructor to initialize a Character object.
+     *
+     * @param x Initial X coordinate
+     * @param y Initial Y coordinate
+     * @param health Initial health of the character
+     */
     public Character(int x, int y, int health) {
         this.x = x;
         this.y = y;
@@ -167,5 +178,13 @@ public abstract class Character {
 
     public void setWalkRightAnimation(Animation<TextureRegion> walkRightAnimation) {
         this.walkRightAnimation = walkRightAnimation;
+    }
+
+    public Direction getCurrentDirection() {
+        return currentDirection;
+    }
+
+    public void setCurrentDirection(Direction currentDirection) {
+        this.currentDirection = currentDirection;
     }
 }
