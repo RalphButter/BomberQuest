@@ -70,8 +70,14 @@ public abstract class GameObject {
     // Abstract method for specific updates (to be implemented by subclasses)
     public abstract void update(float deltaTime);
 
+    public abstract void render(SpriteBatch batch);
+
+    public abstract Rectangle getBoundingRectangle();
+
     // Dispose resources
     public void dispose() {
         texture.dispose();
     }
+    //Needs to be fixed?
+    public abstract boolean isActive();
 }
