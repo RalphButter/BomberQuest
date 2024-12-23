@@ -13,8 +13,6 @@ public abstract class Character {
     private int bombRange;
 
     private boolean moving;
-
-
     private float stateTime;
 
     private Animation<TextureRegion> walkUpAnimation;
