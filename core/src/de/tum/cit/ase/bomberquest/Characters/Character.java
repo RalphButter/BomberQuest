@@ -14,6 +14,7 @@ public abstract class Character {
 
     private boolean moving;
 
+
     private float stateTime;
 
     private Animation<TextureRegion> walkUpAnimation;
