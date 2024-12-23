@@ -29,11 +29,11 @@ public abstract class GameObject {
         this.y = y;
         this.walkable = walkable;
         this.destructible = destructible;
-        this.texture = new Texture(Gdx.files.internal("assets/texture/basictiles.png"));
-        this.texture2 = new Texture(Gdx.files.internal("assets/texture/things.png"));
+        this.texture = new Texture(Gdx.files.internal("assets/texture/basictiles.png")); // Load the texture for the object
+        this.texture2 = new Texture(Gdx.files.internal("assets/texture/things.png")); // Load the secondary texture for the object in case an object gets destroyed
     }
 
-    // Getters and setters
+    // Standard getters and setters for game object properties
     public float getX() { return x; }
     public float getY() { return y; }
     public void setX(float x) { this.x = x; }

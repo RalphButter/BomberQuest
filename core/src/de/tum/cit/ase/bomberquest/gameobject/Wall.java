@@ -24,7 +24,4 @@ public abstract class Wall extends GameObject {
     public void setDestroyed(boolean destroyed) {
         this.destroyed = destroyed;
     }
-
-    @Override
-    public abstract void update(float deltaTime);
 }

@@ -17,9 +17,9 @@ public class Entry extends GameObject{
      * @param destructible Indicates whether the object is destructible or not (destructible and non-destructible walls)
      */
     public Entry(float x, float y, boolean walkable, boolean destructible) {
-        super(x, y, false, false);
-        this.setTextureRegion(new TextureRegion(getTexture(), 32, 96, 16, 16));
-        super.setRectangle(new Rectangle((int) (x * 16), (int) (y * 16), 16, 16));
+        super(x, y, false, false); // Call to the GameObject constructor; 'false' indicates it's not walkable ; 'false' indicates it's not destructible
+        this.setTextureRegion(new TextureRegion(getTexture(), 32, 96, 16, 16)); // Set the specific texture region for the entry
+        super.setRectangle(new Rectangle((int) (x * 16), (int) (y * 16), 16, 16)); // Define the physical space of the entry
     }
 
     @Override
