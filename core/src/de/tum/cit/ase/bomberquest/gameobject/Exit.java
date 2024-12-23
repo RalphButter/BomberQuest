@@ -1,5 +1,6 @@
 package de.tum.cit.ase.bomberquest.gameobject;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 
@@ -21,5 +22,20 @@ public class Exit extends GameObject {
     @Override
     public void update(float deltaTime) {
 
+    }
+
+    @Override
+    public void render(SpriteBatch batch) {
+        batch.draw(getTexture(), getX(), getY());
+    }
+
+    @Override
+    public Rectangle getBoundingRectangle() {
+        return null;
+    }
+
+    @Override
+    public boolean isActive() {
+        return false;
     }
 }

@@ -20,14 +20,13 @@ public abstract class Character {
     private Animation<TextureRegion> walkLeftAnimation;
     private Animation<TextureRegion> walkRightAnimation;
 
-    public Character(int x, int y, int speed, int health, int bombCount, int bombRange) {
+    public Character(int x, int y, int health) {
         this.x = x;
         this.y = y;
-        this.speed = speed;
+        this.speed = 1f;
+        this.moving = false;
         this.health = health;
         this.alive = true;
-        this.bombCount = bombCount;
-        this.bombRange = bombRange;
     }
 
     public void move(int x, int y) {
@@ -128,5 +127,45 @@ public abstract class Character {
 
     public void setStateTime(float stateTime) {
         this.stateTime = stateTime;
+    }
+
+    public boolean isMoving() {
+        return moving;
+    }
+
+    public void setMoving(boolean moving) {
+        this.moving = moving;
+    }
+
+    public Animation<TextureRegion> getWalkUpAnimation() {
+        return walkUpAnimation;
+    }
+
+    public void setWalkUpAnimation(Animation<TextureRegion> walkUpAnimation) {
+        this.walkUpAnimation = walkUpAnimation;
+    }
+
+    public Animation<TextureRegion> getWalkDownAnimation() {
+        return walkDownAnimation;
+    }
+
+    public void setWalkDownAnimation(Animation<TextureRegion> walkDownAnimation) {
+        this.walkDownAnimation = walkDownAnimation;
+    }
+
+    public Animation<TextureRegion> getWalkLeftAnimation() {
+        return walkLeftAnimation;
+    }
+
+    public void setWalkLeftAnimation(Animation<TextureRegion> walkLeftAnimation) {
+        this.walkLeftAnimation = walkLeftAnimation;
+    }
+
+    public Animation<TextureRegion> getWalkRightAnimation() {
+        return walkRightAnimation;
+    }
+
+    public void setWalkRightAnimation(Animation<TextureRegion> walkRightAnimation) {
+        this.walkRightAnimation = walkRightAnimation;
     }
 }

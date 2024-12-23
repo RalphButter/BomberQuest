@@ -1,5 +1,6 @@
 package de.tum.cit.ase.bomberquest.gameobject;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 
@@ -13,6 +14,21 @@ public class InDestructibleWall extends Wall {
     @Override
     public void update(float deltaTime) {
 
+    }
+
+    @Override
+    public void render(SpriteBatch batch) {
+        batch.draw(getTexture2(), getX(), getY());
+    }
+
+    @Override
+    public Rectangle getBoundingRectangle() {
+        return new Rectangle(getX(), getY(), 16, 16);
+    }
+
+    @Override
+    public boolean isActive() {
+        return false;
     }
 
 

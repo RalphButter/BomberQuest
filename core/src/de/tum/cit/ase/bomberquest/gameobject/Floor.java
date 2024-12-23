@@ -1,6 +1,8 @@
 package de.tum.cit.ase.bomberquest.gameobject;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 
 import java.awt.*;
 
@@ -15,4 +17,19 @@ public class Floor extends GameObject {
         public void update(float deltaTime) {
 
         }
+
+    @Override
+    public void render(SpriteBatch batch) {
+        batch.draw(getTexture(), getX(), getY());
+    }
+
+    @Override
+    public Rectangle getBoundingRectangle() {
+        return new Rectangle(getX(), getY(), 16, 16);
+    }
+
+    @Override
+    public boolean isActive() {
+        return false;
+    }
 }
