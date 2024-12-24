@@ -135,8 +135,36 @@ public class Pathfinding {
 
 
     private List<int[]> dijkstra(int[] start, int[] goal) {
-        // Implementation of Dijkstra's algorithm
-        return null;
+        PriorityQueue<Node> pq = new PriorityQueue<>(Comparator.comparingInt(Node::getFCost));
+        Map<String, Integer> costs = new HashMap<>();
+        Map<String, int[]> cameFrom = new HashMap<>();
+
+        String startKey = Arrays.toString(start);
+        costs.put(startKey, 0);
+        pq.add(new Node(start, 0, 0));
+        cameFrom.put(startKey, null);
+
+        while (!pq.isEmpty()) {
+            Node currentNode = pq.poll();
+            int[] current = currentNode.getPosition();
+
+            // Check if we've reached goal
+            if (Arrays.equals(current, goal)) {
+                return reconstructPath(cameFrom, current);
+            }
+
+            for (int[] neighbor : getNeighbors(current)) {
+                int newCost = costs.get(Arrays.toString(current)) + getMovementCost(neighbor);
+                String neighborKey = Arrays.toString(neighbor);
+
+                if (!costs.containsKey(neighborKey) || newCost < costs.get(neighborKey)) {
+                    costs.put(neighborKey, newCost);
+                    cameFrom.put(neighborKey, current);
+                    pq.add(new Node(neighbor, newCost, newCost));
+                }
+            }
+        }
+        return new ArrayList<>();
     }
 
     /**
