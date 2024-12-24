@@ -21,7 +21,10 @@ public class ConcurrentBombPowerUp extends PowerUp {
      * @param gameObjectManager Reference to the game object manager.
      */
     public ConcurrentBombPowerUp(float x, float y, GameMap gameMap, GameObjectManager gameObjectManager) {
+        // Call the superclass constructor with the provided parameters
         super(x, y, true, false, gameMap, gameObjectManager);
+
+        // Initialize the bounds for collision detection
         this.bounds = new Rectangle((int)x, (int)y, 32, 32);
     }
 
@@ -33,7 +36,9 @@ public class ConcurrentBombPowerUp extends PowerUp {
      */
     @Override
     public void applyEffect(Player player) {
+        // Check if the player's concurrent bombs are less than the maximum allowed
         if (player.getConcurrentBombs() < MAX_CONCURRENT_BOMBS) {
+            // Increase the player's concurrent bombs by the increment value
             player.setConcurrentBombs(player.getConcurrentBombs() + CONCURRENT_BOMB_INCREMENT);
             // Optionally, you can play a sound or trigger an animation here
         }
@@ -73,11 +78,12 @@ public class ConcurrentBombPowerUp extends PowerUp {
      * @param player The player object.
      */
     public void update(Player player) {
+        // Check if the bounds of this power-up overlap with the player's bounds
         if (bounds.overlaps(player.getBounds())) {
+            // Apply the effect of the power-up to the player
             applyEffect(player);
         }
     }
-
 
 
 

@@ -14,21 +14,39 @@ public class Bombs extends GameObject {
     private GameMap gameMap;
     private GameObjectManager gameObjectManager;
 
-    public Bombs(float x, float y, GameMap gameMap, GameObjectManager gameObjectManager) {
-        super(x, y, false, true); // Bombs are not walkable and are destructible
-        this.fuseTime = DEFAULT_FUSE_TIME;
-        this.elapsedTime = 0f;
-        this.blastRadius = DEFAULT_BLAST_RADIUS;
-        this.gameMap = gameMap;
-        this.gameObjectManager = gameObjectManager;
-    }
+
+public Bombs(float x, float y, GameMap gameMap, GameObjectManager gameObjectManager) {
+    // Call the superclass constructor with initial position, walkable, and destructible flags
+    super(x, y, false, true); // Bombs are not walkable and are destructible
+
+    // Set the default fuse time for the bomb
+    this.fuseTime = DEFAULT_FUSE_TIME;
+
+    // Initialize the elapsed time since the bomb was placed
+    this.elapsedTime = 0f;
+
+    // Set the default blast radius for the bomb
+    this.blastRadius = DEFAULT_BLAST_RADIUS;
+
+    // Reference to the game map
+    this.gameMap = gameMap;
+
+    // Reference to the game object manager
+    this.gameObjectManager = gameObjectManager;
+}
 
     @Override
     public void update(float deltaTime) {
+        // Increment the elapsed time by the delta time
         elapsedTime += deltaTime;
+
+        // Check if the elapsed time has reached or exceeded the fuse time
         if (elapsedTime >= fuseTime) {
+            // Trigger the explosion
             explode();
-            setActive(false); // Mark for removal
+
+            // Mark the bomb for removal
+            setActive(false);
         }
     }
 
@@ -51,6 +69,11 @@ public class Bombs extends GameObject {
         return new Rectangle(getX(), getY(), 1, 1);
     }
 
+
+    /**
+     * Disposes resources used by the bomb.
+     * Calls the superclass dispose method to ensure proper cleanup.
+     */
     @Override
     public void dispose() {
         super.dispose();

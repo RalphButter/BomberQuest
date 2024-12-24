@@ -24,7 +24,10 @@ public class BlastRadiusPowerUp extends Blast {
      * @param gameObjectManager Reference to the game object manager.
      */
     public BlastRadiusPowerUp(float x, float y, int blastRadius, float blastDuration, int blastDamage, GameMap gameMap, GameObjectManager gameObjectManager) {
+        // Call the superclass constructor with the provided parameters
         super(x, y, blastRadius, blastDuration, blastDamage, gameMap, gameObjectManager);
+
+        // Initialize the bounds for collision detection
         this.bounds = new Rectangle((int)x, (int)y, 32, 32);
     }
 
@@ -51,14 +54,20 @@ public class BlastRadiusPowerUp extends Blast {
      */
     //BITTE ANPASSEN!!!
     public void render(Graphics g) {
-        // Draw a distinct visual for the blast radius power-up
-        // For example, a red circle with a plus sign
-        g.setColor(Color.RED); //Not sure if this is correct
-        g.fillOval((int)getX(), (int)getY(), 32, 32);
-        g.setColor(Color.WHITE);
-        g.drawLine((int)getX() + 16, (int)getY() + 8, (int)getX() + 16, (int)getY() + 24);
-        g.drawLine((int)getX() + 8, (int)getY() + 16, (int)getX() + 24, (int)getY() + 16);
+        // Set the color to red for the outer circle of the power-up
+        g.setColor(Color.RED); // This sets the color to red
 
+        // Draw a filled oval (circle) at the power-up's coordinates with a width and height of 32 pixels
+        g.fillOval((int)getX(), (int)getY(), 32, 32);
+
+        // Set the color to white for the plus sign inside the circle
+        g.setColor(Color.WHITE); // This sets the color to white
+
+        // Draw a vertical line for the plus sign
+        g.drawLine((int)getX() + 16, (int)getY() + 8, (int)getX() + 16, (int)getY() + 24);
+
+        // Draw a horizontal line for the plus sign
+        g.drawLine((int)getX() + 8, (int)getY() + 16, (int)getX() + 24, (int)getY() + 16);
     }
     /**
      * Checks for collision with the player and applies the effect if collided.

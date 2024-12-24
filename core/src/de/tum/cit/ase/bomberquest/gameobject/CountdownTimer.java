@@ -44,6 +44,7 @@ public class CountdownTimer {
      * @param deltaTimeSeconds The time elapsed since the last update in seconds.
      */
     public void update(float deltaTimeSeconds) {
+        // Check if the countdown has already reached zero
         if (isTimeUp) {
             return; // No need to update if time is already up
         }
@@ -53,8 +54,10 @@ public class CountdownTimer {
 
         // Check if time has run out
         if (timeRemaining <= 0) {
+            // Set remaining time to zero and mark the timer as finished
             timeRemaining = 0;
             isTimeUp = true;
+            // Notify all registered listeners that the time is up
             notifyTimeUp();
         }
     }
@@ -78,7 +81,9 @@ public class CountdownTimer {
      * @param newTimeSeconds The new starting time for the countdown in seconds.
      */
     public void reset(float newTimeSeconds) {
+        // Set the remaining time to the new initial time
         this.timeRemaining = newTimeSeconds;
+        // Mark the timer as not finished
         this.isTimeUp = false;
     }
 
@@ -122,7 +127,9 @@ public class CountdownTimer {
      * Notifies all registered listeners that the time is up.
      */
     private void notifyTimeUp() {
+        // Iterate through each registered listener
         for (CountdownListener listener : listeners) {
+            // Call the onTimeUp method to notify the listener
             listener.onTimeUp();
         }
     }

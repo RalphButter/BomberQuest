@@ -20,9 +20,13 @@ abstract class PowerUp  extends GameObject {
      * @param destructible Indicates whether the object is destructible or not (destructible and non-destructible walls)
      */
     public PowerUp(float x, float y, boolean walkable, boolean destructible, GameMap gameMap, GameObjectManager gameObjectManager) {
+        // Call the superclass constructor to initialize position, walkable, and destructible properties
         super(x, y, walkable, destructible);
+        // Initialize the game map reference
         this.gameMap = gameMap;
+        // Initialize the game object manager reference
         this.gameObjectManager = gameObjectManager;
+
     }
 
 

@@ -48,6 +48,7 @@ public class Blast extends GameObject {
     /**
      * Creates blast segments in all four cardinal directions.
      */
+    //Ggf. mit 16 mulitplizieren
     private void createSegments() {
         // Create center blast segment
         segments.add(new Rectangle(getX(), getY(), 1, 1));
@@ -121,7 +122,9 @@ public class Blast extends GameObject {
      */
     @Override
     public void render(SpriteBatch batch) {
+        // Iterate through each segment of the blast
         for (Rectangle segment : segments) {
+            // Draw the texture at the segment's coordinates
             batch.draw(getTexture(), segment.x, segment.y);
         }
     }
@@ -149,7 +152,8 @@ public class Blast extends GameObject {
     }
 
     /**
-     * Disposes resources used by the blast.
+     * Disposes resources used by the bomb.
+     * Calls the superclass dispose method to ensure proper cleanup.
      */
     @Override
     public void dispose() {
