@@ -1,5 +1,7 @@
 package de.tum.cit.ase.bomberquest.Characters;
 
+import de.tum.cit.ase.bomberquest.MapManager.Node;
+
 import java.util.*;
 
 /**
@@ -86,6 +88,84 @@ public class Pathfinding {
 
         return new ArrayList<>(); // No path found
     }
+
+    /**
+     * Performs the A* search algorithm to find an optimal path using a heuristic.
+     * <p>
+     * A* combines Dijkstra’s Algorithm with heuristics to efficiently find the shortest path.
+     *
+     * @param start The starting node [row, col].
+     * @param goal  The target node [row, col].
+     * @return A list of nodes representing the path, or an empty list if no path exists.
+     */
+    private List<int[]> aStar(int[] start, int[] goal) {
+        PriorityQueue<Node> openSet = new PriorityQueue<>(Comparator.comparingInt(Node::getFCost));
+        Map<String, Integer> gCosts = new HashMap<>();
+        Map<String, int[]> cameFrom = new HashMap<>();
+
+        String startKey = Arrays.toString(start);
+        gCosts.put(startKey, 0);
+        openSet.add(new Node(start[0], start[1], 0, heuristic(start, goal)));
+        cameFrom.put(startKey, null);
+
+        while (!openSet.isEmpty()) {
+            Node currentNode = openSet.poll();
+            int[] current = currentNode.getPosition();
+            // Goal test
+            if (Arrays.equals(current, goal)) {
+                return reconstructPath(cameFrom, current);
+            }
+
+            for (int[] neighbor : getNeighbors(current)) {
+                String neighborKey = Arrays.toString(neighbor);
+                int tentativeGCost = gCosts.get(Arrays.toString(current)) + getMovementCost(neighbor);
+
+                if (!gCosts.containsKey(neighborKey) || tentativeGCost < gCosts.get(neighborKey)) {
+                    gCosts.put(neighborKey, tentativeGCost);
+                    int fCost = tentativeGCost + heuristic(neighbor, goal);
+                    openSet.add(new Node(neighbor, tentativeGCost, fCost));
+                    cameFrom.put(neighborKey, current);
+                }
+            }
+        }
+
+        return new ArrayList<>();
+    }
+
+
+
+    private List<int[]> dijkstra(int[] start, int[] goal) {
+        // Implementation of Dijkstra's algorithm
+        return null;
+    }
+
+    /**
+     * Calculates the Manhattan distance heuristic between two nodes.
+     * <p>
+     * Suitable for grid-based paths with 4-directional movement.
+     *
+     * @param node Current node [row, col].
+     * @param goal The goal node [row, col].
+     * @return The Manhattan distance between node and goal.
+     */
+    private int heuristic(int[] node, int[] goal) {
+        return Math.abs(node[0] - goal[0]) + Math.abs(node[1] - goal[1]);
+    }
+
+    /**
+     * Retrieves the cost for moving into the given node.
+     * In an unweighted grid, this may just be 1, or it can represent
+     * different terrain costs if you want more complexity.
+     *
+     * @param node The node for which to get the movement cost.
+     * @return The integer cost of moving into this node.
+     */
+    private int getMovementCost(int[] node) {
+        // If grid[node[0]][node[1]] has some value indicating different terrain,
+        // you could return that value. Default is 1 for unweighted grids.
+        return 1;
+    }
+
 
 
 
