@@ -1,10 +1,12 @@
 package de.tum.cit.ase.bomberquest.MapManager;
 
 
+//NODE GGF BEI ALLEN AUF WALKABLE TESTEN
 /**
  * Represents a node in the grid, primarily used for pathfinding.
  * Each node corresponds to a specific point in the game world and tracks pathfinding costs.
  */
+
 public class Node {
     private int x, y; // The x and y coordinates of the node in the grid
     private boolean walkable; // Flag indicating whether the node is walkable or blocked
@@ -13,7 +15,7 @@ public class Node {
     private int[] position;
 
     /**
-     * Constructor for creating a new Node.
+     * Constructor for creating a new Node with specified coordinates and walkability.
      *
      * @param x        The x-coordinate of the node.
      * @param y        The y-coordinate of the node.
@@ -27,6 +29,14 @@ public class Node {
         this.fCost = Integer.MAX_VALUE; // Initialize fCost to a high value (infinity)
     }
 
+    /**
+     * Constructor for creating a new Node with specified coordinates and costs.
+     *
+     * @param x     The x-coordinate of the node.
+     * @param y     The y-coordinate of the node.
+     * @param gCost The cost from the start node to this node.
+     * @param fCost The total cost (gCost + heuristic) for pathfinding.
+     */
     public Node(int x, int y, int gCost, int fCost) {
         this.x = x;
         this.y = y;
@@ -34,6 +44,13 @@ public class Node {
         this.fCost = fCost;
     }
 
+    /**
+     * Constructor for creating a new Node with specified position and costs.
+     *
+     * @param position The position of the node as an array [x, y].
+     * @param gCost    The cost from the start node to this node.
+     * @param fCost    The total cost (gCost + heuristic) for pathfinding.
+     */
     public Node(int[] position, int gCost, int fCost) {
         this.x = position[0];
         this.y = position[1];
