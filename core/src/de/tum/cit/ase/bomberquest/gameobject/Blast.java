@@ -165,4 +165,61 @@ public class Blast extends GameObject {
     public boolean isActive() {
         return false;
     }
+
+
+    public int getBlastRadius() {
+        return blastRadius;
+    }
+
+    public void setBlastRadius(int blastRadius) {
+        this.blastRadius = blastRadius;
+    }
+
+    public float getBlastDuration() {
+        return blastDuration;
+    }
+
+    public void setBlastDuration(float blastDuration) {
+        this.blastDuration = blastDuration;
+    }
+
+    public float getElapsedTime() {
+        return elapsedTime;
+    }
+
+    public void setElapsedTime(float elapsedTime) {
+        this.elapsedTime = elapsedTime;
+    }
+
+    public int getBlastDamage() {
+        return blastDamage;
+    }
+
+    public void setBlastDamage(int blastDamage) {
+        this.blastDamage = blastDamage;
+    }
+
+    public List<Rectangle> getSegments() {
+        return segments;
+    }
+
+    public void setSegments(List<Rectangle> segments) {
+        this.segments = segments;
+    }
+
+    public GameMap getGameMap() {
+        return gameMap;
+    }
+
+    public void setGameMap(GameMap gameMap) {
+        this.gameMap = gameMap;
+    }
+
+    public GameObjectManager getGameObjectManager() {
+        return gameObjectManager;
+    }
+
+    public void setGameObjectManager(GameObjectManager gameObjectManager) {
+        this.gameObjectManager = gameObjectManager;
+    }
 }
