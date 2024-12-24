@@ -88,6 +88,46 @@ public class Pathfinding {
     }
 
 
+
+    /**
+     * Performs a Depth-First Search (DFS) from start to goal.
+     * <p>
+     * DFS dives deep into one direction at a time. It does not guarantee the shortest path,
+     * but can be useful for certain scenarios.
+     *
+     * @param start The starting node [row, col].
+     * @param goal  The target node [row, col].
+     * @return A list of nodes representing the path, or an empty list if no path exists.
+     */
+    private List<int[]> dfs(int[] start, int[] goal) {
+        Stack<int[]> stack = new Stack<>();
+        Map<String, int[]> cameFrom = new HashMap<>();
+
+        stack.push(start);
+        cameFrom.put(Arrays.toString(start), null);
+
+        while (!stack.isEmpty()) {
+            int[] current = stack.pop();
+
+            // Goal test
+            if (Arrays.equals(current, goal)) {
+                return reconstructPath(cameFrom, current);
+            }
+
+            for (int[] neighbor : getNeighbors(current)) {
+                String neighborKey = Arrays.toString(neighbor);
+                if (!cameFrom.containsKey(neighborKey)) {
+                    cameFrom.put(neighborKey, current);
+                    stack.push(neighbor);
+                }
+            }
+        }
+
+        return new ArrayList<>();
+    }
+
+
+
     /**
      * Reconstructs the path from the 'cameFrom' map once the goal is reached.
      * <p>
