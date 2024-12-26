@@ -3,10 +3,11 @@ package de.tum.cit.ase.bomberquest.Characters;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 
 public abstract class Character {
-    private int x;  // X-coordinate of the character
-    private int y;  // Y-coordinate of the character
+    private float x;  // X-coordinate of the character
+    private float y;  // Y-coordinate of the character
     private float speed;    // Speed of the character
     private int health;     // Health of the character
     private boolean alive;  // Flag indicating if the character is alive
@@ -16,13 +17,16 @@ public abstract class Character {
     private boolean moving; // Flag indicating if the character is moving
     private float stateTime;   // Time elapsed since the animation started
 
-    Texture texture;
+    Texture texture;   // Texture for the character
+
+    private Rectangle rectangle;   // Represents the character's physical space in the game world (used for collision detection)
 
     private Direction currentDirection = Direction.STANDING; // Current direction of the character
     private Animation<TextureRegion> walkUpAnimation;   // Animation for character movement in the up direction
     private Animation<TextureRegion> walkDownAnimation; // Animation for character movement in the down direction
     private Animation<TextureRegion> walkLeftAnimation; // Animation for character movement in the left direction
     private Animation<TextureRegion> walkRightAnimation;   // Animation for character movement in the right direction
+    private Animation<TextureRegion> stadingAnimation; // Animation for character standing still
 
     /**
      * Constructor to initialize a Character object.
@@ -31,16 +35,17 @@ public abstract class Character {
      * @param y Initial Y coordinate
      * @param health Initial health of the character
      */
-    public Character(int x, int y, int health) {
+    public Character(float x, float y, int health, Rectangle rectangle) {
         this.x = x;
         this.y = y;
         this.speed = 1f;
         this.moving = false;
         this.health = health;
         this.alive = true;
+        this.rectangle = rectangle;
     }
 
-    public void move(int x, int y) {
+    public void move(int x, int y) {  // Move the character to the specified position
         this.x = x;
         this.y = y;
     }
@@ -72,20 +77,24 @@ public abstract class Character {
         this.alive = false;
     }
 
-    public int getX() {
+    public float getX() {
         return x;
     }
 
-    public int getY() {
+    public void setX(float x) {
+        this.x = x;
+    }
+
+    public float getY() {
         return y;
+    }
+
+    public void setY(float y) {
+        this.y = y;
     }
 
     public float getSpeed() {
         return speed;
-    }
-
-    public void setSpeed(float speed) {
-        this.speed = speed;
     }
 
     public int getHealth() {
@@ -108,8 +117,16 @@ public abstract class Character {
         this.y = y;
     }
 
-    public void setSpeed(int speed) {
+    public void setSpeed(float speed) {
         this.speed = speed;
+    }
+
+    public Texture getTexture() {
+        return texture;
+    }
+
+    public void setTexture(Texture texture) {
+        this.texture = texture;
     }
 
     public void setHealth(int health) {
@@ -186,5 +203,20 @@ public abstract class Character {
 
     public void setCurrentDirection(Direction currentDirection) {
         this.currentDirection = currentDirection;
+    }
+    public Rectangle getRectangle() {
+        return rectangle;
+    }
+
+    public Animation<TextureRegion> getStadingAnimation() {
+        return stadingAnimation;
+    }
+
+    public void setStadingAnimation(Animation<TextureRegion> stadingAnimation) {
+        this.stadingAnimation = stadingAnimation;
+    }
+
+    public void setRectangle(Rectangle rectangle) {
+        this.rectangle = rectangle;
     }
 }
