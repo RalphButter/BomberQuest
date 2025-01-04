@@ -26,7 +26,20 @@ public class Credits implements Screen {
         //TODO TEXT EINFÜGEN
         // The credits text to be displayed
         creditsText = "CREDITS\n\n"
-                + "TEXT EINFÜGEN";
+                + "In the vibrant realm of pixels and code,\n"
+                + "where imagination fuels endless adventures,\n"
+                + "our game was born.\n\n"
+                + "This creation stands as a testament\n"
+                + "to our passion, creativity, and relentless dedication.\n\n"
+                + "As we present our masterpiece to the world,\n"
+                + "we pause to honor those who transformed our vision\n"
+                + "into a dynamic and captivating reality.\n\n\n"
+                + "BOMBERQUEST\n\n"
+                + "Developed by: Ralph & Jonas WS24/25\n"
+                + "Developed for: Introduction to Programming (CIT5230000) WS24/25\n\n"
+                // TODO: Look up audio credits
+                + "Special thanks to Lagun, Prof. Dr. Stephan Krusche,\n"
+                + "and our dedicated players across the universe.";
 
         scrollPosition = 30; // Initial scroll position
     }
