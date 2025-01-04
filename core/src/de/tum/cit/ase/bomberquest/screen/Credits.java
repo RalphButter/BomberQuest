@@ -41,6 +41,7 @@ public class Credits implements Screen {
                 + "Special thanks to Lagun, Prof. Dr. Stephan Krusche,\n"
                 + "and our dedicated players across the universe.";
 
+
         scrollPosition = 30; // Initial scroll position
     }
 
