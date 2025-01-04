@@ -1,12 +1,13 @@
 package de.tum.cit.ase.bomberquest.screen;
 
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import de.tum.cit.ase.bomberquest.BomberQuestGame;
 
-public class Credits {
+public class Credits implements Screen {
     private BomberQuestGame game;
     private SpriteBatch spriteBatch;
     private BitmapFont font;
@@ -30,4 +31,38 @@ public class Credits {
         scrollPosition = 30; // Initial scroll position
     }
 
+    @Override
+    public void show() {
+
+    }
+
+    @Override
+    public void render(float v) {
+
+    }
+
+    @Override
+    public void resize(int i, int i1) {
+
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
+    }
+
+    @Override
+    public void hide() {
+
+    }
+
+    @Override
+    public void dispose() {
+
+    }
 }

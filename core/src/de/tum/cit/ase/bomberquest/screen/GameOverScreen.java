@@ -1,6 +1,7 @@
 package de.tum.cit.ase.bomberquest.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -16,7 +17,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import de.tum.cit.ase.bomberquest.BomberQuestGame;
 
 
-public class GameOverScreen {
+public class GameOverScreen implements Screen  {
     // Reference to the main game class to access global resources and methods
     private final BomberQuestGame game;
 
@@ -102,8 +103,10 @@ public class GameOverScreen {
     }
 
 
+    @Override
+    public void show() {
 
-
+    }
 
     /**
      * Renders the GameOverScreen. This method should be called every frame to update and draw the stage.
@@ -131,6 +134,21 @@ public class GameOverScreen {
     public void resize(int width, int height) {
         // Update the stage's viewport with the new screen size, centering the camera
         stage.getViewport().update(width, height, true);
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
+    }
+
+    @Override
+    public void hide() {
+
     }
 
     /**
