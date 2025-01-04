@@ -22,6 +22,7 @@ public class Credits {
         font = new BitmapFont(); // Use your preferred font
         viewport = new StretchViewport(800, 500); // Set to your desired resolution
 
+        //TODO TEXT EINFÜGEN
         // The credits text to be displayed
         creditsText = "CREDITS\n\n"
                 + "TEXT EINFÜGEN";
