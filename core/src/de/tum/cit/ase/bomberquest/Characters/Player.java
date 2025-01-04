@@ -115,6 +115,9 @@ public class Player extends Character {
         } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             moveRight();
         }
+        else {
+            setIsMoving(false);
+        }
     }
 
     public void setIsMoving(boolean moving) {
