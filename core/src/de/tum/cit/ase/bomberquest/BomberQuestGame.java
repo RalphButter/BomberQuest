@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import de.tum.cit.ase.bomberquest.audio.MusicTrack;
 import de.tum.cit.ase.bomberquest.map.GameMap;
+import de.tum.cit.ase.bomberquest.screen.Credits;
+import de.tum.cit.ase.bomberquest.screen.GameOverScreen;
 import de.tum.cit.ase.bomberquest.screen.GameScreen;
 import de.tum.cit.ase.bomberquest.screen.MenuScreen;
 import games.spooky.gdx.nativefilechooser.NativeFileChooser;
@@ -17,6 +19,9 @@ import games.spooky.gdx.nativefilechooser.NativeFileChooser;
  * It manages the screens and global resources like SpriteBatch and Skin.
  */
 public class BomberQuestGame extends Game {
+
+    private GameScreen gameScreen;
+    private MenuScreen menuScreen;
 
     /**
      * Sprite Batch for rendering game elements.
@@ -49,6 +54,9 @@ public class BomberQuestGame extends Game {
     public BomberQuestGame(NativeFileChooser fileChooser) {
         this.fileChooser = fileChooser;
     }
+
+
+
 
     /**
      * Called when the game is created. Initializes the SpriteBatch and Skin.
@@ -114,5 +122,32 @@ public class BomberQuestGame extends Game {
         getScreen().dispose(); // Dispose the current screen
         spriteBatch.dispose(); // Dispose the spriteBatch
         skin.dispose(); // Dispose the skin
+    }
+
+    /**
+     * Switches to the credits screen and disposes of the previous screen.
+     *
+     * @param game The main game class, used to access global resources and methods.
+     */
+    public void goToCreditsScreen(BomberQuestGame game) {
+        // Set the current screen to the Credits screen
+        setScreen(new Credits(game));
+
+        // Dispose of the previous screen if it exists
+        if (getScreen() != null) {
+            getScreen().dispose();
+        }
+    }
+
+    public void gameOver() {
+        this.setScreen(new GameOverScreen(this)); // Set the current screen to GameOverScreen
+        if (gameScreen != null) {
+            gameScreen.dispose(); // Dispose the game screen if it exists
+            gameScreen = null;
+        }
+    }
+
+        //TODO MUSS NOCH IMPLEMENTIERT WERDEN!!!
+    public void openFileChooser() {
     }
 }
