@@ -12,10 +12,10 @@ import de.tum.cit.ase.bomberquest.util.CollisionDetection;
 import java.util.List;
 
 public class Enemy extends Character {
-    private Pathfinding pathfinding;
-    private List<int[]> path;
-    private int pathIndex;
-    private GameObject gameObject;
+    private Pathfinding pathfinding; // Pathfinding algorithm to find the path to the player
+    private List<int[]> path; // Path to the player
+    private int pathIndex; // Index of the current step in the path
+    private GameObject gameObject; // The game object representing the enemy
 
     /**
      * Constructor to initialize a Character object.
@@ -23,7 +23,7 @@ public class Enemy extends Character {
      * @param x Initial X coordinate
      * @param y Initial Y coordinate
      */
-    public Enemy(float x, float y, int[][] grid) {
+    public Enemy(float x, float y, int[][] grid) { // Constructor for creating a new Enemy object
         super(x, y, 1, new Rectangle(x + 2, y + 2, 12, 12));
         this.texture = new Texture(Gdx.files.internal("assets/mobs.png"));
 
@@ -58,9 +58,9 @@ public class Enemy extends Character {
         setSpeed(1.5f);
         setHealth(1);
 
-        this.pathfinding = new Pathfinding(grid);
-        this.path = null;
-        this.pathIndex = 0;
+        this.pathfinding = new Pathfinding(grid); // Initialize the pathfinding algorithm
+        this.path = null; // Initialize the path to null
+        this.pathIndex = 0; // Initialize the path index to 0
     }
 
     public void moveUp() {
@@ -83,16 +83,16 @@ public class Enemy extends Character {
         setCurrentDirection(Direction.RIGHT);
     }
 
-    public void move(int[] target) {
+    public void move(int[] target) { // Move the enemy towards the player
         if (path == null || pathIndex >= path.size()) {
             path = pathfinding.findPath(new int[]{(int) getX(), (int) getY()}, target, "A*");
             pathIndex = 0;
         }
 
-        if (path != null && pathIndex < path.size()) {
+        if (path != null && pathIndex < path.size()) { // Move the enemy along the path
             int[] nextStep = path.get(pathIndex);
-            int nextX = nextStep[0];
-            int nextY = nextStep[1];
+            int nextX = nextStep[0]; // Get the next step in the path
+            int nextY = nextStep[1]; // Get the next step in the path
 
             Rectangle nextStepRect = new Rectangle(nextX, nextY, 16, 16);
             Rectangle gameObjectRect = gameObject.getRectangle();
@@ -120,7 +120,7 @@ public class Enemy extends Character {
         }
     }
 
-    public void draw(SpriteBatch batch, float x, float y) {
+    public void draw(SpriteBatch batch, float x, float y) { // Draw the enemy sprite
         TextureRegion currentFrame = switch (getCurrentDirection()) {
             case UP -> getWalkUpAnimation().getKeyFrame(getStateTime(), true);
             case DOWN -> getWalkDownAnimation().getKeyFrame(getStateTime(), true);
@@ -131,18 +131,18 @@ public class Enemy extends Character {
         batch.draw(currentFrame, x, y);
     }
 
-    public void render(SpriteBatch batch) {
+    public void render(SpriteBatch batch) { // Render the enemy sprite
         TextureRegion currentFrame = getWalkDownAnimation().getKeyFrame(getStateTime(), true);
         batch.draw(currentFrame, getX(), getY());
     }
 
-    public void update(int deltaTime, int[] target) {
+    public void update(int deltaTime, int[] target) { // Update the enemy state
         setStateTime(getStateTime() + deltaTime);
         move(target);
     }
 
     @Override
-    public void die() {
+    public void die() { // Handle enemy death
         setAlive(false);
         // Additional logic for enemy death
     }
@@ -152,7 +152,7 @@ public class Enemy extends Character {
         return getRectangle();
     }
 
-    public void dispose() {
+    public void dispose() { // Dispose resources
         texture.dispose();
     }
 }
