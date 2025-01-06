@@ -7,24 +7,22 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import de.tum.cit.ase.bomberquest.gameobject.GameObject;
+import de.tum.cit.ase.bomberquest.texture.Drawable;
 import de.tum.cit.ase.bomberquest.util.CollisionDetection;
+import de.tum.cit.ase.bomberquest.MapManager.Node;
 
 import java.util.List;
 
-public class Enemy extends Character {
-    private Pathfinding pathfinding; // Pathfinding algorithm to find the path to the player
-    private List<int[]> path; // Path to the player
-    private int pathIndex; // Index of the current step in the path
-    private GameObject gameObject; // The game object representing the enemy
+public class Enemy extends Character implements Drawable {
+    private Pathfinding pathfinding;
+    private List<int[]> path;
+    private int pathIndex;
+    private GameObject gameObject;
+    private float prevX, prevY;
+    private int[] target;
 
-    /**
-     * Constructor to initialize a Character object.
-     *
-     * @param x Initial X coordinate
-     * @param y Initial Y coordinate
-     */
-    public Enemy(float x, float y, int[][] grid) { // Constructor for creating a new Enemy object
-        super(x, y, 1, new Rectangle(x + 2, y + 2, 12, 12));
+    public Enemy(float x, float y, int[][] grid) {
+        super(x, y, new Rectangle(x + 2, y + 2, 12, 12));
         this.texture = new Texture(Gdx.files.internal("assets/mobs.png"));
 
         TextureRegion[] walkUpFrames = {
@@ -58,9 +56,10 @@ public class Enemy extends Character {
         setSpeed(1.5f);
         setHealth(1);
 
-        this.pathfinding = new Pathfinding(grid); // Initialize the pathfinding algorithm
-        this.path = null; // Initialize the path to null
-        this.pathIndex = 0; // Initialize the path index to 0
+        this.pathfinding = new Pathfinding(grid);
+        this.path = null;
+        this.pathIndex = 0;
+        this.target = new int[]{0, 0}; // Initialize the target position
     }
 
     public void moveUp() {
@@ -83,16 +82,16 @@ public class Enemy extends Character {
         setCurrentDirection(Direction.RIGHT);
     }
 
-    public void move(int[] target) { // Move the enemy towards the player
+    public void move(int[] target) {
         if (path == null || pathIndex >= path.size()) {
             path = pathfinding.findPath(new int[]{(int) getX(), (int) getY()}, target, "A*");
             pathIndex = 0;
         }
 
-        if (path != null && pathIndex < path.size()) { // Move the enemy along the path
+        if (path != null && pathIndex < path.size()) {
             int[] nextStep = path.get(pathIndex);
-            int nextX = nextStep[0]; // Get the next step in the path
-            int nextY = nextStep[1]; // Get the next step in the path
+            int nextX = nextStep[0];
+            int nextY = nextStep[1];
 
             Rectangle nextStepRect = new Rectangle(nextX, nextY, 16, 16);
             Rectangle gameObjectRect = gameObject.getRectangle();
@@ -113,46 +112,75 @@ public class Enemy extends Character {
                     pathIndex++;
                 }
             } else {
-                // Recalculate path if the next step is not walkable
                 path = pathfinding.findPath(new int[]{(int) getX(), (int) getY()}, target, "A*");
                 pathIndex = 0;
             }
         }
     }
 
-    public void draw(SpriteBatch batch, float x, float y) { // Draw the enemy sprite
+    public void draw(SpriteBatch batch, float x, float y) {
         TextureRegion currentFrame = switch (getCurrentDirection()) {
             case UP -> getWalkUpAnimation().getKeyFrame(getStateTime(), true);
             case DOWN -> getWalkDownAnimation().getKeyFrame(getStateTime(), true);
             case LEFT -> getWalkLeftAnimation().getKeyFrame(getStateTime(), true);
             case RIGHT -> getWalkRightAnimation().getKeyFrame(getStateTime(), true);
-            default -> getWalkDownAnimation().getKeyFrame(0.1f); // Example
+            default -> getWalkDownAnimation().getKeyFrame(0.1f);
         };
         batch.draw(currentFrame, x, y);
     }
 
-    public void render(SpriteBatch batch) { // Render the enemy sprite
+    public void render(SpriteBatch batch) {
         TextureRegion currentFrame = getWalkDownAnimation().getKeyFrame(getStateTime(), true);
         batch.draw(currentFrame, getX(), getY());
     }
 
-    public void update(int deltaTime, int[] target) { // Update the enemy state
+    public void update(int deltaTime, int[] target) {
         setStateTime(getStateTime() + deltaTime);
         move(target);
     }
 
     @Override
-    public void die() { // Handle enemy death
+    public void die() {
         setAlive(false);
-        // Additional logic for enemy death
     }
-
 
     public Rectangle getBoundingRectangle() {
         return getRectangle();
     }
 
-    public void dispose() { // Dispose resources
+    public void dispose() {
         texture.dispose();
+    }
+
+    @Override
+    public TextureRegion getCurrentAppearance() {
+        return null;
+    }
+
+    public void updateState(float delta, Node playerPosition, Node[][] grid) {
+        // Update enemy state
+    }
+
+    public Rectangle getRectangle() {
+        return super.getRectangle();
+    }
+
+    public void handleCollision() {
+        setPosition(prevX, prevY);
+        setCurrentDirection(Direction.STANDING);
+
+        // Recalculate path to the target
+        path = pathfinding.findPath(new int[]{(int) getX(), (int) getY()}, target, "A*");
+        pathIndex = 0;
+    }
+
+    @Override
+    public float getX() {
+        return super.getX();
+    }
+
+    @Override
+    public float getY() {
+        return super.getY();
     }
 }

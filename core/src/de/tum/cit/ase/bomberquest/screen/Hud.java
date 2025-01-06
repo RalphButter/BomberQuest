@@ -13,7 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import de.tum.cit.ase.bomberquest.gameobject.Blast;
-import de.tum.cit.ase.bomberquest.map.Player;
+import de.tum.cit.ase.bomberquest.Characters.Player;
 
 
 /**
@@ -127,7 +127,7 @@ public class Hud {
      * @param remainingEnemies The number of remaining enemies.
      * @param blast           The blast object to get the blast radius.
      */
-    public void update(float dt, de.tum.cit.ase.bomberquest.map.Player player, int remainingEnemies, Blast blast) {
+    public void update(float dt, Player player, int remainingEnemies, Blast blast) {
         // Increment the time counter by the elapsed time
         timeCount += dt;
         // Convert the time counter to an integer for display

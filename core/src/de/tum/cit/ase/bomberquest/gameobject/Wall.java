@@ -12,9 +12,10 @@ public abstract class Wall extends GameObject {
      * @param destructible Indicates whether the object is destructible or not (destructible and non-destructible walls)
      */
     private boolean destroyed;
+    private Rectangle wallRectangle;
     public Wall(float x, float y, boolean walkable, boolean destructible) {
         super(x, y, walkable, destructible);
-        super.setRectangle(new Rectangle((int) (x * 16), (int) (y * 16), 16, 16));
+        wallRectangle =  new Rectangle((int) (x * 16), (int) (y * 16), 16, 16);
     }
 
     public boolean isDestroyed() {
@@ -24,4 +25,9 @@ public abstract class Wall extends GameObject {
     public void setDestroyed(boolean destroyed) {
         this.destroyed = destroyed;
     }
+
+    public Rectangle getWallRectangle() {
+        return wallRectangle;
+    }
+
 }

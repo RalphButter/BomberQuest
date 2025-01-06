@@ -3,166 +3,305 @@ package de.tum.cit.ase.bomberquest.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import de.tum.cit.ase.bomberquest.BomberQuestGame;
-import de.tum.cit.ase.bomberquest.map.Flowers;
-import de.tum.cit.ase.bomberquest.texture.Drawable;
+import de.tum.cit.ase.bomberquest.gameobject.*;
 import de.tum.cit.ase.bomberquest.map.GameMap;
+import de.tum.cit.ase.bomberquest.texture.Drawable;
+import de.tum.cit.ase.bomberquest.screen.Hud;
+import java.util.ArrayList;
+import de.tum.cit.ase.bomberquest.MapManager.MapParser;
+import java.util.List;
+import de.tum.cit.ase.bomberquest.MapManager.Node;
+import de.tum.cit.ase.bomberquest.map.Flowers;
+import de.tum.cit.ase.bomberquest.map.Chest;
+import de.tum.cit.ase.bomberquest.Characters.Enemy;
+import de.tum.cit.ase.bomberquest.Characters.Player;
+import com.badlogic.gdx.math.Rectangle;
 
-/**
- * The GameScreen class is responsible for rendering the gameplay screen.
- * It handles the game logic and rendering of the game elements.
- */
 public class GameScreen implements Screen {
-    
-    /**
-     * The size of a grid cell in pixels.
-     * This allows us to think of coordinates in terms of square grid tiles
-     * (e.g. x=1, y=1 is the bottom left corner of the map)
-     * rather than absolute pixel coordinates.
-     */
+
     public static final int TILE_SIZE_PX = 16;
-    
-    /**
-     * The scale of the game.
-     * This is used to make everything in the game look bigger or smaller.
-     */
     public static final int SCALE = 4;
 
     private final BomberQuestGame game;
     private final SpriteBatch spriteBatch;
     private final GameMap map;
+    private final Player player;
     private final Hud hud;
     private final OrthographicCamera mapCamera;
+    private final Viewport viewport;
+    private final OrthogonalTiledMapRenderer mapRenderer;
+    private final Music stageMusic;
+    private final Music actionMusic;
+    private final Sound bombSound;
+    private final Sound powerUpSound;
+    private final Sound enemySound;
 
-    /**
-     * Constructor for GameScreen. Sets up the camera and font.
-     *
-     * @param game The main game class, used to access global resources and methods.
-     */
+    private final List<Enemy> enemies = new ArrayList<>();
+    private final List<Wall> walls = new ArrayList<>();
+    private final List<Entry> entries = new ArrayList<>();
+    private final List<Exit> exits = new ArrayList<>();
+    private final List<Flowers> flowers = new ArrayList<>();
+    private final List<Floor> floors = new ArrayList<>();
+    private final List<Chest> chests = new ArrayList<>();
+    private Node[][] grid;
+    private final List<Bombs> bombs = new ArrayList<>();
+    private final List <Blast> blasts = new ArrayList<>();
+    private boolean paused;
+
+    private GameObjectManager gameObjectManager;
+    private GameMap gameMap;
+    private float radius;
+
+    private int remainingEnemies = 3;
+
     public GameScreen(BomberQuestGame game) {
         this.game = game;
         this.spriteBatch = game.getSpriteBatch();
         this.map = game.getMap();
         this.hud = new Hud(spriteBatch, game.getSkin().getFont("font"));
-        // Create and configure the camera for the game view
+
+        MapParser.resetMap();
+
+        this.player = new Player(MapParser.getEntry().x, MapParser.getEntry().y);
+
         this.mapCamera = new OrthographicCamera();
-        this.mapCamera.setToOrtho(false);
+        this.viewport = new ExtendViewport(800, 600, mapCamera);
+        this.mapRenderer = new OrthogonalTiledMapRenderer(new TmxMapLoader().load("maps/map-1.tmx"), SCALE);
+
+        this.stageMusic = Gdx.audio.newMusic(Gdx.files.internal("audio/stageMusic.mp3"));
+        stageMusic.setVolume(0.2f);
+        stageMusic.setLooping(true);
+        this.stageMusic.play();
+
+        this.actionMusic = Gdx.audio.newMusic(Gdx.files.internal("audio/actionMusic.mp3"));
+        actionMusic.setVolume(0.2f);
+        actionMusic.setLooping(true);
+        this.actionMusic.play();
+
+        this.bombSound = Gdx.audio.newSound(Gdx.files.internal("audio/bombSound.mp3"));
+        this.powerUpSound = Gdx.audio.newSound(Gdx.files.internal("audio/powerUpSound.mp3"));
+        this.enemySound = Gdx.audio.newSound(Gdx.files.internal("audio/enemySound.mp3"));
+
+
+
     }
-    
-    /**
-     * The render method is called every frame to render the game.
-     * @param deltaTime The time in seconds since the last render.
-     */
     @Override
-    public void render(float deltaTime) {
-        // Check for escape key press to go back to the menu
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            game.goToMenu();
+    public void render(float delta) {
+        ScreenUtils.clear(0, 0, 0, 1); // Clear the screen
+        Node playerPosition = new Node((int) (map.getPlayer().getX() / TILE_SIZE_PX), (int) (map.getPlayer().getY() / TILE_SIZE_PX), true);
+
+        if (!paused) {
+            // Player-Wall collision detection
+            for (Wall wall : walls) {
+                if (wall.getWallRectangle().overlaps(map.getPlayer().getRectangle())) {
+                    player.setPosition(player.getPrevX(), player.getPrevY());
+                }
+            }
+
+            // Enemy Update Method
+            for (Enemy enemy : enemies) {
+                enemy.updateState(delta, playerPosition, grid);
+            }
+
+            // Enemy-Wall collision detection
+            for (Wall wall : walls) {
+                for (Enemy enemy : enemies) {
+                    if (enemy.getRectangle().overlaps(wall.getWallRectangle())) {
+                        enemy.handleCollision();
+                    }
+                }
+            }
+
+            // Differentiating between destructible and indestructible walls
+            for (Wall wall : walls) {
+                if (wall.isDestructible()) {
+                    // Handle destructible wall logic
+                } else {
+                    // Handle indestructible wall logic
+                }
+            }
+
+            // Enemy-Entry collision detection
+            for (Entry entry : entries) {
+                for (Enemy enemy : enemies) {
+                    if (enemy.getRectangle().overlaps(entry.getRectangle())) {
+                        enemy.handleCollision();
+                    }
+                }
+            }
+
+            // Enemy-Exit collision detection
+            for (Exit exit : exits) {
+                for (Enemy enemy : enemies) {
+                    if (enemy.getRectangle().overlaps(exit.getRectangle())) {
+                        enemy.handleCollision();
+                    }
+                }
+            }
+
+            // Bombing and killing of enemies
+            // Add your bombing and enemy killing logic here
+
+            // Check for escape key press to go back to the menu
+            if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+                pause();
+            } else if (Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.UP)
+                    && map.getPlayer().getY() < (MapParser.getHeight() - 1) * TILE_SIZE_PX) { // limits the borders of the game
+                player.moveUp();
+            } else if (Gdx.input.isKeyPressed(Input.Keys.S) || Gdx.input.isKeyPressed(Input.Keys.DOWN)
+                    && map.getPlayer().getY() > 0) {
+                player.moveDown();
+            } else if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)
+                    && map.getPlayer().getX() > 0) {
+                player.moveLeft();
+            } else if (Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)
+                    && map.getPlayer().getX() < (MapParser.getWidth() - 1) * TILE_SIZE_PX) {
+                player.moveRight();
+            }
+
+            // Update player rectangle after movement for collision detection
+            Rectangle updatedRectangle = new Rectangle((int) map.getPlayer().getX() + 2, (int) map.getPlayer().getY() + 2, 12, 12);
+            map.getPlayer().setRectangle(updatedRectangle);
+
+            // Update the camera, centered in the middle
+            updateCamera();
+            mapCamera.update();
+            spriteBatch.setProjectionMatrix(mapCamera.combined);
+
+            // Render the tile map
+            mapRenderer.setView(mapCamera);
+            mapRenderer.render();
+
+            player.update(delta);
+
+            // Supports the player animation and movement
+            if ((!Gdx.input.isKeyPressed(Input.Keys.W) && !Gdx.input.isKeyPressed(Input.Keys.UP)) &&
+                    (!Gdx.input.isKeyPressed(Input.Keys.S) && !Gdx.input.isKeyPressed(Input.Keys.DOWN)) &&
+                    (!Gdx.input.isKeyPressed(Input.Keys.A) && !Gdx.input.isKeyPressed(Input.Keys.LEFT)) &&
+                    (!Gdx.input.isKeyPressed(Input.Keys.D) && !Gdx.input.isKeyPressed(Input.Keys.RIGHT))) {
+                player.setIsMoving(false);
+            }
+
+            // Call draw methods
+            spriteBatch.begin();
+            draw(spriteBatch, map.getPlayer());
+            for (Enemy enemy : enemies) {
+                draw(spriteBatch, enemy);
+            }
+            spriteBatch.end();
+
+            // HUD: Set batch to now draw what the Hud camera sees.
+            spriteBatch.setProjectionMatrix(hud.stage.getCamera().combined);
+            hud.update(delta, player, remainingEnemies, blasts.isEmpty() ? null : blasts.get(0));
+            hud.stage.draw();
         }
-        
-        // Clear the previous frame from the screen, or else the picture smears
-        ScreenUtils.clear(Color.BLACK);
-        
-        // Cap frame time to 250ms to prevent spiral of death
-        float frameTime = Math.min(deltaTime, 0.250f);
-        
-        // Update the map state
-        map.tick(frameTime);
-        
-        // Update the camera
-        updateCamera();
-        
-        // Render the map on the screen
-        renderMap();
-        
-        // Render the HUD on the screen
-        hud.render();
     }
-    
-    /**
-     * Updates the camera to match the current state of the game.
-     * Currently, this just centers the camera at the origin.
-     */
+
     private void updateCamera() {
-        mapCamera.setToOrtho(false);
-        mapCamera.position.x = 3.5f * TILE_SIZE_PX * SCALE;
-        mapCamera.position.y = 3.5f * TILE_SIZE_PX * SCALE;
-        mapCamera.update(); // This is necessary to apply the changes
+        mapCamera.position.set(map.getPlayer().getX() * TILE_SIZE_PX * SCALE, map.getPlayer().getY() * TILE_SIZE_PX * SCALE, 0);
+        mapCamera.update();
     }
-    
-    private void renderMap() {
-        // This configures the spriteBatch to use the camera's perspective when rendering
-        spriteBatch.setProjectionMatrix(mapCamera.combined);
-        
-        // Start drawing
-        spriteBatch.begin();
-        
-        // Render everything in the map here, in order from lowest to highest (later things appear on top)
-        // You may want to add a method to GameMap to return all the drawables in the correct order
-        for (Flowers flowers : map.getFlowers()) {
-            draw(spriteBatch, flowers);
-        }
-        draw(spriteBatch, map.getChest());
-        draw(spriteBatch, map.getPlayer());
-        
-        // Finish drawing, i.e. send the drawn items to the graphics card
-        spriteBatch.end();
-    }
-    
-    /**
-     * Draws this object on the screen.
-     * The texture will be scaled by the game scale and the tile size.
-     * This should only be called between spriteBatch.begin() and spriteBatch.end(), e.g. in the renderMap() method.
-     * @param spriteBatch The SpriteBatch to draw with.
-     */
+
     private static void draw(SpriteBatch spriteBatch, Drawable drawable) {
         TextureRegion texture = drawable.getCurrentAppearance();
-        // Drawable coordinates are in tiles, so we need to scale them to pixels
         float x = drawable.getX() * TILE_SIZE_PX * SCALE;
         float y = drawable.getY() * TILE_SIZE_PX * SCALE;
-        // Additionally scale everything by the game scale
         float width = texture.getRegionWidth() * SCALE;
         float height = texture.getRegionHeight() * SCALE;
         spriteBatch.draw(texture, x, y, width, height);
     }
-    
-    /**
-     * Called when the window is resized.
-     * This is where the camera is updated to match the new window size.
-     * @param width The new window width.
-     * @param height The new window height.
-     */
+
     @Override
     public void resize(int width, int height) {
-        mapCamera.setToOrtho(false);
+        viewport.update(width, height);
         hud.resize(width, height);
     }
 
-    // Unused methods from the Screen interface
     @Override
     public void pause() {
+        paused = true;
     }
 
     @Override
     public void resume() {
+        paused = false;
     }
 
     @Override
     public void show() {
-
+        paused = false;
     }
 
     @Override
     public void hide() {
+        paused = true;
     }
 
     @Override
     public void dispose() {
+        mapRenderer.dispose();
+        stageMusic.dispose();
+        actionMusic.dispose();
+        bombSound.dispose();
+        powerUpSound.dispose();
+        enemySound.dispose();
     }
 
+    public boolean isPaused() {
+        return paused;
+    }
+
+    public void setPaused(boolean paused) {
+        this.paused = paused;
+    }
+
+    // Add these methods to the GameScreen class
+
+    private void handleDestructibleWall(Wall wall) {
+        // Logic for handling destructible walls
+        if (isBombExplodedNear(wall)) {
+            destroyWall(wall);
+        }
+    }
+
+    private void handleIndestructibleWall(Wall wall) {
+        // Logic for handling indestructible walls
+        // For example, you can simply ignore them or add some specific behavior
+
+    }
+
+    private boolean isBombExplodedNear(Wall wall) {
+        for (Bombs bomb : bombs) {
+            if (bomb.getBlastRadius().overlaps(wall.getRectangle())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void destroyWall(Wall wall) {
+        // Logic to destroy the wall
+        // For example, remove the wall from the list of walls and update the game state
+        walls.remove(wall);
+        // Additional logic to update the game state
+    }
+
+    private void explode(float x, float y) {
+        Blast blast = new Blast(x, y, (int) radius, 0.5f, 1, gameMap, gameObjectManager);
+        gameObjectManager.addGameObject(blast);
+        blasts.add(blast);
+    }
 }

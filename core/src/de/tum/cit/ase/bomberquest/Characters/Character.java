@@ -8,6 +8,8 @@ import com.badlogic.gdx.math.Rectangle;
 public abstract class Character {
     private float x;  // X-coordinate of the character
     private float y;  // Y-coordinate of the character
+    float prevX;    // Previous X-coordinate of the character
+    float prevY;   // Previous Y-coordinate of the character
     private float speed;    // Speed of the character
     private int health;     // Health of the character
     private boolean alive;  // Flag indicating if the character is alive
@@ -33,14 +35,14 @@ public abstract class Character {
      *
      * @param x Initial X coordinate
      * @param y Initial Y coordinate
-     * @param health Initial health of the character
      */
-    public Character(float x, float y, int health, Rectangle rectangle) {
+    public Character(float x, float y, Rectangle rectangle) {
         this.x = x;
         this.y = y;
+        this.prevX = x;
+        this.prevY = y;
         this.speed = 1f;
         this.moving = false;
-        this.health = health;
         this.alive = true;
         this.rectangle = rectangle;
     }
@@ -97,6 +99,22 @@ public abstract class Character {
         return speed;
     }
 
+    public float getPrevX() {
+        return prevX;
+    }
+
+    public void setPrevX(float prevX) {
+        this.prevX = prevX;
+    }
+
+    public float getPrevY() {
+        return prevY;
+    }
+
+    public void setPrevY(float prevY) {
+        this.prevY = prevY;
+    }
+
     public int getHealth() {
         return health;
     }
@@ -120,6 +138,8 @@ public abstract class Character {
     public void setSpeed(float speed) {
         this.speed = speed;
     }
+
+    public void setPosition(float x, float y) { this.x = x; this.y = y; }
 
     public Texture getTexture() {
         return texture;

@@ -72,6 +72,7 @@ public abstract class GameObject {
 
     public abstract void render(SpriteBatch batch);
 
+    // Getter for the bounding rectangle of the object
     public abstract Rectangle getBoundingRectangle();
 
     // Dispose resources

@@ -205,7 +205,7 @@ public class MapParser {
      *
      * This method is useful for reinitializing the map data, for example, when loading a new map.
      */
-    public static void reset() {
+    public static void resetMap() {
         // Clear all entries from the objects map
         objects.clear();
 
@@ -218,5 +218,14 @@ public class MapParser {
 
         // Add any additional reset logic here if other static variables are introduced in the future
     }
+
+    public static void setObjects(Map<Point, Integer> objects) {
+        MapParser.objects = objects;
+    }
+
+    public static void setEntry(Point entry) {
+        MapParser.entry = entry;
+    }
+
 
 }

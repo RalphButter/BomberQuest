@@ -7,21 +7,34 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.World;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Player extends Character {
+
+    private int blastRadius = 1; // Initial blast radius
+    private int maxBlastRadius = 8;
+    private int concurrentBombs;
+
+
+
     /**
      * Constructor to initialize a Character object.
      *
      * @param x      Initial X coordinate
      * @param y      Initial Y coordinate
-     * @param health Initial health of the character
+     *
+     *
      */
-    public Player(float x, float y, int health) {
-    super(x, y, health, new Rectangle(x + 2, y + 2, 12, 12));
+
+    public Player(float x, float y) {
+    super(x, y, new Rectangle(x + 2, y + 2, 12, 12));
     this.texture = new Texture(Gdx.files.internal("assets/character.png"));
 
     java.util.List<TextureRegion> walkUpFrames = new ArrayList<>();
@@ -127,8 +140,25 @@ public class Player extends Character {
         }
     }
 
+    public int getConcurrentBombs() {
+        return concurrentBombs;
+    }
+
+    public void setConcurrentBombs(int concurrentBombs) {
+        this.concurrentBombs = concurrentBombs;
+    }
+
     public void dispose() {
         texture.dispose();
     }
+
+
+
+    /**
+     * Move the player around in a circle by updating the linear velocity of its hitbox every frame.
+     * This doesn't actually move the player, but it tells the physics engine how the player should move next frame.
+     *
+     * @param frameTime the time since the last frame.
+     */
 
 }
