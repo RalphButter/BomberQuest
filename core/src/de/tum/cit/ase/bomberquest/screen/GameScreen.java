@@ -130,6 +130,9 @@ public class GameScreen implements Screen {
         Node playerPosition = new Node((int) (map.getPlayer().getX() / TILE_SIZE_PX), (int) (map.getPlayer().getY() / TILE_SIZE_PX), true);
 
         if (!paused) {
+
+            checkPlayerDeath();
+
             // Player-Wall collision detection
             for (Wall wall : walls) {
                 if (wall.getWallRectangle().overlaps(player.getRectangle())) {
@@ -141,6 +144,15 @@ public class GameScreen implements Screen {
                 }
             }
 
+            for (Blast blast : blasts) {
+                for (Wall wall : walls) {
+                    if (wall instanceof DestructibleWall && blast.getBoundingRectangle().overlaps(wall.getWallRectangle())) {
+                        handleDestructibleWall(wall);
+                    }
+                }
+            }
+
+
             // Enemy Update Method
             for (Enemy enemy : enemies) {
                 enemy.updateState(delta, playerPosition, grid);
@@ -148,9 +160,6 @@ public class GameScreen implements Screen {
 
             for (Enemy enemy : enemies) {
                 enemy.update(delta, player.getPosition());
-                if (enemy.getBoundingRectangle().overlaps(player.getRectangle())) {
-                    gameOver();
-                }
             }
 
             // Enemy-Wall collision detection
@@ -163,13 +172,6 @@ public class GameScreen implements Screen {
             }
 
             // Differentiating between destructible and indestructible walls
-            for (Blast blast : blasts) {
-                for (Wall wall : walls) {
-                    if (wall instanceof DestructibleWall && blast.getBoundingRectangle().overlaps(wall.getWallRectangle())) {
-                        handleDestructibleWall(wall);
-                    }
-                }
-            }
 
             // Enemy-Entry collision detection
             for (Entry entry : entries) {
@@ -390,4 +392,27 @@ public class GameScreen implements Screen {
     public List<Wall> getWalls() {
         return walls;
     }
+
+    private void checkPlayerDeath() {
+        // Check for player collision with enemies
+        for (Enemy enemy : enemies) {
+            if (enemy.getBoundingRectangle().overlaps(player.getRectangle())) {
+                player.setAlive(false);
+                System.out.println("Player killed by enemy!");
+                gameOver();
+                return; // Stop further updates
+            }
+        }
+
+        // Check for player collision with blasts
+        for (Blast blast : blasts) {
+            if (blast.getBoundingRectangle().overlaps(player.getRectangle())) {
+                player.setAlive(false);
+                System.out.println("Player hit by explosion!");
+                gameOver();
+                return; // Stop further updates
+            }
+        }
+    }
+
 }

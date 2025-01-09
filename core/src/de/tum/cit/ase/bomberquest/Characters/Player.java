@@ -16,6 +16,7 @@ import de.tum.cit.ase.bomberquest.gameobject.Bombs;
 import de.tum.cit.ase.bomberquest.gameobject.GameObjectManager;
 import de.tum.cit.ase.bomberquest.gameobject.Wall;
 import de.tum.cit.ase.bomberquest.map.GameMap;
+import de.tum.cit.ase.bomberquest.screen.GameOverScreen;
 import de.tum.cit.ase.bomberquest.screen.GameScreen;
 import de.tum.cit.ase.bomberquest.texture.Animations;
 import de.tum.cit.ase.bomberquest.texture.Drawable;
