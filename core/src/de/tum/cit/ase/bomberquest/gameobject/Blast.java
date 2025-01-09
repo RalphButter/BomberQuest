@@ -2,9 +2,7 @@ package de.tum.cit.ase.bomberquest.gameobject;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
-import de.tum.cit.ase.bomberquest.Characters.Enemy;
 import de.tum.cit.ase.bomberquest.map.GameMap;
-import de.tum.cit.ase.bomberquest.map.Player;
 
 import java.util.ArrayList;
 import java.util.List;

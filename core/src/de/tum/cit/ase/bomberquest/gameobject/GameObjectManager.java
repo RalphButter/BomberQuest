@@ -2,7 +2,7 @@ package de.tum.cit.ase.bomberquest.gameobject;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import de.tum.cit.ase.bomberquest.Characters.Enemy;
-import de.tum.cit.ase.bomberquest.map.Player;
+import de.tum.cit.ase.bomberquest.Characters.Player;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -47,14 +47,14 @@ public class GameObjectManager {
         gameObjects.clear();
     }
 
-    public Player getPlayer() {
-        for (GameObject gameObject : gameObjects) {
-            if (gameObject instanceof Player) {
-                return (Player) gameObject;
-            }
-        }
-        return null;
-    }
+//    public Player getPlayer() {
+//        for (GameObject gameObject : gameObjects) {
+//            if (gameObject instanceof Player) {
+//                return (Player) gameObject;
+//            }
+//        }
+//        return null;
+//    }
 
     public List<Enemy> getEnemies() {
         return null;

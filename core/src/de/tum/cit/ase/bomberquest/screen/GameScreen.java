@@ -12,6 +12,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -67,15 +69,19 @@ public class GameScreen implements Screen {
 
     private int remainingEnemies = 3;
 
+    private final World world;
+
+
     public GameScreen(BomberQuestGame game) {
         this.game = game;
         this.spriteBatch = game.getSpriteBatch();
         this.map = game.getMap();
         this.hud = new Hud(spriteBatch, game.getSkin().getFont("font"));
 
+        this.world = new World(new Vector2(0, 0), true);
         MapParser.resetMap();
 
-        this.player = new Player(MapParser.getEntry().x, MapParser.getEntry().y);
+        this.player = new Player(this.world, MapParser.getEntry().x, MapParser.getEntry().y);
 
         this.mapCamera = new OrthographicCamera();
         this.viewport = new ExtendViewport(800, 600, mapCamera);
@@ -95,6 +101,11 @@ public class GameScreen implements Screen {
         this.powerUpSound = Gdx.audio.newSound(Gdx.files.internal("audio/powerUpSound.mp3"));
         this.enemySound = Gdx.audio.newSound(Gdx.files.internal("audio/enemySound.mp3"));
 
+        // Initialize missing fields
+        this.radius = 1.0f; // Example value, adjust as needed
+        this.gameObjectManager = new GameObjectManager();
+        this.gameMap = new GameMap(game);
+
 
 
     }
@@ -106,14 +117,25 @@ public class GameScreen implements Screen {
         if (!paused) {
             // Player-Wall collision detection
             for (Wall wall : walls) {
-                if (wall.getWallRectangle().overlaps(map.getPlayer().getRectangle())) {
-                    player.setPosition(player.getPrevX(), player.getPrevY());
+                if (wall.getWallRectangle().overlaps(player.getRectangle())) {
+                    if (wall.isDestructible()) {
+                        handleDestructibleWall(wall);
+                    } else {
+                        player.setPosition(player.getPrevX(), player.getPrevY());
+                    }
                 }
             }
 
             // Enemy Update Method
             for (Enemy enemy : enemies) {
                 enemy.updateState(delta, playerPosition, grid);
+            }
+
+            for (Enemy enemy : enemies) {
+                enemy.update(delta, player.getPosition());
+                if (enemy.getBoundingRectangle().overlaps(player.getRectangle())) {
+                    gameOver();
+                }
             }
 
             // Enemy-Wall collision detection
@@ -272,20 +294,25 @@ public class GameScreen implements Screen {
 
     private void handleDestructibleWall(Wall wall) {
         // Logic for handling destructible walls
-        if (isBombExplodedNear(wall)) {
-            destroyWall(wall);
+        if (bombs.size() < player.getConcurrentBombs()) {
+            Bombs bomb = new Bombs(player.getX(), player.getY(), map, gameObjectManager);
+            bombs.add(bomb);
+            bombSound.play();
         }
+
+
     }
 
     private void handleIndestructibleWall(Wall wall) {
         // Logic for handling indestructible walls
         // For example, you can simply ignore them or add some specific behavior
 
+
     }
 
     private boolean isBombExplodedNear(Wall wall) {
-        for (Bombs bomb : bombs) {
-            if (bomb.getBlastRadius().overlaps(wall.getRectangle())) {
+        for (Blast blast : blasts) {
+            if (blast.getBoundingRectangle().overlaps(wall.getRectangle())) {
                 return true;
             }
         }
@@ -303,5 +330,13 @@ public class GameScreen implements Screen {
         Blast blast = new Blast(x, y, (int) radius, 0.5f, 1, gameMap, gameObjectManager);
         gameObjectManager.addGameObject(blast);
         blasts.add(blast);
+    }
+
+    private void gameOver() {
+        // Logic to handle game over, e.g., show game over screen, stop music, etc.
+        stageMusic.stop();
+        actionMusic.stop();
+        // Transition to game over screen or main menu
+        game.setScreen(new GameOverScreen(game));
     }
 }

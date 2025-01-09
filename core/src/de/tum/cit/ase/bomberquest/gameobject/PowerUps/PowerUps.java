@@ -3,7 +3,7 @@ package de.tum.cit.ase.bomberquest.gameobject.PowerUps;
 import de.tum.cit.ase.bomberquest.gameobject.GameObject;
 import de.tum.cit.ase.bomberquest.gameobject.GameObjectManager;
 import de.tum.cit.ase.bomberquest.map.GameMap;
-import de.tum.cit.ase.bomberquest.map.Player;
+import de.tum.cit.ase.bomberquest.Characters.Player;
 
 import java.awt.*;
 

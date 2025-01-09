@@ -81,7 +81,7 @@ public class MenuScreen implements Screen {
         stage.addActor(table); // Add the table to the stage
 
         // Create and add a label as the title of the menu screen
-        Label titleLabel = new Label("MAZE RUNNER", game.getSkin(), "title"); // Create a title label
+        Label titleLabel = new Label("BomberMan", game.getSkin(), "title"); // Create a title label
         table.add(titleLabel).padBottom(80).row(); // Add the label to the table with bottom padding and move to the next row
 
         // Create and add the "Go To Game" button

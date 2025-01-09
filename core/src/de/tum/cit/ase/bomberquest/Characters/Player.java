@@ -11,91 +11,130 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.World;
+import de.tum.cit.ase.bomberquest.texture.Animations;
+import de.tum.cit.ase.bomberquest.texture.Drawable;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Player extends Character {
+/**
+ * Represents the player character in the game with combined functionality.
+ */
+public class Player extends Character implements Drawable {
+
+    private final World world;
+    private final Body hitbox;
 
     private int blastRadius = 1; // Initial blast radius
     private int maxBlastRadius = 8;
     private int concurrentBombs;
+    private Rectangle bounds;
+    private float elapsedTime;
 
+    public Player(World world, float x, float y) {
+        super(x, y, new Rectangle(x, y, 16, 32));
+        this.world = world;
+        this.hitbox = createHitbox(world, x, y);
+        this.setTexture(new Texture(Gdx.files.internal("assets/character.png")));
 
+        // Setting animations
+        this.setWalkUpAnimation(createAnimation(64, 16, 32));
+        this.setWalkDownAnimation(createAnimation(0, 16, 32));
+        this.setWalkLeftAnimation(createAnimation(96, 16, 32));
+        this.setWalkRightAnimation(createAnimation(32, 16, 32));
+    }
 
     /**
-     * Constructor to initialize a Character object.
+     * Creates a Box2D body for the player.
+     * This is what the physics engine uses to move the player around and detect collisions with other bodies.
      *
-     * @param x      Initial X coordinate
-     * @param y      Initial Y coordinate
-     *
-     *
+     * @param world  The Box2D world to add the body to.
+     * @param startX The initial X position.
+     * @param startY The initial Y position.
+     * @return The created body.
      */
-
-    public Player(float x, float y) {
-    super(x, y, new Rectangle(x + 2, y + 2, 12, 12));
-    this.texture = new Texture(Gdx.files.internal("assets/character.png"));
-
-    java.util.List<TextureRegion> walkUpFrames = new ArrayList<>();
-    walkUpFrames.add(new TextureRegion(texture, 0, 64, 16, 32));
-    walkUpFrames.add(new TextureRegion(texture, 16, 64, 16, 32));
-    walkUpFrames.add(new TextureRegion(texture, 32, 64, 16, 32));
-    walkUpFrames.add(new TextureRegion(texture, 48, 64, 16, 32));
-    setWalkUpAnimation(new Animation<>(0.1f, walkUpFrames.toArray(new TextureRegion[0])));
-
-    java.util.List<TextureRegion> walkDownFrames = new ArrayList<>();
-    walkDownFrames.add(new TextureRegion(texture, 0, 0, 16, 32));
-    walkDownFrames.add(new TextureRegion(texture, 16, 0, 16, 32));
-    walkDownFrames.add(new TextureRegion(texture, 32, 0, 16, 32));
-    walkDownFrames.add(new TextureRegion(texture, 48, 0, 16, 32));
-    setWalkDownAnimation(new Animation<>(0.1f, walkDownFrames.toArray(new TextureRegion[0])));
-
-    java.util.List<TextureRegion> walkLeftFrames = new ArrayList<>();
-    walkLeftFrames.add(new TextureRegion(texture, 0, 96, 16, 32));
-    walkLeftFrames.add(new TextureRegion(texture, 16, 96, 16, 32));
-    walkLeftFrames.add(new TextureRegion(texture, 32, 96, 16, 32));
-    walkLeftFrames.add(new TextureRegion(texture, 48, 96, 16, 32));
-    setWalkLeftAnimation(new Animation<>(0.1f, walkLeftFrames.toArray(new TextureRegion[0])));
-
-    List<TextureRegion> walkRightFrames = new ArrayList<>();
-    walkRightFrames.add(new TextureRegion(texture, 0, 32, 16, 32));
-    walkRightFrames.add(new TextureRegion(texture, 16, 32, 16, 32));
-    walkRightFrames.add(new TextureRegion(texture, 32, 32, 16, 32));
-    walkRightFrames.add(new TextureRegion(texture, 48, 32, 16, 32));
-    setWalkRightAnimation(new Animation<>(0.1f, walkRightFrames.toArray(new TextureRegion[0])));
-
-    List<TextureRegion> standingFrames = new ArrayList<>();
-    standingFrames.add(new TextureRegion(texture, 0, 0, 16, 32)); // Assuming the first frame of the down animation is the standing frame
-        // setStadingAnimation(new Animation<>(0.1f, standingFrames.toArray(new TextureRegion[0])));
-
-        this.setSpeed(1f);
-    this.setHealth(1);
-}
-
-    public void moveUp() {
-        setY(getY() + getSpeed() * Gdx.graphics.getDeltaTime());
-        setCurrentDirection(Direction.UP);
+    private Body createHitbox(World world, float startX, float startY) {
+        // BodyDef is like a blueprint for the movement properties of the body.
+        BodyDef bodyDef = new BodyDef();
+        // Dynamic bodies are affected by forces and collisions.
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        // Set the initial position of the body.
+        bodyDef.position.set(startX, startY);
+        // Create the body in the world using the body definition.
+        Body body = world.createBody(bodyDef);
+        // Now we need to give the body a shape so the physics engine knows how to collide with it.
+        // We'll use a circle shape for the player.
+        CircleShape circle = new CircleShape();
+        // Give the circle a radius of 0.3 tiles (the player is 0.6 tiles wide).
+        circle.setRadius(0.3f);
+        // Attach the shape to the body as a fixture.
+        // Bodies can have multiple fixtures, but we only need one for the player.
+        body.createFixture(circle, 1.0f);
+        // We're done with the shape, so we should dispose of it to free up memory.
+        circle.dispose();
+        // Set the player as the user data of the body so we can look up the player from the body later.
+        body.setUserData(this);
+        return body;
     }
 
-    public void moveDown() {
-        setY(getY() - getSpeed() * Gdx.graphics.getDeltaTime());
-        setCurrentDirection(Direction.DOWN);
+    private Animation<TextureRegion> createAnimation(int yOffset, int frameWidth, int frameHeight) {
+        List<TextureRegion> frames = new ArrayList<>();
+        for (int i = 0; i < 4; i++) {
+            frames.add(new TextureRegion(getTexture(), i * frameWidth, yOffset, frameWidth, frameHeight));
+        }
+        return new Animation<>(0.1f, frames.toArray(new TextureRegion[0]));
     }
 
-    public void moveLeft() {
-        setX(getX() - getSpeed() * Gdx.graphics.getDeltaTime());
-        setCurrentDirection(Direction.LEFT);
+    @Override
+    public void setPosition(float x, float y) {
+        super.setPosition(x, y);
+        hitbox.setTransform(x, y, 0);
     }
 
-    public void moveRight() {
-        setX(getX() + getSpeed() * Gdx.graphics.getDeltaTime());
-        setCurrentDirection(Direction.RIGHT);
+    /**
+     * Move the player around in a circle by updating the linear velocity of its hitbox every frame.
+     * This doesn't actually move the player, but it tells the physics engine how the player should move next frame.
+     *
+     * @param frameTime the time since the last frame.
+     */
+    public void tick(float frameTime) {
+        this.elapsedTime += frameTime;
+        // Make the player move in a circle with radius 2 tiles
+        // You can change this to make the player move differently, e.g. in response to user input.
+        // See Gdx.input.isKeyPressed() for keyboard input
+        float xVelocity = (float) Math.sin(this.elapsedTime) * 2;
+        float yVelocity = (float) Math.cos(this.elapsedTime) * 2;
+        this.hitbox.setLinearVelocity(xVelocity, yVelocity);
     }
 
-    public void render(SpriteBatch batch) { // Render the player sprite
+    public void update(float deltaTime) {
+        setStateTime(getStateTime() + deltaTime);
+
+        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+            move(Direction.UP, 0, getSpeed() * deltaTime);
+        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+            move(Direction.DOWN, 0, -getSpeed() * deltaTime);
+        } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            move(Direction.LEFT, -getSpeed() * deltaTime, 0);
+        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            move(Direction.RIGHT, getSpeed() * deltaTime, 0);
+        } else {
+            setMoving(false);
+            setCurrentDirection(Direction.STANDING);
+        }
+    }
+
+    private void move(Direction direction, float dx, float dy) {
+        setX(getX() + dx);
+        setY(getY() + dy);
+        setMoving(true);
+        setCurrentDirection(direction);
+        hitbox.setTransform(getX(), getY(), 0);
+    }
+
+    public void render(SpriteBatch batch) {
         TextureRegion currentFrame;
-        switch (getCurrentDirection()) { // Determine the current frame based on the direction
+        switch (getCurrentDirection()) {
             case UP:
                 currentFrame = getWalkUpAnimation().getKeyFrame(getStateTime(), true);
                 break;
@@ -109,35 +148,90 @@ public class Player extends Character {
                 currentFrame = getWalkRightAnimation().getKeyFrame(getStateTime(), true);
                 break;
             default:
-                currentFrame = getWalkDownAnimation().getKeyFrame(0, true); // Default to standing frame
+                currentFrame = getWalkDownAnimation().getKeyFrame(0, true);
                 break;
         }
         batch.draw(currentFrame, getX(), getY());
     }
 
-    public void update(float deltaTime) {
-        // Update the state time, e.g., for animations
-        setStateTime(getStateTime() + deltaTime);
-        // Handle user input for movement
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            moveUp();
-        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            moveDown();
-        } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            moveLeft();
-        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            moveRight();
+    public int getBlastRadius() {
+        return blastRadius;
+    }
+
+    public void setBlastRadius(int blastRadius) {
+        if (blastRadius <= maxBlastRadius) {
+            this.blastRadius = blastRadius;
+            // Update HUD or any other related components if necessary
         }
-        else {
-            setIsMoving(false);
-        }
+    }
+
+    public int getMaxBlastRadius() {
+        return maxBlastRadius;
+    }
+
+    public void setMaxBlastRadius(int maxBlastRadius) {
+        this.maxBlastRadius = maxBlastRadius;
+    }
+    public int[] getPosition() {
+        return new int[]{(int) getX(), (int) getY()};
+    }
+
+    public void moveUp() {
+        prevY = this.getY();  // player.setPrevY(player.getyPlayer()); is set to previous yPlayer
+        this.setY(this.getY()+getSpeed()); // Move up
+        setCurrentDirection(Direction.UP);
+        setIsMoving(true);
+    }
+
+    public void moveDown() {
+        prevY = this.getY();  // player.setPrevY(player.getyPlayer()); is set to previous yPlayer
+        this.setY(this.getY()-getSpeed()); // Move down
+        setCurrentDirection(Direction.DOWN);
+        setIsMoving(true);
+    }
+
+    public void moveLeft() {
+        prevX = this.getX();  // player.setPrevX(player.getxPlayer()); is set to previous xPlayer
+        this.setX(this.getX()-getSpeed()); // Move left
+        setCurrentDirection(Direction.LEFT);
+        setIsMoving(true);
+    }
+
+    public void moveRight() {
+        prevX = this.getX();  // player.setPrevX(player.getxPlayer()); is set to previous xPlayer
+        this.setX(this.getX()+getSpeed()); // Move right
+        setCurrentDirection(Direction.RIGHT);
+        setIsMoving(true);
     }
 
     public void setIsMoving(boolean moving) {
         setMoving(moving);
-        if (!isMoving()) {
+        if(!isMoving()) {
             setCurrentDirection(Direction.STANDING);
         }
+    }
+
+
+    public void dispose() {
+        getTexture().dispose();
+    }
+
+
+    public TextureRegion getCurrentAppearance() {
+        // Get the frame of the walk down animation that corresponds to the current time.
+        return Animations.CHARACTER_WALK_DOWN.getKeyFrame(this.elapsedTime, true);
+    }
+
+    @Override
+    public float getX() {
+        // The x-coordinate of the player is the x-coordinate of the hitbox (this can change every frame).
+        return hitbox.getPosition().x;
+    }
+
+    @Override
+    public float getY() {
+        // The y-coordinate of the player is the y-coordinate of the hitbox (this can change every frame).
+        return hitbox.getPosition().y;
     }
 
     public int getConcurrentBombs() {
@@ -148,17 +242,13 @@ public class Player extends Character {
         this.concurrentBombs = concurrentBombs;
     }
 
-    public void dispose() {
-        texture.dispose();
+    public Rectangle getBounds() {
+        return bounds;
     }
 
+    public void die() {
 
+    }
 
-    /**
-     * Move the player around in a circle by updating the linear velocity of its hitbox every frame.
-     * This doesn't actually move the player, but it tells the physics engine how the player should move next frame.
-     *
-     * @param frameTime the time since the last frame.
-     */
 
 }

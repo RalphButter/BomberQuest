@@ -141,6 +141,8 @@ public abstract class Character {
 
     public void setPosition(float x, float y) { this.x = x; this.y = y; }
 
+    public int[] getPosition () { return new int[]{(int) getX(), (int) getY()}; }
+
     public Texture getTexture() {
         return texture;
     }

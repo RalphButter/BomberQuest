@@ -90,31 +90,44 @@ public class Enemy extends Character implements Drawable {
 
         if (path != null && pathIndex < path.size()) {
             int[] nextStep = path.get(pathIndex);
-            int nextX = nextStep[0];
-            int nextY = nextStep[1];
+            float nextX = nextStep[0];
+            float nextY = nextStep[1];
 
             Rectangle nextStepRect = new Rectangle(nextX, nextY, 16, 16);
             Rectangle gameObjectRect = gameObject.getRectangle();
 
-            if (!CollisionDetection.isColliding(nextStepRect.x, nextStepRect.y, nextStepRect.width, nextStepRect.height,
-                    gameObjectRect.x, gameObjectRect.y, gameObjectRect.width, gameObjectRect.height)) {
-                if (getX() < nextX) {
-                    moveRight();
-                } else if (getX() > nextX) {
-                    moveLeft();
-                } else if (getY() < nextY) {
-                    moveUp();
-                } else if (getY() > nextY) {
-                    moveDown();
-                }
-
-                if (getX() == nextX && getY() == nextY) {
-                    pathIndex++;
-                }
-            } else {
-                path = pathfinding.findPath(new int[]{(int) getX(), (int) getY()}, target, "A*");
-                pathIndex = 0;
+            if (CollisionDetection.isColliding(nextX, nextY, 16, 16, getX(), getY(), getRectangle().width, getRectangle().height)) {
+                handleCollision();
+                return;
             }
+
+            if (getX() < nextX) moveRight();
+            else if (getX() > nextX) moveLeft();
+            else if (getY() < nextY) moveUp();
+            else if (getY() > nextY) moveDown();
+
+            if (Math.abs(getX() - nextX) < 0.1f && Math.abs(getY() - nextY) < 0.1f) {
+                pathIndex++;
+            }
+//            if (!CollisionDetection.isColliding(nextStepRect.x, nextStepRect.y, nextStepRect.width, nextStepRect.height,
+//                    gameObjectRect.x, gameObjectRect.y, gameObjectRect.width, gameObjectRect.height)) {
+//                if (getX() < nextX) {
+//                    moveRight();
+//                } else if (getX() > nextX) {
+//                    moveLeft();
+//                } else if (getY() < nextY) {
+//                    moveUp();
+//                } else if (getY() > nextY) {
+//                    moveDown();
+//                }
+//
+//                if (getX() == nextX && getY() == nextY) {
+//                    pathIndex++;
+//                }
+//            } else {
+//                path = pathfinding.findPath(new int[]{(int) getX(), (int) getY()}, target, "A*");
+//                pathIndex = 0;
+//            }
         }
     }
 
@@ -134,10 +147,12 @@ public class Enemy extends Character implements Drawable {
         batch.draw(currentFrame, getX(), getY());
     }
 
-    public void update(int deltaTime, int[] target) {
+    public void update(float deltaTime, int[] target) {
         setStateTime(getStateTime() + deltaTime);
         move(target);
     }
+
+
 
     @Override
     public void die() {
@@ -159,6 +174,11 @@ public class Enemy extends Character implements Drawable {
 
     public void updateState(float delta, Node playerPosition, Node[][] grid) {
         // Update enemy state
+        if (playerPosition != null) {
+            target = new int[]{playerPosition.getX(), playerPosition.getY()};
+        }
+
+        move(target);
     }
 
     public Rectangle getRectangle() {
@@ -170,8 +190,8 @@ public class Enemy extends Character implements Drawable {
         setCurrentDirection(Direction.STANDING);
 
         // Recalculate path to the target
-        path = pathfinding.findPath(new int[]{(int) getX(), (int) getY()}, target, "A*");
-        pathIndex = 0;
+//        path = pathfinding.findPath(new int[]{(int) getX(), (int) getY()}, target, "A*");
+//        pathIndex = 0;
     }
 
     @Override
