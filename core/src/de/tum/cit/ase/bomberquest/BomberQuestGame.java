@@ -13,6 +13,8 @@ import de.tum.cit.ase.bomberquest.screen.GameOverScreen;
 import de.tum.cit.ase.bomberquest.screen.GameScreen;
 import de.tum.cit.ase.bomberquest.screen.MenuScreen;
 import games.spooky.gdx.nativefilechooser.NativeFileChooser;
+import games.spooky.gdx.nativefilechooser.NativeFileChooserCallback;
+import games.spooky.gdx.nativefilechooser.NativeFileChooserConfiguration;
 
 /**
  * The BomberQuestGame class represents the core of the Bomber Quest game.
@@ -20,6 +22,7 @@ import games.spooky.gdx.nativefilechooser.NativeFileChooser;
  */
 public class BomberQuestGame extends Game {
 
+    // Screens for different game states
     private GameScreen gameScreen;
     private MenuScreen menuScreen;
 
@@ -38,7 +41,9 @@ public class BomberQuestGame extends Game {
      * which you can use to read the contents of the map file as a String, and then parse it into a {@link GameMap}.
      */
     private final NativeFileChooser fileChooser;
-    
+    private String filePath;
+
+
     /**
      * The map. This is where all the game objects are stored.
      * This is owned by {@link BomberQuestGame} and not by {@link GameScreen}
@@ -139,6 +144,9 @@ public class BomberQuestGame extends Game {
         }
     }
 
+    /**
+     * Called when the player loses all lives. Switches to the GameOver screen.
+     */
     public void gameOver() {
         this.setScreen(new GameOverScreen(this)); // Set the current screen to GameOverScreen
         if (gameScreen != null) {
@@ -147,7 +155,38 @@ public class BomberQuestGame extends Game {
         }
     }
 
-        //TODO MUSS NOCH IMPLEMENTIERT WERDEN!!!
+    /**
+     * Opens a file chooser dialog to select a file from the "maps" directory.
+     * Only .properties files are accepted. The chosen file path is saved.
+     */
     public void openFileChooser() {
+        // Create a configuration for the file chooser
+        NativeFileChooserConfiguration conf = new NativeFileChooserConfiguration();
+        conf.directory = Gdx.files.internal("maps"); // Set initial directory if desired
+
+        // Open the file chooser with the specified configuration
+        fileChooser.chooseFile(conf, new NativeFileChooserCallback() {
+            @Override
+            public void onFileChosen(com.badlogic.gdx.files.FileHandle file) {
+                // Only accept .properties files
+                if (file.extension().equals("properties")) {
+                    filePath = file.path(); // Save the chosen file path
+                } else {
+                    Gdx.app.log("FileChooser", "Selected file is not a .properties file");
+                }
+            }
+
+            @Override
+            public void onCancellation() {
+                Gdx.app.log("FileChooser", "Cancelled");
+            }
+
+            @Override
+            public void onError(Exception exception) {
+                Gdx.app.error("FileChooser", "Error: " + exception.getMessage());
+            }
+        });
     }
+
+
 }
