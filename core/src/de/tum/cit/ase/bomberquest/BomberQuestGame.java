@@ -8,10 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import de.tum.cit.ase.bomberquest.audio.MusicTrack;
 import de.tum.cit.ase.bomberquest.map.GameMap;
-import de.tum.cit.ase.bomberquest.screen.Credits;
-import de.tum.cit.ase.bomberquest.screen.GameOverScreen;
-import de.tum.cit.ase.bomberquest.screen.GameScreen;
-import de.tum.cit.ase.bomberquest.screen.MenuScreen;
+import de.tum.cit.ase.bomberquest.screen.*;
 import games.spooky.gdx.nativefilechooser.NativeFileChooser;
 import games.spooky.gdx.nativefilechooser.NativeFileChooserCallback;
 import games.spooky.gdx.nativefilechooser.NativeFileChooserConfiguration;
@@ -85,12 +82,7 @@ public class BomberQuestGame extends Game {
         this.setScreen(new MenuScreen(this)); // Set the current screen to MenuScreen
     }
 
-    /**
-     * Switches to the game screen.
-     */
-    public void goToGame() {
-        this.setScreen(new GameScreen(this)); // Set the current screen to GameScreen
-    }
+
 
     /** Returns the skin for UI elements. */
     public Skin getSkin() {
@@ -106,7 +98,29 @@ public class BomberQuestGame extends Game {
     public GameMap getMap() {
         return map;
     }
-    
+
+    /**
+     * Returns the currently stored file path from the file chooser.
+     */
+    public String getFilePath() {
+        return filePath;
+    }
+
+    /**
+     * Returns the current MenuScreen (if any).
+     */
+    public MenuScreen getMenuScreen() {
+        return menuScreen;
+    }
+
+    /**
+     * Returns the current GameScreen (if any).
+     */
+    public GameScreen getGameScreen() {
+        return gameScreen;
+    }
+
+
     /**
      * Switches to the given screen and disposes of the previous screen.
      * @param screen the new screen
@@ -189,4 +203,41 @@ public class BomberQuestGame extends Game {
     }
 
 
+    /**
+     * Called when the player wins. Switches to the Victory screen.
+     */
+    public void victory() {
+        this.setScreen(new VictoryScreen(this));
+        if (gameScreen != null) {
+            gameScreen.dispose();
+            gameScreen = null;
+        }
+    }
+
+    /**
+     * Switches to the game screen, disposing of the menu screen if it exists.
+     */
+    public void goToGame() {
+        this.setScreen(new GameScreen(this));
+        if (menuScreen != null) {
+            menuScreen.dispose();
+            menuScreen = null;
+        }
+    }
+
+
+
 }
+
+
+
+//Patrick's Methoden
+
+
+/**
+ * Switches to the game screen.
+ */
+/*
+public void goToGame() {
+    this.setScreen(new GameScreen(this)); // Set the current screen to GameScreen
+}*/
