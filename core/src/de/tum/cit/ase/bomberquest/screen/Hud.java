@@ -39,6 +39,8 @@ public class Hud {
     private Label labelConcurrentBombs;
     private Label labelRemainingEnemies;
     private Label labelAllEnemiesDefeated;
+
+    private Label labelBombCoolDown;
     private Player player;
     private Blast blast;
 
@@ -68,11 +70,19 @@ public class Hud {
         labelAllEnemiesDefeated.setColor(Color.GREEN);
         labelAllEnemiesDefeated.setVisible(false); // Initially invisible
 
+        labelBombCoolDown = new Label("Cooldown: 0.0s", new Label.LabelStyle(font, Color.WHITE));
+
+// Add the label to the HUD table layout
+
+
         // Define a table for layout
         Table table = new Table();
         table.top();
         table.setFillParent(true);
         table.padTop(10);
+
+        table.row().padTop(10); // Add some padding between rows
+        table.add(labelBombCoolDown).expandX().center();
 
         // Add labels to the table
         table.add(labelTime).expandX().left().padRight(50);
@@ -151,6 +161,11 @@ public class Hud {
             labelAllEnemiesDefeated.setVisible(false);
         }
     }
+
+    public void updateCoolDown(float cooldownRemaining) {
+        labelBombCoolDown.setText(String.format("Cooldown: %.1fs", cooldownRemaining));
+    }
+
 
 
 }

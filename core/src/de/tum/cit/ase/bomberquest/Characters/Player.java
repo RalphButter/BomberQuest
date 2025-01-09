@@ -309,5 +309,11 @@ public class Player extends Character implements Drawable {
 
     }
 
+    public float getTimeSinceLastBomb() {
+        return timeSinceLastBomb;
+    }
+
+
+
 
 }

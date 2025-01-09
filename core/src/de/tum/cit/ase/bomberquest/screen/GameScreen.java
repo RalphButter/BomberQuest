@@ -84,6 +84,8 @@ public class GameScreen implements Screen {
         this.spriteBatch = game.getSpriteBatch();
         this.hud = new Hud(spriteBatch, game.getSkin().getFont("font"));
 
+        hud.stage.draw(); // Render the HUD
+
         this.world = new World(new Vector2(0, 0), true);
         MapParser.resetMap();
         List<String> mapLines = MapReader.readMapFile("path/to/map.properties");
@@ -115,6 +117,9 @@ public class GameScreen implements Screen {
         this.radius = 1.0f; // Example value, adjust as needed
         this.gameObjectManager = new GameObjectManager();
         this.gameMap = new GameMap(game);
+
+        float coolDownRemaining = Math.max(0, player.getCoolDownTime() - player.getTimeSinceLastBomb());
+        hud.updateCoolDown(coolDownRemaining);
 
 
 
