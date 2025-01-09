@@ -5,6 +5,7 @@ import de.tum.cit.ase.bomberquest.Characters.Enemy;
 import de.tum.cit.ase.bomberquest.Characters.Player;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -61,5 +62,19 @@ public class GameObjectManager {
     }
 
     public void spawnPowerUpIfAny(float nextX, float nextY) {
+    }
+
+    public List<GameObject> getGameObjects() {
+        return gameObjects;
+    }
+
+    public int getBombs() {
+        int bombCount = 0;
+        for (GameObject gameObject : gameObjects) {
+            if (gameObject instanceof Bombs) {
+                bombCount++;
+            }
+        }
+        return bombCount;
     }
 }

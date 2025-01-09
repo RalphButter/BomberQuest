@@ -4,6 +4,7 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 public class MapParser {
     private static int width;
@@ -65,6 +66,16 @@ public class MapParser {
 
         return objects;
     }
+
+    public static void initializeMap(List<String> mapLines) {
+        parseMap(mapLines); // Parse the map
+        calculateDimensions(); // Calculate width and height
+        ensureExitExists(); // Ensure exit is placed
+        if (!validateOuterBoundaries()) { // Validate outer boundaries
+            throw new IllegalStateException("Outer boundaries must consist of indestructible walls!");
+        }
+    }
+
 
     /**
      * Calculates the dimensions of the map based on the points in objects.
@@ -225,6 +236,44 @@ public class MapParser {
 
     public static void setEntry(Point entry) {
         MapParser.entry = entry;
+    }
+
+    public static void ensureExitExists() {
+        final int EXIT_ID = 4; // Exit ID
+        if (objects.values().contains(EXIT_ID)) {
+            return; // Exit already exists
+        }
+
+        // Filter destructible walls (ID 1) and pick a random one
+        List<Point> destructibleWalls = objects.entrySet().stream()
+                .filter(entry -> entry.getValue() == 1)
+                .map(Map.Entry::getKey)
+                .toList();
+
+        if (!destructibleWalls.isEmpty()) {
+            Point randomWall = destructibleWalls.get(new Random().nextInt(destructibleWalls.size()));
+            objects.put(randomWall, EXIT_ID); // Replace the wall with an exit
+            System.out.println("Added exit under destructible wall at: " + randomWall);
+        } else {
+            System.err.println("No destructible walls available to place an exit!");
+        }
+    }
+
+    public static boolean validateOuterBoundaries() {
+        for (int x = 0; x < width; x++) {
+            if (objects.getOrDefault(new Point(x, 0), -1) != 0 ||
+                    objects.getOrDefault(new Point(x, height - 1), -1) != 0) {
+                return false; // Bottom or top boundary is invalid
+            }
+        }
+
+        for (int y = 0; y < height; y++) {
+            if (objects.getOrDefault(new Point(0, y), -1) != 0 ||
+                    objects.getOrDefault(new Point(width - 1, y), -1) != 0) {
+                return false; // Left or right boundary is invalid
+            }
+        }
+        return true;
     }
 
 

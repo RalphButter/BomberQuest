@@ -9,7 +9,7 @@ public class DestructibleWall extends Wall{
 
     public DestructibleWall(float x, float y, boolean walkable, boolean destructible) {
         super(x, y, true, true); // Set the walkable and destructible properties; 'true' indicates it's walkable; 'true' indicates it's destructible
-        setTextureRegion(new TextureRegion(getTexture2(), 32, 0, 16, 16)); // Set the specific texture region for the wall
+        setTextureRegion(new TextureRegion(getTexture(), 32, 0, 16, 16)); // Set the specific texture region for the wall
         super.setRectangle(new Rectangle((int) (x * 16), (int) (y * 16), 16, 16)); // Define the physical space of the entry
     }
 
@@ -20,7 +20,7 @@ public class DestructibleWall extends Wall{
 
     @Override
     public void render(SpriteBatch batch) {
-        batch.draw(getTexture2(), getX(), getY());
+        batch.draw(getTexture(), getX(), getY());
     }
 
     @Override

@@ -18,10 +18,16 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import de.tum.cit.ase.bomberquest.BomberQuestGame;
+import de.tum.cit.ase.bomberquest.MapManager.MapReader;
 import de.tum.cit.ase.bomberquest.gameobject.*;
+import de.tum.cit.ase.bomberquest.gameobject.PowerUps.BlastRadiusPowerUp;
+import de.tum.cit.ase.bomberquest.gameobject.PowerUps.ConcurrentBombPowerUp;
 import de.tum.cit.ase.bomberquest.map.GameMap;
 import de.tum.cit.ase.bomberquest.texture.Drawable;
 import de.tum.cit.ase.bomberquest.screen.Hud;
+
+
+import java.awt.*;
 import java.util.ArrayList;
 import de.tum.cit.ase.bomberquest.MapManager.MapParser;
 import java.util.List;
@@ -50,6 +56,7 @@ public class GameScreen implements Screen {
     private final Sound bombSound;
     private final Sound powerUpSound;
     private final Sound enemySound;
+    private Sound bombPlaceSound;
 
     private final List<Enemy> enemies = new ArrayList<>();
     private final List<Wall> walls = new ArrayList<>();
@@ -63,8 +70,8 @@ public class GameScreen implements Screen {
     private final List <Blast> blasts = new ArrayList<>();
     private boolean paused;
 
-    private GameObjectManager gameObjectManager;
-    private GameMap gameMap;
+    private final GameObjectManager gameObjectManager;
+    private final GameMap gameMap;
     private float radius;
 
     private int remainingEnemies = 3;
@@ -75,11 +82,13 @@ public class GameScreen implements Screen {
     public GameScreen(BomberQuestGame game) {
         this.game = game;
         this.spriteBatch = game.getSpriteBatch();
-        this.map = game.getMap();
         this.hud = new Hud(spriteBatch, game.getSkin().getFont("font"));
 
         this.world = new World(new Vector2(0, 0), true);
         MapParser.resetMap();
+        List<String> mapLines = MapReader.readMapFile("path/to/map.properties");
+        MapParser.initializeMap(mapLines); // Centralized parsing and validation
+        this.map = new GameMap(game);
 
         this.player = new Player(this.world, MapParser.getEntry().x, MapParser.getEntry().y);
 
@@ -100,6 +109,7 @@ public class GameScreen implements Screen {
         this.bombSound = Gdx.audio.newSound(Gdx.files.internal("audio/bombSound.mp3"));
         this.powerUpSound = Gdx.audio.newSound(Gdx.files.internal("audio/powerUpSound.mp3"));
         this.enemySound = Gdx.audio.newSound(Gdx.files.internal("audio/enemySound.mp3"));
+        bombPlaceSound = Gdx.audio.newSound(Gdx.files.internal("audio/bombPlace.mp3"));
 
         // Initialize missing fields
         this.radius = 1.0f; // Example value, adjust as needed
@@ -148,11 +158,11 @@ public class GameScreen implements Screen {
             }
 
             // Differentiating between destructible and indestructible walls
-            for (Wall wall : walls) {
-                if (wall.isDestructible()) {
-                    // Handle destructible wall logic
-                } else {
-                    // Handle indestructible wall logic
+            for (Blast blast : blasts) {
+                for (Wall wall : walls) {
+                    if (wall instanceof DestructibleWall && blast.getBoundingRectangle().overlaps(wall.getWallRectangle())) {
+                        handleDestructibleWall(wall);
+                    }
                 }
             }
 
@@ -174,8 +184,11 @@ public class GameScreen implements Screen {
                 }
             }
 
-            // Bombing and killing of enemies
-            // Add your bombing and enemy killing logic here
+            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+                // Call the placeBomb method on the player
+                player.placeBomb(map, gameObjectManager, bombPlaceSound, delta);
+            }
+
 
             // Check for escape key press to go back to the menu
             if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
@@ -293,15 +306,44 @@ public class GameScreen implements Screen {
     // Add these methods to the GameScreen class
 
     private void handleDestructibleWall(Wall wall) {
-        // Logic for handling destructible walls
-        if (bombs.size() < player.getConcurrentBombs()) {
-            Bombs bomb = new Bombs(player.getX(), player.getY(), map, gameObjectManager);
-            bombs.add(bomb);
-            bombSound.play();
+        if (wall instanceof DestructibleWall) {
+            // Calculate the wall's position in the map grid
+            Point wallPosition = new Point((int) wall.getX() / TILE_SIZE_PX, (int) wall.getY() / TILE_SIZE_PX);
+
+            // Get the object ID beneath the wall
+            Integer objectId = MapParser.getObjects().get(wallPosition);
+
+            // Handle objects revealed under the wall
+            if (objectId != null) {
+                switch (objectId) {
+                    case 4: // Exit
+                        gameObjectManager.addGameObject(new Exit(wall.getX(), wall.getY(), true, false));
+                        System.out.println("Exit revealed at: " + wallPosition);
+                        break;
+                    case 5: // Concurrent Bomb Power-Up
+                        gameObjectManager.addGameObject(new ConcurrentBombPowerUp(wall.getX(), wall.getY(), map, gameObjectManager));
+                        System.out.println("Concurrent Bomb Power-Up revealed at: " + wallPosition);
+                        break;
+                    case 6: // Blast Radius Power-Up
+                        gameObjectManager.addGameObject(new BlastRadiusPowerUp(wall.getX(), wall.getY(), 1, 0.5f, 1, map, gameObjectManager));
+                        System.out.println("Blast Radius Power-Up revealed at: " + wallPosition);
+                        break;
+                    default:
+                        System.out.println("Unknown object beneath the wall at: " + wallPosition);
+                        break;
+                }
+            }
+
+            // Remove the destructible wall from the game
+            walls.remove(wall);
+            MapParser.getObjects().remove(wallPosition); // Remove it from the map state as well
+
+            System.out.println("Destructible wall removed at: " + wallPosition);
+        } else {
+            System.err.println("Error: Non-destructible wall passed to handleDestructibleWall.");
         }
-
-
     }
+
 
     private void handleIndestructibleWall(Wall wall) {
         // Logic for handling indestructible walls
@@ -338,5 +380,9 @@ public class GameScreen implements Screen {
         actionMusic.stop();
         // Transition to game over screen or main menu
         game.setScreen(new GameOverScreen(game));
+    }
+
+    public List<Wall> getWalls() {
+        return walls;
     }
 }

@@ -8,7 +8,7 @@ public class InDestructibleWall extends Wall {
     public InDestructibleWall(float x, float y, boolean walkable, boolean destructible) {
         super(x, y, false, false); // Call to the GameObject constructor; 'false' indicates it's not walkable ; 'false' indicates it's not destructible
         super.setRectangle(new Rectangle((int) (x * 16), (int) (y * 16), 16, 16)); // Define the physical space of the Wall
-        setTextureRegion(new TextureRegion(getTexture2(), 0, 80, 16, 16)); // Set the specific texture region for the floor
+        setTextureRegion(new TextureRegion(getTexture(), 0, 80, 16, 16)); // Set the specific texture region for the floor
     }
 
     @Override
@@ -18,7 +18,7 @@ public class InDestructibleWall extends Wall {
 
     @Override
     public void render(SpriteBatch batch) {
-        batch.draw(getTexture2(), getX(), getY());
+        batch.draw(getTexture(), getX(), getY());
     }
 
     @Override

@@ -2,6 +2,7 @@ package de.tum.cit.ase.bomberquest.Characters;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -11,8 +12,14 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.World;
+import de.tum.cit.ase.bomberquest.gameobject.Bombs;
+import de.tum.cit.ase.bomberquest.gameobject.GameObjectManager;
+import de.tum.cit.ase.bomberquest.gameobject.Wall;
+import de.tum.cit.ase.bomberquest.map.GameMap;
+import de.tum.cit.ase.bomberquest.screen.GameScreen;
 import de.tum.cit.ase.bomberquest.texture.Animations;
 import de.tum.cit.ase.bomberquest.texture.Drawable;
+import de.tum.cit.ase.bomberquest.util.CollisionDetection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +37,11 @@ public class Player extends Character implements Drawable {
     private int concurrentBombs;
     private Rectangle bounds;
     private float elapsedTime;
+
+    private float coolDownTime = 1.0f; // 1-second cooldown
+    private float timeSinceLastBomb = 0f; // Time since the last bomb was placed
+
+    private GameScreen gameScreen;
 
     public Player(World world, float x, float y) {
         super(x, y, new Rectangle(x, y, 16, 32));
@@ -124,14 +136,6 @@ public class Player extends Character implements Drawable {
         }
     }
 
-    private void move(Direction direction, float dx, float dy) {
-        setX(getX() + dx);
-        setY(getY() + dy);
-        setMoving(true);
-        setCurrentDirection(direction);
-        hitbox.setTransform(getX(), getY(), 0);
-    }
-
     public void render(SpriteBatch batch) {
         TextureRegion currentFrame;
         switch (getCurrentDirection()) {
@@ -177,32 +181,21 @@ public class Player extends Character implements Drawable {
     }
 
     public void moveUp() {
-        prevY = this.getY();  // player.setPrevY(player.getyPlayer()); is set to previous yPlayer
-        this.setY(this.getY()+getSpeed()); // Move up
-        setCurrentDirection(Direction.UP);
-        setIsMoving(true);
+        move(Direction.UP, 0, getSpeed());
     }
 
     public void moveDown() {
-        prevY = this.getY();  // player.setPrevY(player.getyPlayer()); is set to previous yPlayer
-        this.setY(this.getY()-getSpeed()); // Move down
-        setCurrentDirection(Direction.DOWN);
-        setIsMoving(true);
+        move(Direction.DOWN, 0, -getSpeed());
     }
 
     public void moveLeft() {
-        prevX = this.getX();  // player.setPrevX(player.getxPlayer()); is set to previous xPlayer
-        this.setX(this.getX()-getSpeed()); // Move left
-        setCurrentDirection(Direction.LEFT);
-        setIsMoving(true);
+        move(Direction.LEFT, -getSpeed(), 0);
     }
 
     public void moveRight() {
-        prevX = this.getX();  // player.setPrevX(player.getxPlayer()); is set to previous xPlayer
-        this.setX(this.getX()+getSpeed()); // Move right
-        setCurrentDirection(Direction.RIGHT);
-        setIsMoving(true);
+        move(Direction.RIGHT, getSpeed(), 0);
     }
+
 
     public void setIsMoving(boolean moving) {
         setMoving(moving);
@@ -210,6 +203,64 @@ public class Player extends Character implements Drawable {
             setCurrentDirection(Direction.STANDING);
         }
     }
+
+    private void move(Direction direction, float dx, float dy) {
+        float newX = getX() + dx;
+        float newY = getY() + dy;
+
+        // Check for collisions with walls or other obstacles
+        if (!isCollidingWithWalls(newX, newY, gameScreen.getWalls())) {
+            setPosition(newX, newY); // Update player position
+            setCurrentDirection(direction); // Update direction
+            setMoving(true); // Indicate the player is moving
+            hitbox.setTransform(newX, newY, 0); // Sync hitbox with position
+        } else {
+            setMoving(false); // Prevent movement if collision occurs
+        }
+    }
+
+    private boolean isCollidingWithWalls(float x, float y, List<Wall> walls) {
+        Rectangle nextPosition = new Rectangle(x, y, getRectangle().width, getRectangle().height);
+        for (Wall wall : walls) {
+            if (CollisionDetection.isColliding(nextPosition.x, nextPosition.y, nextPosition.width, nextPosition.height,
+                    wall.getWallRectangle().x, wall.getWallRectangle().y, wall.getWallRectangle().width, wall.getWallRectangle().height)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void placeBomb(GameMap gameMap, GameObjectManager gameObjectManager, Sound bombPlaceSound, float deltaTime) {
+        // Update the cooldown timer
+        timeSinceLastBomb += deltaTime;
+
+        if (timeSinceLastBomb >= coolDownTime) {
+            if (gameObjectManager.getBombs() < getConcurrentBombs()) {
+                int gridX = Math.round(getX() / GameScreen.TILE_SIZE_PX);
+                int gridY = Math.round(getY() / GameScreen.TILE_SIZE_PX);
+
+                Bombs bomb = new Bombs(gridX * GameScreen.TILE_SIZE_PX, gridY * GameScreen.TILE_SIZE_PX, gameMap, gameObjectManager);
+                gameObjectManager.addGameObject(bomb);
+
+                // Play bomb placement sound
+                if (bombPlaceSound != null) {
+                    bombPlaceSound.play(0.5f); // Adjust volume as needed
+                }
+
+                // Reset cooldown
+                timeSinceLastBomb = 0f;
+
+                System.out.println("Bomb placed at: " + gridX + ", " + gridY);
+            } else {
+                System.out.println("Cannot place more bombs. Limit reached!");
+            }
+        } else {
+            System.out.println("Bomb cooldown active. Time remaining: " + (coolDownTime - timeSinceLastBomb));
+        }
+    }
+
+
+
 
 
     public void dispose() {
@@ -244,6 +295,14 @@ public class Player extends Character implements Drawable {
 
     public Rectangle getBounds() {
         return bounds;
+    }
+
+    public float getCoolDownTime() {
+        return coolDownTime;
+    }
+
+    public void setCoolDownTime(float coolDownTime) {
+        this.coolDownTime = coolDownTime;
     }
 
     public void die() {
