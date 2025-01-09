@@ -180,23 +180,27 @@ public class BomberQuestGame extends Game {
 
         // Open the file chooser with the specified configuration
         fileChooser.chooseFile(conf, new NativeFileChooserCallback() {
+            //Method checks if the selected file has a .properties extension.
             @Override
             public void onFileChosen(com.badlogic.gdx.files.FileHandle file) {
-                // Only accept .properties files
+                // If the file is a .properties file, it saves the file path to the filePath variable.
                 if (file.extension().equals("properties")) {
                     filePath = file.path(); // Save the chosen file path
                 } else {
+                    //If the file is not a .properties file, it logs a message indicating that the selected file is not a .properties file.
                     Gdx.app.log("FileChooser", "Selected file is not a .properties file");
                 }
             }
 
             @Override
             public void onCancellation() {
+                // Log a message indicating that the file chooser was cancelled by the user
                 Gdx.app.log("FileChooser", "Cancelled");
             }
 
             @Override
             public void onError(Exception exception) {
+                // Log an error message with the details of the exception that occurred
                 Gdx.app.error("FileChooser", "Error: " + exception.getMessage());
             }
         });
