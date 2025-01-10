@@ -108,7 +108,7 @@ public class MenuScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 // When the "Credits" button is pressed, transition to the Credits screen
-                game.goToCreditsScreen(game); // Method to change to the Credits screen
+                game.goToCreditsScreen(); // Method to change to the Credits screen
 
                 // Dispose of the background music to free resources
                 menuMusic.dispose(); // Dispose of the menu background music

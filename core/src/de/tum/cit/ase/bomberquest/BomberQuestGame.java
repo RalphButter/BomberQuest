@@ -1,6 +1,5 @@
 package de.tum.cit.ase.bomberquest;
-//DDD
-//DDDDD
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -31,7 +30,7 @@ public class BomberQuestGame extends Game {
 
     /** The game's UI skin. This is used to style the game's UI elements. */
     private Skin skin;
-//    Ralph und Jonas
+
     /**
      * The file chooser for loading map files from the user's computer.
      * This will give you access to a {@link com.badlogic.gdx.files.FileHandle} object,
@@ -57,9 +56,6 @@ public class BomberQuestGame extends Game {
         this.fileChooser = fileChooser;
     }
 
-
-
-
     /**
      * Called when the game is created. Initializes the SpriteBatch and Skin.
      * During the class constructor, libGDX is not fully initialized yet.
@@ -80,9 +76,8 @@ public class BomberQuestGame extends Game {
      */
     public void goToMenu() {
         this.setScreen(new MenuScreen(this)); // Set the current screen to MenuScreen
+        // No need to dispose here; it's handled in the overridden setScreen method
     }
-
-
 
     /** Returns the skin for UI elements. */
     public Skin getSkin() {
@@ -93,7 +88,7 @@ public class BomberQuestGame extends Game {
     public SpriteBatch getSpriteBatch() {
         return spriteBatch;
     }
-    
+
     /** Returns the current map, if there is one. */
     public GameMap getMap() {
         return map;
@@ -120,42 +115,12 @@ public class BomberQuestGame extends Game {
         return gameScreen;
     }
 
-
     /**
-     * Switches to the given screen and disposes of the previous screen.
-     * @param screen the new screen
+     * Switches to the credits screen.
      */
-    @Override
-    public void setScreen(Screen screen) {
-        Screen previousScreen = super.screen;
-        super.setScreen(screen);
-        if (previousScreen != null) {
-            previousScreen.dispose();
-        }
-    }
-
-    /** Cleans up resources when the game is disposed. */
-    @Override
-    public void dispose() {
-        getScreen().hide(); // Hide the current screen
-        getScreen().dispose(); // Dispose the current screen
-        spriteBatch.dispose(); // Dispose the spriteBatch
-        skin.dispose(); // Dispose the skin
-    }
-
-    /**
-     * Switches to the credits screen and disposes of the previous screen.
-     *
-     * @param game The main game class, used to access global resources and methods.
-     */
-    public void goToCreditsScreen(BomberQuestGame game) {
-        // Set the current screen to the Credits screen
-        setScreen(new Credits(game));
-
-        // Dispose of the previous screen if it exists
-        if (getScreen() != null) {
-            getScreen().dispose();
-        }
+    public void goToCreditsScreen() {
+        setScreen(new Credits(this)); // Pass 'this' to Credits constructor
+        // No need to dispose here; it's handled in the overridden setScreen method
     }
 
     /**
@@ -180,14 +145,14 @@ public class BomberQuestGame extends Game {
 
         // Open the file chooser with the specified configuration
         fileChooser.chooseFile(conf, new NativeFileChooserCallback() {
-            //Method checks if the selected file has a .properties extension.
+            // Method checks if the selected file has a .properties extension.
             @Override
             public void onFileChosen(com.badlogic.gdx.files.FileHandle file) {
                 // If the file is a .properties file, it saves the file path to the filePath variable.
                 if (file.extension().equals("properties")) {
                     filePath = file.path(); // Save the chosen file path
                 } else {
-                    //If the file is not a .properties file, it logs a message indicating that the selected file is not a .properties file.
+                    // If the file is not a .properties file, it logs a message indicating that the selected file is not a .properties file.
                     Gdx.app.log("FileChooser", "Selected file is not a .properties file");
                 }
             }
@@ -206,14 +171,13 @@ public class BomberQuestGame extends Game {
         });
     }
 
-
     /**
      * Called when the player wins. Switches to the Victory screen.
      */
     public void victory() {
-        this.setScreen(new VictoryScreen(this));
+        this.setScreen(new VictoryScreen(this)); // Set the current screen to VictoryScreen
         if (gameScreen != null) {
-            gameScreen.dispose();
+            gameScreen.dispose(); // Dispose the game screen if it exists
             gameScreen = null;
         }
     }
@@ -222,16 +186,37 @@ public class BomberQuestGame extends Game {
      * Switches to the game screen, disposing of the menu screen if it exists.
      */
     public void goToGame() {
-        this.setScreen(new GameScreen(this));
+        this.setScreen(new GameScreen(this)); // Set the current screen to GameScreen
         if (menuScreen != null) {
-            menuScreen.dispose();
+            menuScreen.dispose(); // Dispose the menu screen if it exists
             menuScreen = null;
         }
     }
 
+    /**
+     * Switches to the given screen and disposes of the previous screen.
+     * @param screen the new screen
+     */
+    @Override
+    public void setScreen(Screen screen) {
+        Screen previousScreen = getScreen(); // Use getter for clarity
+        super.setScreen(screen);
+        if (previousScreen != null) {
+            previousScreen.dispose();
+        }
+    }
 
-
+    /** Cleans up resources when the game is disposed. */
+    @Override
+    public void dispose() {
+        if (getScreen() != null) {
+            getScreen().dispose(); // Dispose the current screen
+        }
+        spriteBatch.dispose(); // Dispose the spriteBatch
+        skin.dispose(); // Dispose the skin
+    }
 }
+
 
 
 
