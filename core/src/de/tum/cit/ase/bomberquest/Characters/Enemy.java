@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import de.tum.cit.ase.bomberquest.gameobject.GameObject;
+import de.tum.cit.ase.bomberquest.gameobject.Wall;
 import de.tum.cit.ase.bomberquest.texture.Drawable;
 import de.tum.cit.ase.bomberquest.util.CollisionDetection;
 import de.tum.cit.ase.bomberquest.MapManager.Node;
@@ -82,7 +83,37 @@ public class Enemy extends Character implements Drawable {
         setCurrentDirection(Direction.RIGHT);
     }
 
-    public void move(int[] target) {
+//    public void move(int[] target) {
+//        if (path == null || pathIndex >= path.size()) {
+//            path = pathfinding.findPath(new int[]{(int) getX(), (int) getY()}, target, "A*");
+//            pathIndex = 0;
+//        }
+//
+//        if (path != null && pathIndex < path.size()) {
+//            int[] nextStep = path.get(pathIndex);
+//            float nextX = nextStep[0];
+//            float nextY = nextStep[1];
+//
+//            Rectangle nextStepRect = new Rectangle(nextX, nextY, 16, 16);
+//            Rectangle gameObjectRect = gameObject.getRectangle();
+//
+//            if (CollisionDetection.isColliding(nextX, nextY, 16, 16, getX(), getY(), getRectangle().width, getRectangle().height)) {
+//                handleCollision();
+//                return;
+//            }
+//
+//            if (getX() < nextX) moveRight();
+//            else if (getX() > nextX) moveLeft();
+//            else if (getY() < nextY) moveUp();
+//            else if (getY() > nextY) moveDown();
+//
+//            if (Math.abs(getX() - nextX) < 0.1f && Math.abs(getY() - nextY) < 0.1f) {
+//                pathIndex++;
+//            }
+//        }
+//    }
+
+    public void move(int[] target, List<Wall> walls) {
         if (path == null || pathIndex >= path.size()) {
             path = pathfinding.findPath(new int[]{(int) getX(), (int) getY()}, target, "A*");
             pathIndex = 0;
@@ -93,43 +124,24 @@ public class Enemy extends Character implements Drawable {
             float nextX = nextStep[0];
             float nextY = nextStep[1];
 
-            Rectangle nextStepRect = new Rectangle(nextX, nextY, 16, 16);
-            Rectangle gameObjectRect = gameObject.getRectangle();
+            // Check for collisions
+            if (!isCollidingWithObject(nextX, nextY, walls)) {
+                // Move towards the next step
+                if (getX() < nextX) moveRight();
+                else if (getX() > nextX) moveLeft();
+                else if (getY() < nextY) moveUp();
+                else if (getY() > nextY) moveDown();
 
-            if (CollisionDetection.isColliding(nextX, nextY, 16, 16, getX(), getY(), getRectangle().width, getRectangle().height)) {
-                handleCollision();
-                return;
+                // Check if the enemy is close enough to the next step
+                if (Math.abs(getX() - nextX) < 0.1f && Math.abs(getY() - nextY) < 0.1f) {
+                    pathIndex++; // Proceed to the next step in the path
+                }
+            } else {
+                handleCollision(); // Handle collision and recalculate path
             }
-
-            if (getX() < nextX) moveRight();
-            else if (getX() > nextX) moveLeft();
-            else if (getY() < nextY) moveUp();
-            else if (getY() > nextY) moveDown();
-
-            if (Math.abs(getX() - nextX) < 0.1f && Math.abs(getY() - nextY) < 0.1f) {
-                pathIndex++;
-            }
-//            if (!CollisionDetection.isColliding(nextStepRect.x, nextStepRect.y, nextStepRect.width, nextStepRect.height,
-//                    gameObjectRect.x, gameObjectRect.y, gameObjectRect.width, gameObjectRect.height)) {
-//                if (getX() < nextX) {
-//                    moveRight();
-//                } else if (getX() > nextX) {
-//                    moveLeft();
-//                } else if (getY() < nextY) {
-//                    moveUp();
-//                } else if (getY() > nextY) {
-//                    moveDown();
-//                }
-//
-//                if (getX() == nextX && getY() == nextY) {
-//                    pathIndex++;
-//                }
-//            } else {
-//                path = pathfinding.findPath(new int[]{(int) getX(), (int) getY()}, target, "A*");
-//                pathIndex = 0;
-//            }
         }
     }
+
 
     public void draw(SpriteBatch batch, float x, float y) {
         TextureRegion currentFrame = switch (getCurrentDirection()) {
@@ -147,17 +159,17 @@ public class Enemy extends Character implements Drawable {
         batch.draw(currentFrame, getX(), getY());
     }
 
-    public void update(float deltaTime, int[] target) {
-        setStateTime(getStateTime() + deltaTime);
-        move(target);
-    }
-
 
 
     @Override
     public void die() {
-        setAlive(false);
+        setAlive(false); // Mark the enemy as dead
+        System.out.println("Enemy died!");
+
+        // Trigger removal logic (handled by GameObjectManager or GameScreen)
+        // Play death animation or sound (optional)
     }
+
 
     public Rectangle getBoundingRectangle() {
         return getRectangle();
@@ -173,13 +185,31 @@ public class Enemy extends Character implements Drawable {
     }
 
     public void updateState(float delta, Node playerPosition, Node[][] grid) {
-        // Update enemy state
+        // Update target to the player's position
         if (playerPosition != null) {
             target = new int[]{playerPosition.getX(), playerPosition.getY()};
         }
 
-        move(target);
+        // Recalculate the path if needed
+        if (path == null || pathIndex >= path.size()) {
+            path = pathfinding.findPath(new int[]{(int) getX(), (int) getY()}, target, "A*");
+            pathIndex = 0;
+        }
     }
+
+
+    public void update(float deltaTime, List<Wall> walls) {
+        setStateTime(getStateTime() + deltaTime);
+
+        // Move along the path calculated in updateState
+        if (path != null && pathIndex < path.size()) {
+            move(target, walls);
+        } else {
+            setCurrentDirection(Direction.STANDING); // No movement if no valid path
+        }
+    }
+
+
 
     public Rectangle getRectangle() {
         return super.getRectangle();
@@ -194,6 +224,20 @@ public class Enemy extends Character implements Drawable {
 //        pathIndex = 0;
     }
 
+    private boolean isCollidingWithObject(float x, float y, List<Wall> walls) {
+        Rectangle nextPosition = new Rectangle(x, y, getRectangle().width, getRectangle().height);
+
+        for (Wall wall : walls) {
+            if (CollisionDetection.isColliding(
+                    nextPosition.x, nextPosition.y, nextPosition.width, nextPosition.height,
+                    wall.getWallRectangle().x, wall.getWallRectangle().y, wall.getWallRectangle().width, wall.getWallRectangle().height)) {
+                return true; // Collision detected
+            }
+        }
+        return false; // No collision
+    }
+
+
     @Override
     public float getX() {
         return super.getX();
@@ -203,4 +247,7 @@ public class Enemy extends Character implements Drawable {
     public float getY() {
         return super.getY();
     }
+
+
+
 }

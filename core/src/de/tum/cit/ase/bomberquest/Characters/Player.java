@@ -120,22 +120,25 @@ public class Player extends Character implements Drawable {
         this.hitbox.setLinearVelocity(xVelocity, yVelocity);
     }
 
-    public void update(float deltaTime) {
+    public void update(float deltaTime, List<Wall> walls) {
+        // Update state time for animations
         setStateTime(getStateTime() + deltaTime);
 
+        // Handle input and movement
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            move(Direction.UP, 0, getSpeed() * deltaTime);
+            moveUp(walls);
         } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            move(Direction.DOWN, 0, -getSpeed() * deltaTime);
+            moveDown(walls);
         } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            move(Direction.LEFT, -getSpeed() * deltaTime, 0);
+            moveLeft(walls);
         } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            move(Direction.RIGHT, getSpeed() * deltaTime, 0);
+            moveRight(walls);
         } else {
-            setMoving(false);
-            setCurrentDirection(Direction.STANDING);
+            // Stop movement if no keys are pressed
+            setIsMoving(false);
         }
     }
+
 
     public void render(SpriteBatch batch) {
         TextureRegion currentFrame;
@@ -181,21 +184,22 @@ public class Player extends Character implements Drawable {
         return new int[]{(int) getX(), (int) getY()};
     }
 
-    public void moveUp() {
-        move(Direction.UP, 0, getSpeed());
+    public void moveUp(List<Wall> walls) {
+        move(Direction.UP, 0, getSpeed(), walls);
     }
 
-    public void moveDown() {
-        move(Direction.DOWN, 0, -getSpeed());
+    public void moveDown(List<Wall> walls) {
+        move(Direction.DOWN, 0, -getSpeed(), walls);
     }
 
-    public void moveLeft() {
-        move(Direction.LEFT, -getSpeed(), 0);
+    public void moveLeft(List<Wall> walls) {
+        move(Direction.LEFT, -getSpeed(), 0, walls);
     }
 
-    public void moveRight() {
-        move(Direction.RIGHT, getSpeed(), 0);
+    public void moveRight(List<Wall> walls) {
+        move(Direction.RIGHT, getSpeed(), 0, walls);
     }
+
 
 
     public void setIsMoving(boolean moving) {
@@ -205,30 +209,47 @@ public class Player extends Character implements Drawable {
         }
     }
 
-    private void move(Direction direction, float dx, float dy) {
+    public void move(Direction direction, float dx, float dy, List<Wall> walls) {
         float newX = getX() + dx;
         float newY = getY() + dy;
 
-        // Check for collisions with walls or other obstacles
-        if (!isCollidingWithWalls(newX, newY, gameScreen.getWalls())) {
-            setPosition(newX, newY); // Update player position
-            setCurrentDirection(direction); // Update direction
-            setMoving(true); // Indicate the player is moving
-            hitbox.setTransform(newX, newY, 0); // Sync hitbox with position
-        } else {
-            setMoving(false); // Prevent movement if collision occurs
+        // Check for collisions based on movement direction
+        if (!isCollidingWithObject(newX, getY(), walls)) {
+            setX(newX); // Update X position if no collision on the X-axis
         }
+        if (!isCollidingWithObject(getX(), newY, walls)) {
+            setY(newY); // Update Y position if no collision on the Y-axis
+        }
+
+        setCurrentDirection(direction); // Update the player's direction
+        setMoving(true); // Mark the player as moving
+        hitbox.setTransform(getX(), getY(), 0); // Sync the hitbox with the player's position
     }
 
-    private boolean isCollidingWithWalls(float x, float y, List<Wall> walls) {
-        Rectangle nextPosition = new Rectangle(x, y, getRectangle().width, getRectangle().height);
+
+//    private boolean isCollidingWithWalls(float x, float y, List<Wall> walls) {
+//        Rectangle nextPosition = new Rectangle(x, y, getRectangle().width, getRectangle().height);
+//        for (Wall wall : walls) {
+//            if (CollisionDetection.isColliding(nextPosition.x, nextPosition.y, nextPosition.width, nextPosition.height,
+//                    wall.getWallRectangle().x, wall.getWallRectangle().y, wall.getWallRectangle().width, wall.getWallRectangle().height)) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
+
+    private boolean isCollidingWithObject(float newX, float newY, List<Wall> walls) {
+        Rectangle nextPosition = new Rectangle(newX, newY, getRectangle().width, getRectangle().height);
+
+        // Check for collisions with all walls
         for (Wall wall : walls) {
-            if (CollisionDetection.isColliding(nextPosition.x, nextPosition.y, nextPosition.width, nextPosition.height,
+            if (CollisionDetection.isColliding(
+                    nextPosition.x, nextPosition.y, nextPosition.width, nextPosition.height,
                     wall.getWallRectangle().x, wall.getWallRectangle().y, wall.getWallRectangle().width, wall.getWallRectangle().height)) {
-                return true;
+                return true; // Collision detected
             }
         }
-        return false;
+        return false; // No collision
     }
 
     public void placeBomb(GameMap gameMap, GameObjectManager gameObjectManager, Sound bombPlaceSound, float deltaTime) {

@@ -56,7 +56,7 @@ public class GameScreen implements Screen {
     private final Sound bombSound;
     private final Sound powerUpSound;
     private final Sound enemySound;
-    private Sound bombPlaceSound;
+    private final Sound bombPlaceSound;
 
     private final List<Enemy> enemies = new ArrayList<>();
     private final List<Wall> walls = new ArrayList<>();
@@ -154,13 +154,23 @@ public class GameScreen implements Screen {
 
 
             // Enemy Update Method
+            // Update enemies
             for (Enemy enemy : enemies) {
-                enemy.updateState(delta, playerPosition, grid);
+                Node playerNode = grid[(int) (player.getX() / GameScreen.TILE_SIZE_PX)][(int) (player.getY() / GameScreen.TILE_SIZE_PX)];
+                enemy.updateState(delta, playerNode, grid); // Handle AI and pathfinding
+                enemy.update(delta, walls); // Handle movement and animation
             }
 
             for (Enemy enemy : enemies) {
-                enemy.update(delta, player.getPosition());
+                for (Blast blast : blasts) {
+                    if (blast.getBoundingRectangle().overlaps(enemy.getBoundingRectangle())) {
+                        enemy.die();
+                        enemies.remove(enemy); // Remove dead enemy from the list
+                        break; // Stop further checks for this enemy
+                    }
+                }
             }
+
 
             // Enemy-Wall collision detection
             for (Wall wall : walls) {
@@ -202,16 +212,16 @@ public class GameScreen implements Screen {
                 pause();
             } else if (Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.UP)
                     && map.getPlayer().getY() < (MapParser.getHeight() - 1) * TILE_SIZE_PX) { // limits the borders of the game
-                player.moveUp();
+                player.moveUp(walls);
             } else if (Gdx.input.isKeyPressed(Input.Keys.S) || Gdx.input.isKeyPressed(Input.Keys.DOWN)
                     && map.getPlayer().getY() > 0) {
-                player.moveDown();
+                player.moveDown(walls);
             } else if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)
                     && map.getPlayer().getX() > 0) {
-                player.moveLeft();
+                player.moveLeft(walls);
             } else if (Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)
                     && map.getPlayer().getX() < (MapParser.getWidth() - 1) * TILE_SIZE_PX) {
-                player.moveRight();
+                player.moveRight(walls);
             }
 
             // Update player rectangle after movement for collision detection
@@ -227,7 +237,7 @@ public class GameScreen implements Screen {
             mapRenderer.setView(mapCamera);
             mapRenderer.render();
 
-            player.update(delta);
+            player.update(delta, walls);
 
             // Supports the player animation and movement
             if ((!Gdx.input.isKeyPressed(Input.Keys.W) && !Gdx.input.isKeyPressed(Input.Keys.UP)) &&
