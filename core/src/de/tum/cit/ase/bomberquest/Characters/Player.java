@@ -48,7 +48,7 @@ public class Player extends Character implements Drawable {
         super(x, y, new Rectangle(x, y, 16, 32));
         this.world = world;
         this.hitbox = createHitbox(world, x, y);
-        this.setTexture(new Texture(Gdx.files.internal("assets/character.png")));
+        this.setTexture(new Texture(Gdx.files.internal("assets/texture/character.png")));
 
         // Setting animations
         this.setWalkUpAnimation(createAnimation(64, 16, 32));
