@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -88,7 +89,8 @@ public class GameScreen implements Screen {
 
         this.world = new World(new Vector2(0, 0), true);
         MapParser.resetMap();
-        List<String> mapLines = MapReader.readMapFile("path/to/map.properties");
+        List<String> mapLines = MapReader.readMapFile("maps/map-1.properties");
+        //List<String> mapLines = MapReader.readMapFile("path/to/map.properties");
         MapParser.initializeMap(mapLines); // Centralized parsing and validation
         this.map = new GameMap(game);
 
@@ -96,7 +98,12 @@ public class GameScreen implements Screen {
 
         this.mapCamera = new OrthographicCamera();
         this.viewport = new ExtendViewport(800, 600, mapCamera);
-        this.mapRenderer = new OrthogonalTiledMapRenderer(new TmxMapLoader().load("maps/map-1.tmx"), SCALE);
+
+        //map-1.properties nicht tmx
+        //this.mapRenderer = new OrthogonalTiledMapRenderer(new TmxMapLoader().load("maps/map-1.tmx"), SCALE);
+        TiledMap tiledMap = new TmxMapLoader().load("maps/map-1.tmx");
+        this.mapRenderer = new OrthogonalTiledMapRenderer(tiledMap, SCALE);
+
 
         this.stageMusic = Gdx.audio.newMusic(Gdx.files.internal("audio/stageMusic.mp3"));
         stageMusic.setVolume(0.2f);
@@ -424,5 +431,7 @@ public class GameScreen implements Screen {
             }
         }
     }
+
+
 
 }

@@ -23,58 +23,50 @@ public class MapParser {
      * @return A Map where the key is a Point (x, y coordinates) and the value is an object ID.
      */
     public static Map<Point, Integer> parseMap(List<String> mapLines) {
-        // Iterate over each line in the input map data
         for (String line : mapLines) {
-            // Split the line into coordinates and object ID based on the '=' delimiter
+            line = line.trim(); // Remove leading and trailing whitespace
+            if (line.isEmpty() || line.startsWith("#")) {
+                // Skip blank lines and comments
+                continue;
+            }
+
             String[] parts = line.split("=");
             if (parts.length != 2) {
-                // If the line doesn't have exactly two parts, it's malformed; skip it
                 System.out.println("Malformed line: " + line);
                 continue;
             }
 
-            // Split the coordinates part into x and y based on the ',' delimiter
             String[] coords = parts[0].split(",");
             if (coords.length != 2) {
-                // If the coordinates part doesn't have exactly two values, it's malformed; skip it
                 System.out.println("Malformed coordinates: " + parts[0]);
                 continue;
             }
 
             try {
-                // Parse x and y coordinates as integers
                 int x = Integer.parseInt(coords[0].trim());
                 int y = Integer.parseInt(coords[1].trim());
-
-                // Parse the object ID as an integer
                 int objectId = Integer.parseInt(parts[1].trim());
-
-                // Create a Point object with the parsed coordinates
-                Point point = new Point(x, y);
-
-                // Add the Point and its corresponding object ID to the objects map
-                objects.put(point, objectId);
+                objects.put(new Point(x, y), objectId);
             } catch (NumberFormatException e) {
-                // Handle cases where parsing integers fails
                 System.out.println("Invalid number format in line: " + line);
-                continue;
             }
         }
 
-        // After populating objects, calculate the map's width and height
         calculateDimensions();
-
         return objects;
     }
 
+
     public static void initializeMap(List<String> mapLines) {
         parseMap(mapLines); // Parse the map
-        calculateDimensions(); // Calculate width and height
-        ensureExitExists(); // Ensure exit is placed
+        calculateDimensions(); // Calculate map dimensions
+        findEntry(); // Find the entry point
+        ensureExitExists(); // Ensure there is an exit
         if (!validateOuterBoundaries()) { // Validate outer boundaries
             throw new IllegalStateException("Outer boundaries must consist of indestructible walls!");
         }
     }
+
 
 
     /**
@@ -106,27 +98,20 @@ public class MapParser {
      * If no entry point is found, a message is printed to indicate the absence.
      */
     public static void findEntry() {
-        final int ENTRY_ID = 1; // Define the object ID that represents the entry point
+        final int ENTRY_ID = 1;
 
-        // Iterate through each entry in the objects map
+        // Find the entry point in the map
         for (Map.Entry<Point, Integer> mapEntry : objects.entrySet()) {
-            // Check if the current object's ID matches the ENTRY_ID
             if (mapEntry.getValue().equals(ENTRY_ID)) {
-                // If a match is found, set entry to the current Point
-                entry = mapEntry.getKey();
-                break; // Exit the loop once the entry point is found
+                entry = new Point(mapEntry.getKey().x * 16, mapEntry.getKey().y * 16); // Scale to pixel coordinates
+                return;
             }
         }
 
-        if (entry != null) {
-            // If the entry point is found, scale its coordinates by 16
-            // This is likely to convert grid coordinates to pixel coordinates
-            entry = new Point(entry.x * 16, entry.y * 16);
-        } else {
-            // If no entry point is found, print an error message
-            System.out.println("Entry point not found in the map!");
-        }
+        // If no entry is found, throw an exception or log an error
+        throw new IllegalStateException("Entry point not found in the map! Ensure ENTRY_ID (1) is defined.");
     }
+
 
     /**
      * Overrides the default hashCode method.
