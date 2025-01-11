@@ -1,6 +1,10 @@
 package de.tum.cit.ase.bomberquest.gameobject;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import de.tum.cit.ase.bomberquest.map.GameMap;
 
@@ -17,19 +21,11 @@ public class Blast extends GameObject {
     private int blastDamage;
     private List<Rectangle> segments;
     private GameMap gameMap;     // Reference to the game map to interact with walls
-    private GameObjectManager gameObjectManager; // To manage game objects like enemies and player
+    private GameObjectManager gameObjectManager;
+    private Texture texture;
+    private Animation<TextureRegion> explodeAnimation;
+    private boolean isActive;
 
-    /**
-     * Constructor for creating a new Blast.
-     *
-     * @param x                 The X-coordinate of the bomb.
-     * @param y                 The Y-coordinate of the bomb.
-     * @param blastRadius       The radius of the blast.
-     * @param blastDuration     How long the blast remains active.
-     * @param blastDamage       Damage dealt by the blast.
-     * @param gameMap           Reference to the game map.
-     * @param gameObjectManager Reference to the game object manager.
-     */
     public Blast(float x, float y, int blastRadius, float blastDuration, int blastDamage, GameMap gameMap, GameObjectManager gameObjectManager) {
         super(x, y, false, false); // Blasts are not walkable and not destructible
         this.blastRadius = blastRadius;
@@ -39,185 +35,97 @@ public class Blast extends GameObject {
         this.segments = new ArrayList<>();
         this.gameMap = gameMap;
         this.gameObjectManager = gameObjectManager;
+        this.isActive = true;
+
+        // Load texture and define animation frames
+        this.texture = new Texture(Gdx.files.internal("assets/blast.png")); // Replace with the actual path
+        TextureRegion[] explodeFrames = {
+                new TextureRegion(texture, 0, 0, 16, 16),
+                new TextureRegion(texture, 16, 0, 16, 16),
+                new TextureRegion(texture, 32, 0, 16, 16),
+                new TextureRegion(texture, 48, 0, 16, 16)
+        };
+        this.explodeAnimation = new Animation<>(0.1f, explodeFrames);
 
         createSegments();
     }
 
-    /**
-     * Creates blast segments in all four cardinal directions.
-     */
-    //Ggf. mit 16 mulitplizieren
     private void createSegments() {
-        // Create center blast segment
+        // Center blast
         segments.add(new Rectangle(getX(), getY(), 1, 1));
 
-        // Up
-        createDirectionalSegments(0, 1);
-        // Down
-        createDirectionalSegments(0, -1);
-        // Left
-        createDirectionalSegments(-1, 0);
-        // Right
-        createDirectionalSegments(1, 0);
+        // Add directional segments
+        createDirectionalSegments(0, 1);  // Up
+        createDirectionalSegments(0, -1); // Down
+        createDirectionalSegments(-1, 0); // Left
+        createDirectionalSegments(1, 0);  // Right
     }
 
-    /**
-     * Creates blast segments in a specific direction until an obstacle is hit or blast radius is reached.
-     *
-     * @param dx Change in X-direction.
-     * @param dy Change in Y-direction.
-     */
     private void createDirectionalSegments(int dx, int dy) {
         for (int step = 1; step <= blastRadius; step++) {
             float nextX = getX() + step * dx;
             float nextY = getY() + step * dy;
 
-            // Boundary check
-            if (!gameMap.isWithinBounds(nextX, nextY)) {
-                break;
-            }
+            if (!gameMap.isWithinBounds(nextX, nextY)) break;
+            if (gameMap.isIndestructibleWall(nextX, nextY)) break;
 
-            // Check for indestructible walls
-            if (gameMap.isIndestructibleWall(nextX, nextY)) {
-                break; // Stop blast in this direction
-            }
-
-            // Add blast segment
             segments.add(new Rectangle(nextX, nextY, 1, 1));
 
-            // Check for destructible walls
             if (gameMap.isDestructibleWall(nextX, nextY)) {
-                gameMap.destroyWall(nextX, nextY); // Destroy the wall
-                gameObjectManager.spawnPowerUpIfAny(nextX, nextY); // Optionally spawn power-up
-                break; // Stop blast after destroying the wall
+                gameMap.destroyWall(nextX, nextY);
+                gameObjectManager.spawnPowerUpIfAny(nextX, nextY);
+                break;
             }
         }
     }
 
-    /**
-     * Updates the blast's state, handles timing, and checks for collisions.
-     *
-     * @param deltaTime Time elapsed since last update.
-     */
     @Override
     public void update(float deltaTime) {
         elapsedTime += deltaTime;
-        if (elapsedTime >= blastDuration) {
-            setActive(false); // Mark for removal
+
+        // Automatically deactivate after animation ends
+        if (elapsedTime >= explodeAnimation.getAnimationDuration()) {
+            isActive = false;
         }
 
-        // Check collisions with player and enemies
+        // Implement collision handling here if needed
         checkCollisions();
     }
 
-    private void setActive(boolean b) {
+    private void checkCollisions() {
+        // Logic for checking collisions with player or enemies
     }
 
-    /**
-     * Renders the blast segments.
-     *
-     * @param batch SpriteBatch for rendering.
-     */
     @Override
     public void render(SpriteBatch batch) {
-        // Iterate through each segment of the blast
+        TextureRegion currentFrame = explodeAnimation.getKeyFrame(elapsedTime, false); // Non-looping animation
+
+        // Render each segment with the animation frame
         for (Rectangle segment : segments) {
-            // Draw the texture at the segment's coordinates
-            batch.draw(getTexture(), segment.x, segment.y);
+            batch.draw(currentFrame, segment.x, segment.y);
         }
     }
 
-    /**
-     * Checks for collisions between the blast and other entities (player, enemies).
-     */
-    private void checkCollisions() {
-
-    }
-
-    /**
-     * Returns the bounding rectangle encompassing all blast segments.
-     *
-     * @return Bounding Rectangle.
-     */
     @Override
     public Rectangle getBoundingRectangle() {
-        // Simple implementation: returns the center blast's rectangle
-        // For more accurate collision, consider all segments
-        if (!segments.isEmpty()) {
-            return segments.get(0);
+        // Returns the total bounding rectangle of all segments
+        if (segments.isEmpty()) return new Rectangle(getX(), getY(), 1, 1);
+
+        Rectangle combined = segments.get(0);
+        for (Rectangle segment : segments) {
+            combined = combined.merge(segment);
         }
-        return new Rectangle(getX(), getY(), 1, 1);
+        return combined;
     }
 
-    /**
-     * Disposes resources used by the bomb.
-     * Calls the superclass dispose method to ensure proper cleanup.
-     */
     @Override
     public void dispose() {
+        texture.dispose(); // Dispose of the texture
         super.dispose();
     }
 
-    //Needs to be fixed
     @Override
     public boolean isActive() {
-        return false;
-    }
-
-
-    public int getBlastRadius() {
-        return blastRadius;
-    }
-
-    public void setBlastRadius(int blastRadius) {
-        this.blastRadius = blastRadius;
-    }
-
-    public float getBlastDuration() {
-        return blastDuration;
-    }
-
-    public void setBlastDuration(float blastDuration) {
-        this.blastDuration = blastDuration;
-    }
-
-    public float getElapsedTime() {
-        return elapsedTime;
-    }
-
-    public void setElapsedTime(float elapsedTime) {
-        this.elapsedTime = elapsedTime;
-    }
-
-    public int getBlastDamage() {
-        return blastDamage;
-    }
-
-    public void setBlastDamage(int blastDamage) {
-        this.blastDamage = blastDamage;
-    }
-
-    public List<Rectangle> getSegments() {
-        return segments;
-    }
-
-    public void setSegments(List<Rectangle> segments) {
-        this.segments = segments;
-    }
-
-    public GameMap getGameMap() {
-        return gameMap;
-    }
-
-    public void setGameMap(GameMap gameMap) {
-        this.gameMap = gameMap;
-    }
-
-    public GameObjectManager getGameObjectManager() {
-        return gameObjectManager;
-    }
-
-    public void setGameObjectManager(GameObjectManager gameObjectManager) {
-        this.gameObjectManager = gameObjectManager;
+        return isActive;
     }
 }
