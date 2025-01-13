@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -34,6 +35,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import de.tum.cit.ase.bomberquest.MapManager.MapParser;
+
+import java.util.Arrays;
 import java.util.List;
 import de.tum.cit.ase.bomberquest.MapManager.Node;
 import de.tum.cit.ase.bomberquest.map.Flowers;
@@ -44,6 +47,8 @@ import com.badlogic.gdx.math.Rectangle;
 import games.spooky.gdx.nativefilechooser.NativeFileChooser;
 import games.spooky.gdx.nativefilechooser.NativeFileChooserCallback;
 import games.spooky.gdx.nativefilechooser.NativeFileChooserConfiguration;
+
+import static de.tum.cit.ase.bomberquest.MapManager.MapParser.initializeMap;
 
 public class GameScreen implements Screen {
 
@@ -95,38 +100,57 @@ public class GameScreen implements Screen {
 
         this.world = new World(new Vector2(0, 0), true);
         MapParser.resetMap();
-        NativeFileChooser fileChooser = Gdx.app.getNativeFileChooser();
+        NativeFileChooser fileChooser = new NativeFileChooser();
         NativeFileChooserConfiguration config = new NativeFileChooserConfiguration();
         config.title = "Select Map File";
-        config.directory = Gdx.files.getLocalStoragePath();
+        config.directory = Gdx.files.local("/").path();
         config.filter = new String[] {"properties"};
 
         fileChooser.chooseFile(config, new NativeFileChooserCallback() {
             @Override
-            public void onFileChosen(String file) {
+            public void onFileChosen(FileHandle fileHandle) {
                 try {
-                    mapLines = Files.readAllLines(Paths.get(file));
+                    // Use LibGDX's FileHandle to read the file content
+                    String fileContent = fileHandle.readString("UTF-8");
+                    // Split the content into lines and store in mapLines
+                    mapLines = Arrays.asList(fileContent.split("\\r?\\n"));
                     // Proceed with map initialization using mapLines
-                } catch (IOException e) {
+                    initializeMap(mapLines);
+                } catch (Exception e) {
                     System.err.println("Error reading file: " + e.getMessage());
                     mapLines = new ArrayList<>();
                     // Handle the error, possibly by loading a default map
+                    loadDefaultMap();
                 }
             }
 
             @Override
-            public void onFileChooserError(Throwable t) {
-                System.err.println("File chooser error: " + t.getMessage());
+            public void onCancellation() {
+                System.err.println("File selection was canceled.");
+                mapLines = new ArrayList<>();
+                // Handle the cancellation, possibly by loading a default map
+                loadDefaultMap();
+            }
+
+            @Override
+            public void onError(Exception e) {
+                System.err.println("File chooser error: " + e.getMessage());
                 mapLines = new ArrayList<>();
                 // Handle the error appropriately
+                loadDefaultMap();
             }
+        });
+
+        fileChooser.chooseFile(config, new NativeFileChooserCallback() {
+
+
         });
 
 
 
         //List<String> mapLines = MapReader.readMapFile("maps/map-1.properties");
         //List<String> mapLines = MapReader.readMapFile("path/to/map.properties");
-        MapParser.initializeMap(mapLines); // Centralized parsing and validation
+        initializeMap(mapLines); // Centralized parsing and validation
         this.map = new GameMap(game);
 
         this.player = new Player(this.world, MapParser.getEntry().x, MapParser.getEntry().y);
