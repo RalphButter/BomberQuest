@@ -68,7 +68,8 @@ public class GameScreen implements Screen {
     private final Music actionMusic;
     private final Sound bombSound;
     private final Sound powerUpSound;
-    private final Sound enemySound;
+    //I don't think we need that
+    //private final Sound enemySound;
     private final Sound bombPlaceSound;
 
     private final List<Enemy> enemies = new ArrayList<>();
@@ -186,7 +187,8 @@ public class GameScreen implements Screen {
 
         this.bombSound = Gdx.audio.newSound(Gdx.files.internal("audio/bombSound.mp3"));
         this.powerUpSound = Gdx.audio.newSound(Gdx.files.internal("audio/powerUpSound.mp3"));
-        this.enemySound = Gdx.audio.newSound(Gdx.files.internal("audio/enemySound.mp3"));
+        //I don't think we need that
+        //this.enemySound = Gdx.audio.newSound(Gdx.files.internal("audio/enemySound.mp3"));
         bombPlaceSound = Gdx.audio.newSound(Gdx.files.internal("audio/bombPlace.mp3"));
 
         // Initialize missing fields
@@ -385,7 +387,8 @@ public class GameScreen implements Screen {
         actionMusic.dispose();
         bombSound.dispose();
         powerUpSound.dispose();
-        enemySound.dispose();
+        //I don't think we need that
+        //enemySound.dispose();
     }
 
     public boolean isPaused() {
