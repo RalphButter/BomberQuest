@@ -29,6 +29,9 @@ import de.tum.cit.ase.bomberquest.screen.Hud;
 
 
 import java.awt.*;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import de.tum.cit.ase.bomberquest.MapManager.MapParser;
 import java.util.List;
@@ -38,6 +41,9 @@ import de.tum.cit.ase.bomberquest.map.Chest;
 import de.tum.cit.ase.bomberquest.Characters.Enemy;
 import de.tum.cit.ase.bomberquest.Characters.Player;
 import com.badlogic.gdx.math.Rectangle;
+import games.spooky.gdx.nativefilechooser.NativeFileChooser;
+import games.spooky.gdx.nativefilechooser.NativeFileChooserCallback;
+import games.spooky.gdx.nativefilechooser.NativeFileChooserConfiguration;
 
 public class GameScreen implements Screen {
 
@@ -78,7 +84,7 @@ public class GameScreen implements Screen {
     private int remainingEnemies = 3;
 
     private final World world;
-
+    private List<String> mapLines; // Declare mapLines
 
     public GameScreen(BomberQuestGame game) {
         this.game = game;
@@ -89,7 +95,35 @@ public class GameScreen implements Screen {
 
         this.world = new World(new Vector2(0, 0), true);
         MapParser.resetMap();
-        List<String> mapLines = MapReader.readMapFile("maps/map-1.properties");
+        NativeFileChooser fileChooser = Gdx.app.getNativeFileChooser();
+        NativeFileChooserConfiguration config = new NativeFileChooserConfiguration();
+        config.title = "Select Map File";
+        config.directory = Gdx.files.getLocalStoragePath();
+        config.filter = new String[] {"properties"};
+
+        fileChooser.chooseFile(config, new NativeFileChooserCallback() {
+            @Override
+            public void onFileChosen(String file) {
+                try {
+                    mapLines = Files.readAllLines(Paths.get(file));
+                    // Proceed with map initialization using mapLines
+                } catch (IOException e) {
+                    System.err.println("Error reading file: " + e.getMessage());
+                    mapLines = new ArrayList<>();
+                    // Handle the error, possibly by loading a default map
+                }
+            }
+
+            @Override
+            public void onFileChooserError(Throwable t) {
+                System.err.println("File chooser error: " + t.getMessage());
+                mapLines = new ArrayList<>();
+                // Handle the error appropriately
+            }
+        });
+
+
+        //List<String> mapLines = MapReader.readMapFile("maps/map-1.properties");
         //List<String> mapLines = MapReader.readMapFile("path/to/map.properties");
         MapParser.initializeMap(mapLines); // Centralized parsing and validation
         this.map = new GameMap(game);
