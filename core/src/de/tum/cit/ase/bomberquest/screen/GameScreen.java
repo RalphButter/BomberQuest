@@ -100,11 +100,23 @@ public class GameScreen implements Screen {
 
         this.world = new World(new Vector2(0, 0), true);
         MapParser.resetMap();
-        NativeFileChooser fileChooser = new NativeFileChooser();
+
+        // Initialize mapLines to avoid potential null references
+        mapLines = new ArrayList<>();
+
+        // Initialize mapLines to avoid potential null references
+        mapLines = new ArrayList<>();
+
+        // Configure the NativeFileChooser
         NativeFileChooserConfiguration config = new NativeFileChooserConfiguration();
         config.title = "Select Map File";
-        config.directory = Gdx.files.local("/").path();
-        config.filter = new String[] {"properties"};
+        config.directory = Gdx.files.local("/");
+        //Löschbar, weil User schon die richtige Datei auswählen wird
+        //config.mimeTypes = new String[] { "properties" }; // Use 'mimeTypes' instead of 'filter'        // Instantiate the correct NativeFileChooser based on the platform
+
+        //Ab hier muss das Lambda in sein
+        NativeFileChooser fileChooser = getNativeFileChooser();
+
 
         fileChooser.chooseFile(config, new NativeFileChooserCallback() {
             @Override
@@ -141,10 +153,7 @@ public class GameScreen implements Screen {
             }
         });
 
-        fileChooser.chooseFile(config, new NativeFileChooserCallback() {
 
-
-        });
 
 
 
