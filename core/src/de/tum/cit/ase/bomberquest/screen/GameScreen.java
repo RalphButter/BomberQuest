@@ -123,6 +123,7 @@ public class GameScreen implements Screen {
         });
 
 
+
         //List<String> mapLines = MapReader.readMapFile("maps/map-1.properties");
         //List<String> mapLines = MapReader.readMapFile("path/to/map.properties");
         MapParser.initializeMap(mapLines); // Centralized parsing and validation
