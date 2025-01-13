@@ -1,4 +1,5 @@
 package de.tum.cit.ase.bomberquest.screen;
+import games.spooky.gdx.nativefilechooser.*;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -92,6 +93,7 @@ public class GameScreen implements Screen {
     private List<String> mapLines; // Declare mapLines
 
     public GameScreen(BomberQuestGame game) {
+
         this.game = game;
         this.spriteBatch = game.getSpriteBatch();
         this.hud = new Hud(spriteBatch, game.getSkin().getFont("font"));
@@ -115,8 +117,7 @@ public class GameScreen implements Screen {
         //config.mimeTypes = new String[] { "properties" }; // Use 'mimeTypes' instead of 'filter'        // Instantiate the correct NativeFileChooser based on the platform
 
         //Ab hier muss das Lambda in sein
-        NativeFileChooser fileChooser = getNativeFileChooser();
-
+        NativeFileChooser fileChooser = new DesktopNativeFileChooser();
 
         fileChooser.chooseFile(config, new NativeFileChooserCallback() {
             @Override
@@ -132,7 +133,7 @@ public class GameScreen implements Screen {
                     System.err.println("Error reading file: " + e.getMessage());
                     mapLines = new ArrayList<>();
                     // Handle the error, possibly by loading a default map
-                    loadDefaultMap();
+                    //loadDefaultMap();
                 }
             }
 
@@ -141,7 +142,7 @@ public class GameScreen implements Screen {
                 System.err.println("File selection was canceled.");
                 mapLines = new ArrayList<>();
                 // Handle the cancellation, possibly by loading a default map
-                loadDefaultMap();
+                //loadDefaultMap();
             }
 
             @Override
@@ -149,7 +150,7 @@ public class GameScreen implements Screen {
                 System.err.println("File chooser error: " + e.getMessage());
                 mapLines = new ArrayList<>();
                 // Handle the error appropriately
-                loadDefaultMap();
+                //loadDefaultMap();
             }
         });
 
@@ -499,6 +500,10 @@ public class GameScreen implements Screen {
             }
         }
     }
+
+
+
+
 
 
 
