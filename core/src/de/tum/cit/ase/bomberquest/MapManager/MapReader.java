@@ -26,13 +26,20 @@ public class MapReader {
         List<String> lines = new ArrayList<>();
         BufferedReader reader = null;
 
+        System.out.println("Attempting to read file at path: " + internalPath);
+
         try {
             FileHandle fileHandle = Gdx.files.internal(internalPath);
             reader = new BufferedReader(new InputStreamReader(fileHandle.read()));
 
             String line;
             while ((line = reader.readLine()) != null) {
-                lines.add(line);
+                // Skip comments or empty lines
+                if (line.startsWith("#") || line.trim().isEmpty()) {
+                    continue;
+                }
+
+                lines.add(line); // Add valid lines to the list
             }
         } catch (IOException e) {
             System.err.println("Error reading map file: " + e.getMessage());
@@ -48,4 +55,5 @@ public class MapReader {
 
         return lines;
     }
+
 }

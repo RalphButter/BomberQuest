@@ -165,6 +165,7 @@ public class MapParser {
      *
      * @return The height of the map as an integer.
      */
+
     public static int getHeight() {
         return height;
     }

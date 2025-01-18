@@ -67,6 +67,7 @@ public abstract class GameObject {
     }
 
 
+
     // Abstract method for specific updates (to be implemented by subclasses)
     public abstract void update(float deltaTime);
 
