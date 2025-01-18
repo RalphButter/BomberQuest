@@ -1,5 +1,3 @@
-
-
 package de.tum.cit.ase.bomberquest.screen;
 
 import com.badlogic.gdx.Gdx;
@@ -7,11 +5,13 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -30,11 +30,14 @@ import de.tum.cit.ase.bomberquest.screen.Hud;
 
 
 import java.awt.*;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import de.tum.cit.ase.bomberquest.MapManager.MapParser;
-import java.util.List;
-import java.util.Map;
 
+import java.util.Arrays;
+import java.util.List;
 import de.tum.cit.ase.bomberquest.MapManager.Node;
 import de.tum.cit.ase.bomberquest.map.Flowers;
 import de.tum.cit.ase.bomberquest.map.Chest;
@@ -42,6 +45,10 @@ import de.tum.cit.ase.bomberquest.Characters.Enemy;
 import de.tum.cit.ase.bomberquest.Characters.Player;
 import com.badlogic.gdx.math.Rectangle;
 import games.spooky.gdx.nativefilechooser.NativeFileChooser;
+import games.spooky.gdx.nativefilechooser.NativeFileChooserCallback;
+import games.spooky.gdx.nativefilechooser.NativeFileChooserConfiguration;
+
+import static de.tum.cit.ase.bomberquest.MapManager.MapParser.initializeMap;
 
 public class GameScreen implements Screen {
 
@@ -82,7 +89,7 @@ public class GameScreen implements Screen {
     private int remainingEnemies = 3;
 
     private final World world;
-
+    private List<String> mapLines; // Declare mapLines
 
     public GameScreen(BomberQuestGame game) {
         this.game = game;
@@ -92,66 +99,80 @@ public class GameScreen implements Screen {
         hud.stage.draw(); // Render the HUD
 
         this.world = new World(new Vector2(0, 0), true);
-
-        // Reset map data before initialization
         MapParser.resetMap();
 
-        // Validate and load the map file
-        String mapFilePath = "maps/map-1.properties";
-//        /Users/jonaswahl/Library/CloudStorage/OneDrive-TUM/TUM/3.Semester/ITP/IdeaProjects/Wintersemester2024/Project/Bomber_Quest/assets/maps/map-1.properties// Update this to the actual file path
-        if (!Gdx.files.internal(mapFilePath).exists()) {
-            throw new IllegalStateException("Map file not found at path: " + mapFilePath);
-        }
+        // Initialize mapLines to avoid potential null references
+        mapLines = new ArrayList<>();
 
-        List<String> mapLines = MapReader.readMapFile(mapFilePath);
-        if (mapLines.isEmpty()) {
-            throw new IllegalStateException("Map file is empty or invalid: " + mapFilePath);
-        }
+        // Initialize mapLines to avoid potential null references
+        mapLines = new ArrayList<>();
 
-        // Initialize the map with parsed data
-        MapParser.initializeMap(mapLines);
+        // Configure the NativeFileChooser
+        NativeFileChooserConfiguration config = new NativeFileChooserConfiguration();
+        config.title = "Select Map File";
+        config.directory = Gdx.files.local("/");
+        //Löschbar, weil User schon die richtige Datei auswählen wird
+        //config.mimeTypes = new String[] { "properties" }; // Use 'mimeTypes' instead of 'filter'        // Instantiate the correct NativeFileChooser based on the platform
+
+        //Ab hier muss das Lambda in sein
+        NativeFileChooser fileChooser = getNativeFileChooser();
+
+
+        fileChooser.chooseFile(config, new NativeFileChooserCallback() {
+            @Override
+            public void onFileChosen(FileHandle fileHandle) {
+                try {
+                    // Use LibGDX's FileHandle to read the file content
+                    String fileContent = fileHandle.readString("UTF-8");
+                    // Split the content into lines and store in mapLines
+                    mapLines = Arrays.asList(fileContent.split("\\r?\\n"));
+                    // Proceed with map initialization using mapLines
+                    initializeMap(mapLines);
+                } catch (Exception e) {
+                    System.err.println("Error reading file: " + e.getMessage());
+                    mapLines = new ArrayList<>();
+                    // Handle the error, possibly by loading a default map
+                    loadDefaultMap();
+                }
+            }
+
+            @Override
+            public void onCancellation() {
+                System.err.println("File selection was canceled.");
+                mapLines = new ArrayList<>();
+                // Handle the cancellation, possibly by loading a default map
+                loadDefaultMap();
+            }
+
+            @Override
+            public void onError(Exception e) {
+                System.err.println("File chooser error: " + e.getMessage());
+                mapLines = new ArrayList<>();
+                // Handle the error appropriately
+                loadDefaultMap();
+            }
+        });
+
+
+
+
+
+        //List<String> mapLines = MapReader.readMapFile("maps/map-1.properties");
+        //List<String> mapLines = MapReader.readMapFile("path/to/map.properties");
+        initializeMap(mapLines); // Centralized parsing and validation
         this.map = new GameMap(game);
 
-        Map<Point, Integer> parsedObjects = MapParser.getObjects();
-        for (Map.Entry<Point, Integer> entry : parsedObjects.entrySet()) {
-            Point point = entry.getKey();
-            int objectId = entry.getValue();
-            float x = point.x * TILE_SIZE_PX;
-            float y = point.y * TILE_SIZE_PX;
-
-            switch (objectId) {
-                case 0: // Indestructible wall
-                    walls.add(new InDestructibleWall(x, y, false, false));
-                    break;
-                case 1: // Destructible wall
-                    walls.add(new DestructibleWall(x, y, false, true));
-                    break;
-                case 4: // Exit
-                    exits.add(new Exit(x, y, false, false));
-                    break;
-                case 5: // Power-up (Chest)
-                    chests.add(new Chest(world, x / TILE_SIZE_PX, y / TILE_SIZE_PX)); // Using World
-                    break;
-                case 6: // Decorative object (Flowers)
-                    flowers.add(new Flowers((int) x / TILE_SIZE_PX, (int) y / TILE_SIZE_PX));
-                    break;
-                // Add other cases for additional object IDs
-            }
-        }
-
-        // Validate and set up the player entry point
-        if (MapParser.getEntry() == null) {
-            throw new IllegalStateException("Entry point not found in the map!");
-        }
         this.player = new Player(this.world, MapParser.getEntry().x, MapParser.getEntry().y);
 
-        // Set up camera and rendering
         this.mapCamera = new OrthographicCamera();
-
         this.viewport = new ExtendViewport(800, 600, mapCamera);
-        this.mapRenderer = new OrthogonalTiledMapRenderer(new TmxMapLoader().load("maps/map-1.properties"), SCALE);
 
-        // Load and play music
+        //map-1.properties nicht tmx
+        //this.mapRenderer = new OrthogonalTiledMapRenderer(new TmxMapLoader().load("maps/map-1.tmx"), SCALE);
+        TiledMap tiledMap = new TmxMapLoader().load("maps/map-1.tmx");
+        this.mapRenderer = new OrthogonalTiledMapRenderer(tiledMap, SCALE);
+
+
         this.stageMusic = Gdx.audio.newMusic(Gdx.files.internal("audio/stageMusic.mp3"));
         stageMusic.setVolume(0.2f);
         stageMusic.setLooping(true);
@@ -162,22 +183,22 @@ public class GameScreen implements Screen {
         actionMusic.setLooping(true);
         this.actionMusic.play();
 
-        // Load sound effects
         this.bombSound = Gdx.audio.newSound(Gdx.files.internal("audio/bombSound.mp3"));
         this.powerUpSound = Gdx.audio.newSound(Gdx.files.internal("audio/powerUpSound.mp3"));
         this.enemySound = Gdx.audio.newSound(Gdx.files.internal("audio/enemySound.mp3"));
         bombPlaceSound = Gdx.audio.newSound(Gdx.files.internal("audio/bombPlace.mp3"));
 
-        // Initialize other fields
+        // Initialize missing fields
         this.radius = 1.0f; // Example value, adjust as needed
         this.gameObjectManager = new GameObjectManager();
         this.gameMap = new GameMap(game);
 
-        // Update HUD cooldown
         float coolDownRemaining = Math.max(0, player.getCoolDownTime() - player.getTimeSinceLastBomb());
         hud.updateCoolDown(coolDownRemaining);
-    }
 
+
+
+    }
     @Override
     public void render(float delta) {
         ScreenUtils.clear(0, 0, 0, 1); // Clear the screen
@@ -478,5 +499,7 @@ public class GameScreen implements Screen {
             }
         }
     }
+
+
 
 }
