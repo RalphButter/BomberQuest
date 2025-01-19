@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 
+//TODO GameObject aufteilen in GameObject und Entity
+
 public abstract class GameObject {
     private float x, y;  // Position in the game grid (or world coordinates)
     private boolean walkable;  // Can other objects walk over this?

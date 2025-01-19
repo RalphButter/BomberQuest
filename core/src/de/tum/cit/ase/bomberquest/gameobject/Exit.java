@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 
+//TODO Eigentlich ist ja nur position und Texture relevant, hier müssen wir vereinfachen
 public class Exit extends GameObject {
     /**
      * Constructor for creating a new GameObject.

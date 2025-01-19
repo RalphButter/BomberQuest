@@ -21,6 +21,8 @@ import de.tum.cit.ase.bomberquest.BomberQuestGame;
  * It extends the LibGDX Screen interface and sets up UI components such as labels, buttons,
  * and background music to provide a satisfying conclusion to the level.
  */
+
+//TODO This class is also wrong
 public class VictoryScreen implements Screen {
     private final Stage stage; // Stage manages the 2D scene for UI elements.
     private final Music victoryMusic; // Music that plays when the victory screen is displayed.

@@ -7,7 +7,8 @@ import de.tum.cit.ase.bomberquest.map.GameMap;
 import de.tum.cit.ase.bomberquest.Characters.Player;
 
 import java.awt.*;
-
+//TODO Eigentlich ist ja nur position und Texture relevant, hier müssen wir vereinfachen
+//Ich glaube PowerUp brauchen wir evtl. nicht
 public class ConcurrentBombPowerUp extends PowerUp {
     private static final int CONCURRENT_BOMB_INCREMENT = 1;
     private static final int MAX_CONCURRENT_BOMBS = 8;

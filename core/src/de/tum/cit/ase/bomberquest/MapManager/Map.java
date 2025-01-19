@@ -1,4 +1,4 @@
-package de.tum.cit.ase.bomberquest.gameobject;
+package de.tum.cit.ase.bomberquest.MapManager;
 
 //Basierend auf unserem Meeting, Samstag 18.01.2025
 //Entry ist auch so redundant
@@ -8,6 +8,7 @@ package de.tum.cit.ase.bomberquest.gameobject;
 //TODO ES müssen evtl. die anderen Klassen, die mit Gamobject zu tun haben auch geändert werden.
 
 import com.badlogic.gdx.math.Vector2;
+import de.tum.cit.ase.bomberquest.gameobject.GameObject;
 import de.tum.cit.ase.bomberquest.util.SpriteSheet;
 
 import java.util.List;

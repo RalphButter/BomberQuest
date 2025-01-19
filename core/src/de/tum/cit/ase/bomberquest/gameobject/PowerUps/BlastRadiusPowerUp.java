@@ -5,6 +5,7 @@ import de.tum.cit.ase.bomberquest.gameobject.GameObjectManager;
 import de.tum.cit.ase.bomberquest.map.GameMap;
 
 import java.awt.*;
+//TODO Eigentlich ist ja nur position und Texture relevant, hier müssen wir vereinfachen
 
 public class BlastRadiusPowerUp extends Blast {
     private static final int BLAST_RADIUS_INCREMENT = 1;

@@ -29,6 +29,8 @@ public class Entity {
     public Rectangle getRect(){
         return new Rectangle(pos.x,pos.y,texture.getWidth(),texture.getHeight());
     }
+
+    //TODO Please add comments :)
     public void draw(Batch batch){
         batch.begin();
         batch.draw(texture, pos.x, pos.y ,texture.getWidth(),texture.getHeight(),0,0,texture.getWidth(),texture.getHeight(),false,false);
