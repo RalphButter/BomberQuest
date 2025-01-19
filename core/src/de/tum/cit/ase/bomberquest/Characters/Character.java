@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 
+
+
 public abstract class Character {
     private float x;  // X-coordinate of the character
     private float y;  // Y-coordinate of the character
