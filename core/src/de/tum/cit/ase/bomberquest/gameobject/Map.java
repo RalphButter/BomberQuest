@@ -4,7 +4,8 @@ package de.tum.cit.ase.bomberquest.gameobject;
 //Entry ist auch so redundant
 //BITTE NICHT DIE REDUNDANTEN KLASSEN LÖSCHEN!!! (ICH BRAUCHE DIE GGF. NOCH)
 //TODO Evtl. GameObject Klasse anpassen
-
+//TODO DAVOR!!! SPRITE SHEET ERSTELLEN
+//TODO ES müssen evtl. die anderen Klassen, die mit Gamobject zu tun haben auch geändert werden.
 /**
  * The Map class serves as the primary structure for managing the game's spatial environment.
  * It provides functionality to store, access, and manipulate game objects within a
