@@ -65,5 +65,6 @@ public class Map {
 
     //Todo Wir brauchen noch eine draw + drawWall function
     //Todo Konstrutur (mache ich (Ralph))
+    //TODO Wir müssen davor Enemy, etc. machen. Diese Klasse kann erst zum Schluss implementiert werden
 
 }
