@@ -22,6 +22,7 @@ import com.badlogic.gdx.math.Vector2;
  */
 
 //I don't think our current render function work in Enemy and Player. We might need this class.
+//Wir sollten nicht das Enum benutzen. Ich habe auf das Enum aufgebaut
 
 public class SpriteSheet {
     Texture texture; // The texture representing the sprite sheet

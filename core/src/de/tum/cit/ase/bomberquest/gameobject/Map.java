@@ -6,6 +6,13 @@ package de.tum.cit.ase.bomberquest.gameobject;
 //TODO Evtl. GameObject Klasse anpassen
 //TODO DAVOR!!! SPRITE SHEET ERSTELLEN
 //TODO ES müssen evtl. die anderen Klassen, die mit Gamobject zu tun haben auch geändert werden.
+
+import com.badlogic.gdx.math.Vector2;
+import de.tum.cit.ase.bomberquest.util.SpriteSheet;
+
+import java.util.List;
+import java.util.Random;
+
 /**
  * The Map class serves as the primary structure for managing the game's spatial environment.
  * It provides functionality to store, access, and manipulate game objects within a
@@ -39,5 +46,24 @@ package de.tum.cit.ase.bomberquest.gameobject;
 
 
 public class Map {
+    int rows; // Number of rows in the map grid, essential for defining the map's dimensions
+    int cols; // Number of columns in the map grid, essential for defining the map's dimensions
+    GameObject testGameObject; // A test game object for development and debugging purposes
+    SpriteSheet mapSheet; // The sprite sheet used for rendering the map tiles
+    int cellSize = 16; // The size of each cell in the grid, used for positioning and scaling
+
+    Vector2 pos; // The position of the map in the game world
+
+    GameObject entryGameObject; // The entry point game object, marking the start position in the map
+    GameObject exitGameObject; // The exit point game object, marking the end position in the map
+    GameObject[][] grid; // A 2D array to store game objects within the map grid
+    List<GameObject> emptyGameObjects; // A list of empty game objects for managing available positions
+    Random random; // A random number generator for procedural content and random events
+    int keyCount = 0; // A counter for tracking the number of keys collected or required
+    Vector2 playerPos; // The position of the player within the map
+
+
+    //Todo Wir brauchen noch eine draw + drawWall function
+    //Todo Konstrutur (mache ich (Ralph))
 
 }
