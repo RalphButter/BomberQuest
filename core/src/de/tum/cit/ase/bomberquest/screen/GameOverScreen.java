@@ -16,6 +16,13 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import de.tum.cit.ase.bomberquest.BomberQuestGame;
 
+/**
+ * The GameOverScreen class is responsible for displaying the game-over screen
+ * when the player fails to complete a level in the game.
+ * It extends the LibGDX Screen interface and sets up UI components such as labels, buttons,
+ * and background music to provide feedback to the player.
+ */
+
 
 public class GameOverScreen implements Screen  {
     // Reference to the main game class to access global resources and methods
