@@ -1,341 +1,205 @@
 package de.tum.cit.ase.bomberquest.Characters;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.World;
+import de.tum.cit.ase.bomberquest.MapManager.Map;
 import de.tum.cit.ase.bomberquest.gameobject.Bombs;
 import de.tum.cit.ase.bomberquest.gameobject.GameObjectManager;
-import de.tum.cit.ase.bomberquest.gameobject.Wall;
 import de.tum.cit.ase.bomberquest.map.GameMap;
-import de.tum.cit.ase.bomberquest.screen.GameOverScreen;
 import de.tum.cit.ase.bomberquest.screen.GameScreen;
 import de.tum.cit.ase.bomberquest.texture.Animations;
 import de.tum.cit.ase.bomberquest.texture.Drawable;
-import de.tum.cit.ase.bomberquest.util.CollisionDetection;
+import de.tum.cit.ase.bomberquest.util.Manager;
+import de.tum.cit.ase.bomberquest.util.SpriteSheet;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Represents the player character in the game with combined functionality.
+ * Represents the player character in the game. Handles movement, animations,
+ * interaction with the game world, and shooting mechanics.
  */
-public class Player extends Character implements Drawable {
+public class Player extends Entity {
 
-    private final World world;
-    private final Body hitbox;
+    boolean onGround = false; // Indicates if the player is on the ground
+    float speed; // Movement speed of the player
+    boolean dead = false; // Tracks if the player is dead
+    boolean jumping = false; // Indicates if the player is jumping
 
-    private int blastRadius = 1; // Initial blast radius
-    private int maxBlastRadius = 8;
-    private int concurrentBombs;
-    private Rectangle bounds;
-    private float elapsedTime;
+    // Sprite sheets for different movement directions
+    SpriteSheet walkSheet_down;
+    SpriteSheet walkSheet_up;
+    SpriteSheet walkSheet_left;
+    SpriteSheet walkSheet_right;
+    SpriteSheet sheet; // Currently active sprite sheet
 
-    private float coolDownTime = 1.0f; // 1-second cooldown
-    private float timeSinceLastBomb = 0f; // Time since the last bomb was placed
+    Vector2 dir; // Movement direction
+    Vector2 facingDir; // Direction the player is facing
+    int bombCount = 0; // Number of bombs the player can place
+    public boolean shooting = false; // Indicates if the player is shooting
+    float shootTime = 0; // Timer for shooting actions
 
-    private GameScreen gameScreen;
+    private GameScreen gameScreen; // Reference to the game screen
 
-    public Player(World world, float x, float y) {
-        super(x, y, new Rectangle(x, y, 16, 32));
-        this.world = world;
-        this.hitbox = createHitbox(world, x, y);
-        this.setTexture(new Texture(Gdx.files.internal("assets/texture/character.png")));
+    /**
+     * Initializes the player with a starting position and animation setup.
+     *
+     * @param pos Initial position of the player.
+     */
+    public Player(Vector2 pos) {
+        super(pos, null);
 
-        // Setting animations
-        this.setWalkUpAnimation(createAnimation(64, 16, 32));
-        this.setWalkDownAnimation(createAnimation(0, 16, 32));
-        this.setWalkLeftAnimation(createAnimation(96, 16, 32));
-        this.setWalkRightAnimation(createAnimation(32, 16, 32));
+        // Load animations for walking in different directions
+        walkSheet_down = new SpriteSheet(new Texture("player_walk.png"), 4, 4);
+        walkSheet_down.setPlay(0, 3, 0.1f, true);
+
+        walkSheet_right = new SpriteSheet(new Texture("player_walk.png"), 4, 4);
+        walkSheet_right.setPlay(4, 7, 0.1f, true);
+
+        walkSheet_up = new SpriteSheet(new Texture("player_walk.png"), 4, 4);
+        walkSheet_up.setPlay(8, 11, 0.1f, true);
+
+        walkSheet_left = new SpriteSheet(new Texture("player_walk.png"), 4, 4);
+        walkSheet_left.setPlay(12, 15, 0.1f, true);
+
+        sheet = walkSheet_right;
+        speed = 1;
+
+        dir = new Vector2(0, 0);
+        facingDir = new Vector2(1, 0);
     }
 
     /**
-     * Creates a Box2D body for the player.
-     * This is what the physics engine uses to move the player around and detect collisions with other bodies.
+     * Creates a Box2D body to handle physics-based movement and collisions.
      *
      * @param world  The Box2D world to add the body to.
      * @param startX The initial X position.
      * @param startY The initial Y position.
-     * @return The created body.
+     * @return The created Box2D body.
      */
     private Body createHitbox(World world, float startX, float startY) {
-        // BodyDef is like a blueprint for the movement properties of the body.
         BodyDef bodyDef = new BodyDef();
-        // Dynamic bodies are affected by forces and collisions.
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        // Set the initial position of the body.
         bodyDef.position.set(startX, startY);
-        // Create the body in the world using the body definition.
         Body body = world.createBody(bodyDef);
-        // Now we need to give the body a shape so the physics engine knows how to collide with it.
-        // We'll use a circle shape for the player.
         CircleShape circle = new CircleShape();
-        // Give the circle a radius of 0.3 tiles (the player is 0.6 tiles wide).
         circle.setRadius(0.3f);
-        // Attach the shape to the body as a fixture.
-        // Bodies can have multiple fixtures, but we only need one for the player.
         body.createFixture(circle, 1.0f);
-        // We're done with the shape, so we should dispose of it to free up memory.
         circle.dispose();
-        // Set the player as the user data of the body so we can look up the player from the body later.
         body.setUserData(this);
         return body;
     }
 
-    private Animation<TextureRegion> createAnimation(int yOffset, int frameWidth, int frameHeight) {
-        List<TextureRegion> frames = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
-            frames.add(new TextureRegion(getTexture(), i * frameWidth, yOffset, frameWidth, frameHeight));
+    /**
+     * Handles key release events to stop movement.
+     *
+     * @param keycode The released key.
+     */
+    public void onKeyUp(int keycode) {
+        switch (keycode) {
+            case Input.Keys.A:
+                if (dir.x == -1) dir.x = 0;
+                break;
+            case Input.Keys.D:
+                if (dir.x == 1) dir.x = 0;
+                break;
+            case Input.Keys.W:
+                if (dir.y == 1) dir.y = 0;
+                break;
+            case Input.Keys.S:
+                if (dir.y == -1) dir.y = 0;
+                break;
         }
-        return new Animation<>(0.1f, frames.toArray(new TextureRegion[0]));
-    }
-
-    @Override
-    public void setPosition(float x, float y) {
-        super.setPosition(x, y);
-        hitbox.setTransform(x, y, 0);
     }
 
     /**
-     * Move the player around in a circle by updating the linear velocity of its hitbox every frame.
-     * This doesn't actually move the player, but it tells the physics engine how the player should move next frame.
+     * Handles key press events to initiate movement and shooting.
      *
-     * @param frameTime the time since the last frame.
+     * @param keycode The pressed key.
      */
-    public void tick(float frameTime) {
-        this.elapsedTime += frameTime;
-        // Make the player move in a circle with radius 2 tiles
-        // You can change this to make the player move differently, e.g. in response to user input.
-        // See Gdx.input.isKeyPressed() for keyboard input
-        float xVelocity = (float) Math.sin(this.elapsedTime) * 2;
-        float yVelocity = (float) Math.cos(this.elapsedTime) * 2;
-        this.hitbox.setLinearVelocity(xVelocity, yVelocity);
-    }
-
-    public void update(float deltaTime, List<Wall> walls) {
-        // Update state time for animations
-        setStateTime(getStateTime() + deltaTime);
-
-        // Handle input and movement
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            moveUp(walls);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            moveDown(walls);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            moveLeft(walls);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            moveRight(walls);
-        } else {
-            // Stop movement if no keys are pressed
-            setIsMoving(false);
-        }
-    }
-
-
-    public void render(SpriteBatch batch) {
-        TextureRegion currentFrame;
-        switch (getCurrentDirection()) {
-            case UP:
-                currentFrame = getWalkUpAnimation().getKeyFrame(getStateTime(), true);
+    public void onKeyDown(int keycode) {
+        switch (keycode) {
+            case Input.Keys.A:
+                dir = new Vector2(-1, 0);
+                sheet = walkSheet_left;
+                facingDir = new Vector2(dir.x, dir.y);
                 break;
-            case DOWN:
-                currentFrame = getWalkDownAnimation().getKeyFrame(getStateTime(), true);
+            case Input.Keys.D:
+                dir = new Vector2(1, 0);
+                sheet = walkSheet_right;
+                facingDir = new Vector2(dir.x, dir.y);
                 break;
-            case LEFT:
-                currentFrame = getWalkLeftAnimation().getKeyFrame(getStateTime(), true);
+            case Input.Keys.W:
+                dir = new Vector2(0, 1);
+                sheet = walkSheet_up;
+                facingDir = new Vector2(dir.x, dir.y);
                 break;
-            case RIGHT:
-                currentFrame = getWalkRightAnimation().getKeyFrame(getStateTime(), true);
+            case Input.Keys.S:
+                dir = new Vector2(0, -1);
+                sheet = walkSheet_down;
+                facingDir = new Vector2(dir.x, dir.y);
                 break;
-            default:
-                currentFrame = getWalkDownAnimation().getKeyFrame(0, true);
+            case Input.Keys.SPACE:
+                shootTime = 0;
+                shooting = true;
                 break;
         }
-        batch.draw(currentFrame, getX(), getY());
     }
 
-    public int getBlastRadius() {
-        return blastRadius;
-    }
+    /**
+     * Updates the player's position and handles collision detection.
+     *
+     * @param map The game map used for collision checking.
+     */
+    public void update(Map map) {
+        Vector2 vel = new Vector2(dir.x * speed, dir.y * speed);
+        Vector2 prevPos = new Vector2(pos.x, pos.y);
 
-    public void setBlastRadius(int blastRadius) {
-        if (blastRadius <= maxBlastRadius) {
-            this.blastRadius = blastRadius;
-            // Update HUD or any other related components if necessary
-        }
-    }
-
-    public int getMaxBlastRadius() {
-        return maxBlastRadius;
-    }
-
-    public void setMaxBlastRadius(int maxBlastRadius) {
-        this.maxBlastRadius = maxBlastRadius;
-    }
-    public int[] getPosition() {
-        return new int[]{(int) getX(), (int) getY()};
-    }
-
-    public void moveUp(List<Wall> walls) {
-        move(Direction.UP, 0, getSpeed(), walls);
-    }
-
-    public void moveDown(List<Wall> walls) {
-        move(Direction.DOWN, 0, -getSpeed(), walls);
-    }
-
-    public void moveLeft(List<Wall> walls) {
-        move(Direction.LEFT, -getSpeed(), 0, walls);
-    }
-
-    public void moveRight(List<Wall> walls) {
-        move(Direction.RIGHT, getSpeed(), 0, walls);
-    }
-
-
-
-    public void setIsMoving(boolean moving) {
-        setMoving(moving);
-        if(!isMoving()) {
-            setCurrentDirection(Direction.STANDING);
-        }
-    }
-
-    public void move(Direction direction, float dx, float dy, List<Wall> walls) {
-        float newX = getX() + dx;
-        float newY = getY() + dy;
-
-        // Check for collisions based on movement direction
-        if (!isCollidingWithObject(newX, getY(), walls)) {
-            setX(newX); // Update X position if no collision on the X-axis
-        }
-        if (!isCollidingWithObject(getX(), newY, walls)) {
-            setY(newY); // Update Y position if no collision on the Y-axis
+        pos = pos.add(vel);
+        if (vel.x != 0 || vel.y != 0) {
+            sheet.play();
         }
 
-        setCurrentDirection(direction); // Update the player's direction
-        setMoving(true); // Mark the player as moving
-        hitbox.setTransform(getX(), getY(), 0); // Sync the hitbox with the player's position
-    }
-
-
-//    private boolean isCollidingWithWalls(float x, float y, List<Wall> walls) {
-//        Rectangle nextPosition = new Rectangle(x, y, getRectangle().width, getRectangle().height);
-//        for (Wall wall : walls) {
-//            if (CollisionDetection.isColliding(nextPosition.x, nextPosition.y, nextPosition.width, nextPosition.height,
-//                    wall.getWallRectangle().x, wall.getWallRectangle().y, wall.getWallRectangle().width, wall.getWallRectangle().height)) {
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
-
-    private boolean isCollidingWithObject(float newX, float newY, List<Wall> walls) {
-        Rectangle nextPosition = new Rectangle(newX, newY, getRectangle().width, getRectangle().height);
-
-        // Check for collisions with all walls
-        for (Wall wall : walls) {
-            if (CollisionDetection.isColliding(
-                    nextPosition.x, nextPosition.y, nextPosition.width, nextPosition.height,
-                    wall.getWallRectangle().x, wall.getWallRectangle().y, wall.getWallRectangle().width, wall.getWallRectangle().height)) {
-                return true; // Collision detected
-            }
-        }
-        return false; // No collision
-    }
-
-    public void placeBomb(GameMap gameMap, GameObjectManager gameObjectManager, Sound bombPlaceSound, float deltaTime) {
-        // Update the cooldown timer
-        timeSinceLastBomb += deltaTime;
-
-        if (timeSinceLastBomb >= coolDownTime) {
-            if (gameObjectManager.getBombs() < getConcurrentBombs()) {
-                int gridX = Math.round(getX() / GameScreen.TILE_SIZE_PX);
-                int gridY = Math.round(getY() / GameScreen.TILE_SIZE_PX);
-
-                Bombs bomb = new Bombs(gridX * GameScreen.TILE_SIZE_PX, gridY * GameScreen.TILE_SIZE_PX, gameMap, gameObjectManager);
-                gameObjectManager.addGameObject(bomb);
-
-                // Play bomb placement sound
-                if (bombPlaceSound != null) {
-                    bombPlaceSound.play(0.5f); // Adjust volume as needed
+        // Check for collisions with walls
+        for (int row = 0; row < map.getRows(); row++) {
+            for (int col = 0; col < map.getCols(); col++) {
+                GameObject gameObject = map.getCell(row, col);
+                if ((gameObject.cellType == CellType.INDESTRUCTIBLE_WALL ||
+                        gameObject.cellType == CellType.DESTRUCTIBLE_WALL) &&
+                        gameObject.getRect().collide(this.getRect())) {
+                    pos = prevPos;
+                    return;
                 }
-
-                // Reset cooldown
-                timeSinceLastBomb = 0f;
-
-                System.out.println("Bomb placed at: " + gridX + ", " + gridY);
-            } else {
-                System.out.println("Cannot place more bombs. Limit reached!");
             }
-        } else {
-            System.out.println("Bomb cooldown active. Time remaining: " + (coolDownTime - timeSinceLastBomb));
         }
     }
 
 
-
-
-
-    public void dispose() {
-        getTexture().dispose();
-    }
-
-
-    public TextureRegion getCurrentAppearance() {
-        // Get the frame of the walk down animation that corresponds to the current time.
-        return Animations.CHARACTER_WALK_DOWN.getKeyFrame(this.elapsedTime, true);
-    }
-
-    @Override
-    public float getX() {
-        // The x-coordinate of the player is the x-coordinate of the hitbox (this can change every frame).
-        return hitbox.getPosition().x;
-    }
-
-    @Override
-    public float getY() {
-        // The y-coordinate of the player is the y-coordinate of the hitbox (this can change every frame).
-        return hitbox.getPosition().y;
-    }
-
-    public int getConcurrentBombs() {
-        return concurrentBombs;
-    }
-
-    public void setConcurrentBombs(int concurrentBombs) {
-        this.concurrentBombs = concurrentBombs;
-    }
-
-    public Rectangle getBounds() {
-        return bounds;
-    }
-
-    public float getCoolDownTime() {
-        return coolDownTime;
-    }
-
-    public void setCoolDownTime(float coolDownTime) {
-        this.coolDownTime = coolDownTime;
-    }
-
-    public void die() {
+    /**
+     * Shoots a bomb if the player has one available.
+     *
+     * @param objects List of active game objects.
+     */
+    public void shoot(List<Entity> objects) {
+        if (shooting) {
+            bombCount--;
+            Vector2 pos = new Vector2((int) getCenter().x / 16 * 16, (int) getCenter().y / 16 * 16);
+            objects.add(new Bombs(pos));
+            shooting = false;
+            Manager.getInstance().soundsManager.play("shoot", 1.0f);
+        }
 
     }
 
-    public float getTimeSinceLastBomb() {
-        return timeSinceLastBomb;
+    public Vector2 getCenter(){
+        return new Vector2(getRect().x + getRect().w/2,getRect().y + getRect().h/2);
     }
-
-
-
 
 }

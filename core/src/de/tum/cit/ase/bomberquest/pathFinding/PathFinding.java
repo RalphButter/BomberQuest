@@ -45,10 +45,21 @@ public class PathFinding {
         this.map = map;
     }
 
+    /**
+     * Returns the 2D grid representing the game map or terrain.
+     *
+     * @return The 2D array representing the game map or terrain.
+     */
     public Map getMap(){
         return map;
     }
 
+    /**
+     * Returns the node in the open list that is equal to the given node.
+     *
+     * @param node The node to search for in the open list.
+     * @return The node in the open list that is equal to the given node, or {@code null} if not found.
+     */
     Node isInOpenList(Node node) {
         for (Node n : open_list) {
             if (n.equal(node)) {
@@ -57,6 +68,14 @@ public class PathFinding {
         }
         return null;
     }
+
+    /**
+     * Returns the node in the close list that is at the given row and column.
+     *
+     * @param row The row of the node to search for in the close list.
+     * @param col The column of the node to search for in the close list.
+     * @return The node in the close list that is at the given row and column, or {@code null} if not found.
+     */
     Node isInCloseList(int row, int col) {
         for (Node n : close_list) {
             if (n.getRow() == row && n.getCol() == col) {
@@ -66,6 +85,11 @@ public class PathFinding {
         return null;
     }
 
+    /**
+     * Returns the index of the node in the open list that has the minimum F value.
+     *
+     * @return The index of the node in the open list that has the minimum F value.
+     */
     int findMinFNode() {
         float min = 999999999;
         // Node* minF_node = nullptr;
@@ -80,6 +104,15 @@ public class PathFinding {
         return index;
     }
 
+
+
+    /**
+     * Explores the neighbors of the given node.
+     *
+     * @param node The node whose neighbors to explore.
+     */
+
+//    Ralph bitte die Funktionen noch in der Map Klasse implementieren
 
 
     void exploreNeightbour(Node node) {
@@ -133,6 +166,34 @@ public class PathFinding {
 
     }
 
+    /**
+     * Returns the  distance between two nodes.
+     *
+     * @param a The first node.
+     * @param b The second node.
+     * @return The distance between the two nodes.
+     */
+
+    static float grid_distance(Node a, Node b)
+    {
+        int dst_x = Math.abs(a.getCol() - b.getCol());
+        int dst_y = Math.abs(a.getRow() - b.getRow());
+
+        if (dst_x > dst_y)
+        {
+            return 5 * dst_y + 3 * (dst_x - dst_y);
+        }
+        return 5 * dst_x + 3 * (dst_y - dst_x);
+
+    }
+
+    /**
+     * Returns the path from the start node to the given node.
+     *
+     * @param node The node to find the path to.
+     * @return The path from the start node to the given node.
+     */
+
     List<Vector2> showPath(Node node) {
         Node tmp = node;
         List<Node> tracepath = new ArrayList<>();
@@ -155,6 +216,16 @@ public class PathFinding {
     }
 
 
+
+    /**
+     * Finds a path from the given start node to the given end node.
+     *
+     * @param col The column of the start node.
+     * @param row The row of the start node.
+     * @param toCol The column of the end node.
+     * @param toRow The row of the end node.
+     * @return The path from the start node to the end node.
+     */
     public List<Vector2> findPath(int col,int row, int toCol,int toRow) {
         startNode = new Node(row,col,null);
         endNode = new Node(toRow,toCol,null);

@@ -25,7 +25,7 @@ public class Enemy extends Entity {
 
     //TODO KONSTRUTUR ANGLEICHEN
     public Enemy(Vector2 pos, Map map) {
-        super(pos, texture);
+        super(pos, null);
         sheet = new SpriteSheet(new Texture("enemy.png"),1,3);
         sheet.setPlay(0, 2, 0.1f, true);
         pathFinding = new PathFinding(map);

@@ -7,7 +7,7 @@ import de.tum.cit.ase.bomberquest.util.Rectangle;
 
 public class Entity {
     protected Vector2 pos;
-    Texture texture;
+    public Texture texture;
     public boolean destroyFlag = false;
 
     public Entity(Vector2 pos, Texture texture) {

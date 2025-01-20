@@ -1,123 +1,85 @@
 package de.tum.cit.ase.bomberquest.gameobject;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Rectangle;
+import de.tum.cit.ase.bomberquest.Characters.Entity;
 import de.tum.cit.ase.bomberquest.map.GameMap;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Vector2;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
+import de.tum.cit.ase.bomberquest.util.Manager;
+import de.tum.cit.ase.bomberquest.util.Rectangle;
+import de.tum.cit.ase.bomberquest.util.SoundsManager;
+
+import com.badlogic.gdx.graphics.g2d.Batch;
 import java.awt.*;
 
-public class Bombs extends GameObject {
-    private static final float DEFAULT_FUSE_TIME = 3.0f;
-    private static final int DEFAULT_BLAST_RADIUS = 1;
+public class Bombs extends Entity {
+    private float bombTick = 4f; // Time until the bomb explodes
+    private float bombTickInterval = bombTick;
+    private float flashInterval = 0.1f; // Initial flash interval
+    private float flashTimer = flashInterval; // Timer to control flashing
+    private boolean visible = true; // Toggle visibility
 
-    private final float fuseTime;
-    private float elapsedTime;
-    private float radius;
-    private Rectangle blastRadius;
-    private final GameMap gameMap;
-    private final GameObjectManager gameObjectManager;
+    public Bombs(Vector2 pos) {
+        super(pos, new Texture("bomb.png"));
+    }
 
+    public Rectangle getRect() {
+        return new Rectangle(pos.x, pos.y, texture.getWidth(), texture.getHeight());
+    }
 
-public Bombs(float x, float y, GameMap gameMap, GameObjectManager gameObjectManager) {
-    // Call the superclass constructor with initial position, walkable, and destructible flags
-    super(x, y, false, true); // Bombs are not walkable and are destructible
+    public void update() {
+        // Decrease bombTickInterval based on delta time
+        if(isExplode()){
+            destroyFlag = true;
+        }
 
-    // Set the default fuse time for the bomb
-    this.fuseTime = DEFAULT_FUSE_TIME;
+        bombTickInterval -= Gdx.graphics.getDeltaTime();
 
-    // Initialize the elapsed time since the bomb was placed
-    this.elapsedTime = 0f;
+        // Calculate the new flash interval dynamically
+        if (bombTickInterval > 0) {
+            flashInterval = Math.max(0.1f, bombTickInterval / 10);
+        }
 
-    // Set the default blast radius for the bomb
-    this.blastRadius = new Rectangle(x - radius, y - radius, radius * 2, radius * 2);
-
-    // Reference to the game map
-    this.gameMap = gameMap;
-
-    // Reference to the game object manager
-    this.gameObjectManager = gameObjectManager;
-
-    this.radius = DEFAULT_BLAST_RADIUS;
-}
-
-    @Override
-    public void update(float deltaTime) {
-        // Increment the elapsed time by the delta time
-        elapsedTime += deltaTime;
-
-        // Check if the elapsed time has reached or exceeded the fuse time
-        if (elapsedTime >= fuseTime) {
-            // Trigger the explosion
-            //explode();
-
-            // Mark the bomb for removal
-            setActive(false);
+        // Update the flash timer and toggle visibility when the flash interval is reached
+        flashTimer -=  Gdx.graphics.getDeltaTime();
+        if (flashTimer <= 0) {
+            if (bombTickInterval < 3) {
+                // Play sound when flashing quickly (assumes a SoundManager class handles sounds)
+                Manager.getInstance().soundsManager.play("clickBomb",1.0f);
+            }
+            visible = !visible; // Toggle visibility
+            flashTimer = flashInterval; // Reset the flash timer
         }
     }
 
-    private void setActive(boolean b) {
-    }
-    //TODO GGf. in Map
-    /*private void explode() {
-        // Create a new blast at the bomb's position
-        Blast blast = new Blast(getX(), getY(), (int) radius, 0.5f, 1, gameMap, gameObjectManager);
-        gameObjectManager.addGameObject(blast);
-    }*/
+    public void draw(Batch batch){
+        if (bombTickInterval > 3){
+            visible = true;
+        }
+        if (visible) {
+            batch.begin();
+            batch.draw(texture, pos.x, pos.y ,texture.getWidth(),texture.getHeight(),0,0,texture.getWidth(),texture.getHeight(),false,false);
+            batch.end();
+        }
 
-    @Override
-    public void render(SpriteBatch batch) {
-        batch.draw(getTexture(), getX(), getY());
     }
 
-
-    @Override
-    public Rectangle getBoundingRectangle() {
-        return new Rectangle(getX(), getY(), 16, 16);
+    public boolean isExplode(){
+        return bombTickInterval <= 0;
     }
 
-    /**
-     * Disposes resources used by the bomb.
-     * Calls the superclass dispose method to ensure proper cleanup.
-     */
-    @Override
+
     public void dispose() {
-        super.dispose();
-    }
-
-    @Override
-    public boolean isActive() {
-        return false;
-    }
-
-    public float getFuseTime() {
-        return fuseTime;
-    }
-
-    public float getElapsedTime() {
-        return elapsedTime;
-    }
-
-    public Rectangle getBlastRadius() {
-        return blastRadius;
-    }
-
-    public void setBlastRadius(Rectangle blastRadius) {
-        this.blastRadius = blastRadius;
-    }
-
-    public GameMap getGameMap() {
-        return gameMap;
-    }
-
-    public GameObjectManager getGameObjectManager() {
-        return gameObjectManager;
-    }
-
-    public float getRadius() {
-        return radius;
-    }
-
-    public void setRadius(float radius) {
-        this.radius = radius;
+        texture.dispose();
     }
 }
