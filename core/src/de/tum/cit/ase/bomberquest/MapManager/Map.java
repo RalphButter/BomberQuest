@@ -172,7 +172,23 @@ public class Map {
                 }
             }
 
+            // If no exit is found, randomly assign one from destructible walls
+            if (!hasExit && !destructibleWalls.isEmpty()) {
+                Random random = new Random();
+                // TODO select a GameObject from the list of destructible walls. This is done using the Random class to generate a random index within the bounds of the destructibleWalls list. The selected GameObject is then assigned to the variable randomGameObject.
+                GameObject randomGameObject = destructibleWalls.get(random.nextInt(destructibleWalls.size()));
+                hasExit = true;
+                entities.add(new Exit(new Vector2(randomGameObject.col * 16, randomGameObject.row * 16)));
+            }
 
+            // Populate the list of empty game objects
+            for (int row = 0; row < rows; row++) {
+                for (int col = 0; col < cols; col++) {
+                    if (grid[row][col].cellType == null || grid[row][col].cellType == CellType.ENEMY) {
+                        emptyGameObjects.add(grid[row][col]);
+                    }
+                }
+            }
 
 
         }
