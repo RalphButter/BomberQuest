@@ -6,7 +6,10 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import de.tum.cit.ase.bomberquest.Characters.Entity;
 import de.tum.cit.ase.bomberquest.map.GameMap;
+import de.tum.cit.ase.bomberquest.util.SpriteSheet;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,8 +17,21 @@ import java.util.List;
 /**
  * Represents the explosion (blast) created by a bomb.
  */
-public class Blast extends GameObject {
-    private int blastRadius;
+
+
+public class Blast extends Entity {
+    SpriteSheet sheet;
+    float  deathTime = 0;
+    public Blast(Vector2 pos) {
+        super(pos, null);
+
+        sheet = new SpriteSheet(new Texture("explo1.png"),1,10);
+        sheet.setPlay(0,9,0.1f,false);
+    }
+
+
+}
+    /*private int blastRadius;
     private float blastDuration; // Total duration the blast remains visible
     private float elapsedTime;   // Time elapsed since the blast was created
     private int blastDamage;
@@ -204,5 +220,5 @@ public class Blast extends GameObject {
 
     public void setActive(boolean active) {
         isActive = active;
-    }
+    }*/
 }
