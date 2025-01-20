@@ -9,11 +9,14 @@ package de.tum.cit.ase.bomberquest.MapManager;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
+import de.tum.cit.ase.bomberquest.Characters.Enemy;
 import de.tum.cit.ase.bomberquest.Characters.Entity;
 import de.tum.cit.ase.bomberquest.gameobject.Cell;
 import de.tum.cit.ase.bomberquest.gameobject.CellType;
 import de.tum.cit.ase.bomberquest.gameobject.Exit;
 import de.tum.cit.ase.bomberquest.gameobject.GameObject;
+import de.tum.cit.ase.bomberquest.gameobject.PowerUps.BlastRadiusPowerUp;
+import de.tum.cit.ase.bomberquest.gameobject.PowerUps.ConcurrentBombPowerUp;
 import de.tum.cit.ase.bomberquest.util.SpriteSheet;
 
 import java.io.FileInputStream;
@@ -102,7 +105,7 @@ public class Map {
                     continue;
                 }
                 // Extract the column and row values from the key
-                int col = Integer.parseInt(key.split(",")[0]);
+                int col = getCol(key);
                 int row = Integer.parseInt(key.split(",")[1]);
 
                 // Update the maximum column value if the current column is greater
@@ -189,13 +192,62 @@ public class Map {
                     }
                 }
             }
+                
+                
+                //ADD ITEMS
+                // Add items to the grid based on the properties file
+                for (java.util.Map.Entry<Object, Object> entry : prop.entrySet()) {
+                    String key = (String) entry.getKey();
+                    int value = Integer.valueOf((String) entry.getValue());
+                    try {
+                        // Skip error format
+                        Integer.parseInt(key.split(",")[0]);
+                    } catch (Exception e) {
+                        continue;
+                    }
+                    int col = Integer.parseInt(key.split(",")[0]);
+                    int row = Integer.parseInt(key.split(",")[1]);
+
+                    GameObject gameObject = grid[row][col];
+                    gameObject.cellType = CellType.fromId(value);
+                    switch (gameObject.cellType) {
+                        case ENEMY:
+                            // Randomly decide whether to add a  Enemy
+                            if (random.nextInt(10) <= 3) {
+                                // Uncomment and add Enemy if needed
+                                // gameObjects.add(new Enemy(new Vector2(cell.col * 16, cell.row * 16), this));
+                            } else {
+                                entities.add(new Enemy(new Vector2(gameObject.col * 16, gameObject.row * 16), this));
+                            }
+                            break;
+                        case EXIT:
+                            // Change cell type to destructible wall for exit cells
+                            grid[gameObject.row][gameObject.col].cellType = CellType.DESTRUCTIBLE_WALL;
+                            break;
+                        case CONCURRENT_PU:
+                            // Add a BlastRadiusPowerUp entity and change cell type to destructible wall
+                            //TODO FIX CLASS
+                            entities.add(new BlastRadiusPowerUp(new Vector2(gameObject.col * 16, gameObject.row * 16)));
+                            grid[gameObject.row][gameObject.col].cellType = CellType.DESTRUCTIBLE_WALL;
+                            break;
+                        case BLAST_RADIUS_PU:
+                            // Add a ConcurrentBombPowerUp entity and change cell type to destructible wall
+                            //TODO FIX THAT CLASS
+                            entities.add(new ConcurrentBombPowerUp(new Vector2(gameObject.col * 16, gameObject.row * 16)));
+                            grid[gameObject.row][gameObject.col].cellType = CellType.DESTRUCTIBLE_WALL;
+                            break;
+                    }
+                }
 
 
         }
         catch (Exception ex) {
             ex.printStackTrace();
         }
+        pos = new Vector2( 0,0);
+
     }
+
 
 
 
