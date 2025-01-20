@@ -17,7 +17,7 @@ import java.util.*;
  * Enemies can use this class to find paths towards the player's position using a chosen algorithm.
  */
 
-public class Pathfinding {
+public class PathFinding {
 
     // The grid, where grid[r][c] represents the cell at row r, column c.
     // Typically, 0 = walkable, 1 = obstacle/wall
@@ -30,7 +30,7 @@ public class Pathfinding {
      *             Each element in the array represents a cell in the grid,
      *             where typically 0 indicates a walkable cell and 1 indicates an obstacle.
      */
-    public Pathfinding(int[][] grid) {
+    public PathFinding(int[][] grid) {
         this.grid = grid;
     }
 
