@@ -105,7 +105,7 @@ public class Map {
                     continue;
                 }
                 // Extract the column and row values from the key
-                int col = getCol(key);
+                int col = Integer.parseInt(key.split(",")[0]);
                 int row = Integer.parseInt(key.split(",")[1]);
 
                 // Update the maximum column value if the current column is greater
