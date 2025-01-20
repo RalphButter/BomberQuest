@@ -82,7 +82,56 @@ public class PathFinding {
 
 
 
+    void exploreNeightbour(Node node) {
+        int dir_row[] = { -1, 1, 0, 0 };
+        int dir_col[] = { 0, 0, -1, 1 };
+        //int dir_row[4] = { -1, 1, 0, 0 };
+        //int dir_col[4] = { 0, 0, -1, 1 };
 
+        for (int i = 0; i < 4; i++) {
+            int new_row = dir_row[i] + node.getRow();
+            int new_col = dir_col[i] + node.getCol();
+
+            if (new_row > map.getRows() - 1 || new_row < 0 || new_col > map.getCols() - 1 || new_col < 0) {
+                continue;
+            }
+            if (map.getCell(new_row,new_col).cellType == CellType.INDESTRUCTIBLE_WALL) {
+                continue;
+            }
+            if (map.getCell(new_row,new_col).cellType == CellType.DESTRUCTIBLE_WALL) {
+                continue;
+            }
+            if (map.getCell(new_row,new_col).cellType == CellType.BLAST_RADIUS_PU) {
+                continue;
+            }
+            if (map.getCell(new_row,new_col).cellType == CellType.CONCURRENT_PU) {
+                continue;
+            }
+            if (isInCloseList(new_row, new_col) != null) {
+                continue;
+            }
+
+            Node new_node = new Node(new_row, new_col, node);
+            if (isInOpenList(new_node) != null) {
+                new_node = isInOpenList(new_node);
+            }
+
+            float path_to_this_neightbour = node.getG() + 1;
+
+            if (path_to_this_neightbour < new_node.getG() || isInOpenList(new_node) == null) {
+                // is mud
+
+                new_node.setG(path_to_this_neightbour);
+                new_node.setH(grid_distance(new_node, endNode));
+
+                //graphData->changeType(new_node->getRow(), new_node->getCol(), 1);
+                if (isInOpenList(new_node) == null) {
+                    open_list.add(new_node);
+                }
+            }
+        }
+
+    }
 
 
 

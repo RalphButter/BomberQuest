@@ -12,11 +12,18 @@ import com.badlogic.gdx.math.Rectangle;
 public abstract class GameObject {
     private float x, y;  // Position in the game grid (or world coordinates)
     private boolean walkable;  // Can other objects walk over this?
-    private final Texture texture;
-    private final Texture texture2;// Texture representing the object
+    private
+    Texture texture;
+    private
+    Texture texture2;// Texture representing the object
     private boolean destructible;  // Deciding whether the object can be destroyed or not
     private TextureRegion textureRegion;
     private Rectangle rectangle;
+
+    public CellType cellType;
+
+    public int row;
+    public int col;
 
     /**
      * Constructor for creating a new GameObject.
@@ -33,6 +40,12 @@ public abstract class GameObject {
         this.destructible = destructible;
         this.texture = new Texture(Gdx.files.internal("assets/texture/basictiles.png")); // Load the texture for the object
         this.texture2 = new Texture(Gdx.files.internal("assets/texture/things.png")); // Load the secondary texture for the object in case an object gets destroyed
+    }
+
+    public GameObject(int row, int col, CellType cellType) {
+        this.row = row;
+        this.col = col;
+        this.cellType = cellType;
     }
 
     // Standard getters and setters for game object properties
@@ -84,4 +97,11 @@ public abstract class GameObject {
     }
     //Needs to be fixed?
     public abstract boolean isActive();
+
+
+
+
+    public Rectangle getRect(){
+        return new Rectangle(col * 16,row * 16,16,16);
+    }
 }
