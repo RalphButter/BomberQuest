@@ -1,0 +1,403 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="74035872-45ef-40dd-94f7-1e98de8d3b3e" name="Changes" comment="Adjustments in the Player class as well and the Enemy class as well as the GameScreen.java class" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="Bomber_Quest" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="Bomber_Quest" type="f1a62948:ProjectNode" />
+                <item name="Run Configurations" type="7b0102dc:RunConfigurationsNode" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6
+}</component>
+  <component name="ProjectId" id="2qOU91TVrN8fUIwY5S0VRldJI9b" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Run Game (MacOS).executor": "Run",
+    "Gradle.Bomber_Quest [build].executor": "Run",
+    "Gradle.Build Bomber_Quest.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/jonaswahl/Library/CloudStorage/OneDrive-TUM/TUM/3.Semester/ITP/IdeaProjects/Wintersemester2024/Project/Bomber_Quest/.idea",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "SDKs",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/.idea" />
+      <recent name="$PROJECT_DIR$/assets/audio" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/assets" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="Bomber_Quest [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="build" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Gradle.Bomber_Quest [build]" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="74035872-45ef-40dd-94f7-1e98de8d3b3e" name="Changes" comment="" />
+      <created>1734532959828</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1734532959828</updated>
+      <workItem from="1734532960963" duration="4534000" />
+      <workItem from="1734559414576" duration="157286000" />
+      <workItem from="1736762324676" duration="471000" />
+      <workItem from="1736762806807" duration="4829000" />
+      <workItem from="1736866690157" duration="3615000" />
+      <workItem from="1737135753697" duration="1164000" />
+      <workItem from="1737139040316" duration="1364000" />
+      <workItem from="1737201640925" duration="15251000" />
+    </task>
+    <task id="LOCAL-00001" summary="Ralph und Jonas">
+      <option name="closed" value="true" />
+      <created>1734612143294</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1734612143294</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Ralph und Jonas">
+      <option name="closed" value="true" />
+      <created>1734616018608</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1734616018608</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Implementation of the GameObject.java class as the common superclass of all the other">
+      <option name="closed" value="true" />
+      <created>1734627145740</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1734627145740</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Implementation of the GameObject.java class as the common superclass of all the other object classes">
+      <option name="closed" value="true" />
+      <created>1734628833713</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1734628833713</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Change of the implementation of the superclass GameObject.java with a second texture argument which refers to the things.png&#10;2.) Creation of the abstract class Wall from which the Destructible and InDestructibleWall.java will inherit">
+      <option name="closed" value="true" />
+      <created>1734675132332</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1734675132332</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Change of the implementation of the superclass GameObject.java with a second texture argument which refers to the things.png&#10;2.) Creation of the abstract class Wall from which the Destructible and InDestructibleWall.java will inherit">
+      <option name="closed" value="true" />
+      <created>1734675172196</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1734675172196</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Creation of the Character.java class as the superclass of the Player class as well as the Enemy class. Superclass as the common factor with attributes as well as functionality&#10;&#10;Also minor changes were maid to different object classes">
+      <option name="closed" value="true" />
+      <created>1734940937964</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1734940937964</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Creation of the Character.java class as the superclass of the Player class as well as the Enemy class. Superclass as the common factor with attributes as well as functionality&#10;&#10;Also minor changes were maid to different object classes">
+      <option name="closed" value="true" />
+      <created>1734940963679</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1734940963679</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Creation of the Character.java class as the superclass of the Player class as well as the Enemy class. Superclass as the common factor with attributes as well as functionality&#10;&#10;Also minor changes were maid to different object classes">
+      <option name="closed" value="true" />
+      <created>1734941302313</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1734941302313</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Updates on various object classes as the GameObjectManager class has been implemented which enforces various abstract methods (render, isActive and getBoundingRectangle) through the GameObject class">
+      <option name="closed" value="true" />
+      <created>1734947780154</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1734947780154</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Player clas and minor changes in other classes">
+      <option name="closed" value="true" />
+      <created>1734969666276</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1734969666276</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Player class. Adjusted render, update method and included standingAnimation attribute in the Character.java and in the constructor of the Playerclass">
+      <option name="closed" value="true" />
+      <created>1735212668700</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1735212668700</updated>
+    </task>
+    <task id="LOCAL-00013" summary="First changes in the Enemy class. Final adjustments in the Player class like animations, movement handling and texture disposal">
+      <option name="closed" value="true" />
+      <created>1735976355487</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1735976355487</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Final changes in the Enemy class as well as the outsourcing of the CollisionDetection into a seperate  class with a static method.">
+      <option name="closed" value="true" />
+      <created>1736071910309</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1736071910309</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Comments in the Enemy class as well as the implementation of the MapReader.java which reads map files stored in the internal assets of the games">
+      <option name="closed" value="true" />
+      <created>1736076095021</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1736076095022</updated>
+    </task>
+    <task id="LOCAL-00016" summary="GameScreen implementation and changes in other classes to make the internal functionality work">
+      <option name="closed" value="true" />
+      <created>1736191862681</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1736191862681</updated>
+    </task>
+    <task id="LOCAL-00017" summary="Adjustments in the GameScreen.java. Addtionally, the deleting of the obsolete Player class and combination of the functionality into one Player class">
+      <option name="closed" value="true" />
+      <created>1736411921799</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1736411921799</updated>
+    </task>
+    <task id="LOCAL-00018" summary="Adjustments in the GameScreen.java. Addtionally, the deleting of the obsolete Player class and combination of the functionality into one Player class">
+      <option name="closed" value="true" />
+      <created>1736412003431</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1736412003431</updated>
+    </task>
+    <task id="LOCAL-00019" summary="Changes in various classes to enhance the implementation and comply with requirements of the game">
+      <option name="closed" value="true" />
+      <created>1736457384310</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1736457384310</updated>
+    </task>
+    <task id="LOCAL-00020" summary="New cool down feature in the HUD class and adjustments in the GameScreen.java as well as the player class">
+      <option name="closed" value="true" />
+      <created>1736458678847</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1736458678847</updated>
+    </task>
+    <task id="LOCAL-00021" summary="Adjustments in the Player class as well as the GameScreen.java class">
+      <option name="closed" value="true" />
+      <created>1736460068639</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1736460068639</updated>
+    </task>
+    <task id="LOCAL-00022" summary="Adjustments in the Player class as well and the Enemy class as well as the GameScreen.java class">
+      <option name="closed" value="true" />
+      <created>1736500197530</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1736500197530</updated>
+    </task>
+    <task id="LOCAL-00023" summary="Adjustments in the Player class as well and the Enemy class as well as the GameScreen.java class">
+      <option name="closed" value="true" />
+      <created>1737231731490</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1737231731490</updated>
+    </task>
+    <task id="LOCAL-00024" summary="Adjustments in the Player class as well and the Enemy class as well as the GameScreen.java class">
+      <option name="closed" value="true" />
+      <created>1737231842181</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1737231842181</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="COLUMN_ID_WIDTH">
+                <map>
+                  <entry key="Table.Default.Author.ColumnIdWidth" value="30" />
+                  <entry key="Table.Default.Date.ColumnIdWidth" value="31" />
+                  <entry key="Table.Space.CommitStatus.ColumnIdWidth" value="30" />
+                </map>
+              </option>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="origin/main" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Ralph und Jonas" />
+    <MESSAGE value="Implementation of the GameObject.java class as the common superclass of all the other" />
+    <MESSAGE value="Implementation of the GameObject.java class as the common superclass of all the other object classes" />
+    <MESSAGE value="Change of the implementation of the superclass GameObject.java with a second texture argument which refers to the things.png&#10;2.) Creation of the abstract class Wall from which the Destructible and InDestructibleWall.java will inherit" />
+    <MESSAGE value="Creation of the Character.java class as the superclass of the Player class as well as the Enemy class. Superclass as the common factor with attributes as well as functionality&#10;&#10;Also minor changes were maid to different object classes" />
+    <MESSAGE value="Updates on various object classes as the GameObjectManager class has been implemented which enforces various abstract methods (render, isActive and getBoundingRectangle) through the GameObject class" />
+    <MESSAGE value="Player clas and minor changes in other classes" />
+    <MESSAGE value="Player class. Adjusted render, update method and included standingAnimation attribute in the Character.java and in the constructor of the Playerclass" />
+    <MESSAGE value="First changes in the Enemy class. Final adjustments in the Player class like animations, movement handling and texture disposal" />
+    <MESSAGE value="Final changes in the Enemy class as well as the outsourcing of the CollisionDetection into a seperate  class with a static method." />
+    <MESSAGE value="Comments in the Enemy class as well as the implementation of the MapReader.java which reads map files stored in the internal assets of the games" />
+    <MESSAGE value="GameScreen implementation and changes in other classes to make the internal functionality work" />
+    <MESSAGE value="Adjustments in the GameScreen.java. Addtionally, the deleting of the obsolete Player class and combination of the functionality into one Player class" />
+    <MESSAGE value="Changes in various classes to enhance the implementation and comply with requirements of the game" />
+    <MESSAGE value="New cool down feature in the HUD class and adjustments in the GameScreen.java as well as the player class" />
+    <MESSAGE value="Adjustments in the Player class as well as the GameScreen.java class" />
+    <MESSAGE value="Adjustments in the Player class as well and the Enemy class as well as the GameScreen.java class" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adjustments in the Player class as well and the Enemy class as well as the GameScreen.java class" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.lang.RuntimeException" package="java.lang" />
+          <option name="timeStamp" value="2" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>
