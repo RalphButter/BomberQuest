@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3daabf71-7d08-4b33-b53f-71ae5ba4c551" name="Changes" comment="Created class SoundsManager" />
+    <list default="true" id="74035872-45ef-40dd-94f7-1e98de8d3b3e" name="Changes" comment="Adjustments in the Player class as well and the Enemy class as well as the GameScreen.java class" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -18,12 +18,20 @@
   <component name="ExternalProjectsManager">
     <system id="GRADLE">
       <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
         <projects_view>
           <tree_state>
             <expand>
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="itp2425itp2425projectwork-wahljonasbutterralph" type="f1a62948:ProjectNode" />
+                <item name="Bomber_Quest" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="Bomber_Quest" type="f1a62948:ProjectNode" />
+                <item name="Run Configurations" type="7b0102dc:RunConfigurationsNode" />
               </path>
             </expand>
             <select />
@@ -35,8 +43,6 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Interface" />
-        <option value="Enum" />
         <option value="Class" />
       </list>
     </option>
@@ -44,507 +50,291 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 3
+  &quot;associatedIndex&quot;: 6
 }</component>
-  <component name="ProjectId" id="2qOU4dbg20CcyARkkibcClgNW8k" />
+  <component name="ProjectId" id="2qOU91TVrN8fUIwY5S0VRldJI9b" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.Run Game (MacOS).executor&quot;: &quot;Run&quot;,
-    &quot;Application.Run Game (Windows, Linux).executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Build itp2425itp2425projectwork-wahljonasbutterralph.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.itp2425itp2425projectwork-wahljonasbutterralph:desktop [:desktop:de.tum.cit.ase.bomberquest.DesktopLauncher.main()].executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;ToolWindow.GitHub Copilot Chat.ShowToolbar&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/ralph/IdeaProjects/itp2425itp2425projectwork-wahljonasbutterralph/maps&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\IntelliJ IDEA 2024.2.1\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Run Game (MacOS).executor": "Run",
+    "Gradle.Bomber_Quest [build].executor": "Run",
+    "Gradle.Build Bomber_Quest.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/jonaswahl/Library/CloudStorage/OneDrive-TUM/TUM/3.Semester/ITP/IdeaProjects/Wintersemester2024/Project/Bomber_Quest/.idea",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "SDKs",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\ralph\IdeaProjects\itp2425itp2425projectwork-wahljonasbutterralph\maps" />
-      <recent name="C:\Users\ralph\IdeaProjects\itp2425itp2425projectwork-wahljonasbutterralph\assets\Test" />
-      <recent name="C:\Users\ralph\IdeaProjects\itp2425itp2425projectwork-wahljonasbutterralph\core\src\de\tum\cit\ase\bomberquest\Test" />
+      <recent name="$PROJECT_DIR$/.idea" />
+      <recent name="$PROJECT_DIR$/assets/audio" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\ralph\IdeaProjects\itp2425itp2425projectwork-wahljonasbutterralph\assets\audio" />
+      <recent name="$PROJECT_DIR$/assets" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Run Game (Windows, Linux)">
-    <list>
-      <item itemvalue="Application.Run Game (MacOS)" />
-      <item itemvalue="Application.Run Game (Windows, Linux)" />
-    </list>
-  </component>
-  <component name="SharedIndexes">
-    <attachedChunks>
-      <set>
-        <option value="bundled-jdk-9823dce3aa75-fdfe4dae3a2d-intellij.indexing.shared.core-IU-243.22562.218" />
-        <option value="bundled-js-predefined-d6986cc7102b-deb605915726-JavaScript-IU-243.22562.218" />
-      </set>
-    </attachedChunks>
+  <component name="RunManager">
+    <configuration name="Bomber_Quest [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="build" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Gradle.Bomber_Quest [build]" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="3daabf71-7d08-4b33-b53f-71ae5ba4c551" name="Changes" comment="" />
-      <created>1734532924979</created>
+      <changelist id="74035872-45ef-40dd-94f7-1e98de8d3b3e" name="Changes" comment="" />
+      <created>1734532959828</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1734532924979</updated>
-      <workItem from="1734532926419" duration="103000" />
-      <workItem from="1734596993344" duration="45000" />
-      <workItem from="1734610185725" duration="1959000" />
-      <workItem from="1734614261136" duration="1666000" />
-      <workItem from="1734622363849" duration="781000" />
-      <workItem from="1734693225106" duration="42000" />
-      <workItem from="1734693287874" duration="162000" />
-      <workItem from="1734693462257" duration="147000" />
-      <workItem from="1734693752871" duration="114000" />
-      <workItem from="1734693928891" duration="192000" />
-      <workItem from="1734769754423" duration="5003000" />
-      <workItem from="1734866467300" duration="7022000" />
-      <workItem from="1734956977266" duration="15917000" />
-      <workItem from="1735655162120" duration="1576000" />
-      <workItem from="1735685727386" duration="2084000" />
-      <workItem from="1735750717070" duration="7467000" />
-      <workItem from="1736012451107" duration="7565000" />
-      <workItem from="1736023589610" duration="126000" />
-      <workItem from="1736113333933" duration="119000" />
-      <workItem from="1736114561893" duration="257000" />
-      <workItem from="1736261226642" duration="6553000" />
-      <workItem from="1736415469786" duration="3044000" />
-      <workItem from="1736433506693" duration="3336000" />
-      <workItem from="1736532544414" duration="1163000" />
-      <workItem from="1736533748486" duration="6468000" />
-      <workItem from="1736540290951" duration="803000" />
-      <workItem from="1736541123032" duration="3787000" />
-      <workItem from="1736545251078" duration="3874000" />
-      <workItem from="1736619746042" duration="4965000" />
-      <workItem from="1736759547541" duration="5465000" />
-      <workItem from="1736769705047" duration="453000" />
-      <workItem from="1736775187939" duration="2700000" />
-      <workItem from="1736777926503" duration="341000" />
-      <workItem from="1736779259937" duration="730000" />
-      <workItem from="1736781892073" duration="3847000" />
-      <workItem from="1736949781305" duration="2871000" />
-      <workItem from="1737012192205" duration="294000" />
-      <workItem from="1737316311755" duration="9529000" />
+      <updated>1734532959828</updated>
+      <workItem from="1734532960963" duration="4534000" />
+      <workItem from="1734559414576" duration="157286000" />
+      <workItem from="1736762324676" duration="471000" />
+      <workItem from="1736762806807" duration="4829000" />
+      <workItem from="1736866690157" duration="3615000" />
+      <workItem from="1737135753697" duration="1164000" />
+      <workItem from="1737139040316" duration="1364000" />
+      <workItem from="1737201640925" duration="15251000" />
     </task>
-    <task id="LOCAL-00003" summary="Testlauf, Zoommeeting">
+    <task id="LOCAL-00001" summary="Ralph und Jonas">
       <option name="closed" value="true" />
-      <created>1734612279595</created>
+      <created>1734612143294</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1734612143294</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Ralph und Jonas">
+      <option name="closed" value="true" />
+      <created>1734616018608</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1734616018608</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Implementation of the GameObject.java class as the common superclass of all the other">
+      <option name="closed" value="true" />
+      <created>1734627145740</created>
       <option name="number" value="00003" />
       <option name="presentableId" value="LOCAL-00003" />
       <option name="project" value="LOCAL" />
-      <updated>1734612279595</updated>
+      <updated>1734627145740</updated>
     </task>
-    <task id="LOCAL-00004" summary="Klassenstruktur nach Jonas's Bild implementiert">
+    <task id="LOCAL-00004" summary="Implementation of the GameObject.java class as the common superclass of all the other object classes">
       <option name="closed" value="true" />
-      <created>1734614978958</created>
+      <created>1734628833713</created>
       <option name="number" value="00004" />
       <option name="presentableId" value="LOCAL-00004" />
       <option name="project" value="LOCAL" />
-      <updated>1734614978958</updated>
+      <updated>1734628833713</updated>
     </task>
-    <task id="LOCAL-00005" summary="Add BlastRadiusPowerUp class extending Blast&#10;Implemented the BlastRadiusPowerUp class in core/src/de/tum/cit/ase/bomberquest/gameobject/PowerUps/BlastRadiusPowerUp.java&#10;Added constructor to initialize blast properties and references to GameMap and GameObjectManager">
+    <task id="LOCAL-00005" summary="Change of the implementation of the superclass GameObject.java with a second texture argument which refers to the things.png&#10;2.) Creation of the abstract class Wall from which the Destructible and InDestructibleWall.java will inherit">
       <option name="closed" value="true" />
-      <created>1734893761569</created>
+      <created>1734675132332</created>
       <option name="number" value="00005" />
       <option name="presentableId" value="LOCAL-00005" />
       <option name="project" value="LOCAL" />
-      <updated>1734893761569</updated>
+      <updated>1734675132332</updated>
     </task>
-    <task id="LOCAL-00006" summary="Add BlastRadiusPowerUp class extending Blast&#10;Implemented the BlastRadiusPowerUp class in core/src/de/tum/cit/ase/bomberquest/gameobject/PowerUps/BlastRadiusPowerUp.java&#10;Added constructor to initialize blast properties and references to GameMap and GameObjectManager&#10;Implemented render method to visually represent the power-up&#10;Added collision detection and effect application logic in update method&#10;Updated Player class to support blast radius modification">
+    <task id="LOCAL-00006" summary="Change of the implementation of the superclass GameObject.java with a second texture argument which refers to the things.png&#10;2.) Creation of the abstract class Wall from which the Destructible and InDestructibleWall.java will inherit">
       <option name="closed" value="true" />
-      <created>1734896806662</created>
+      <created>1734675172196</created>
       <option name="number" value="00006" />
       <option name="presentableId" value="LOCAL-00006" />
       <option name="project" value="LOCAL" />
-      <updated>1734896806662</updated>
+      <updated>1734675172196</updated>
     </task>
-    <task id="LOCAL-00007" summary="Add ConcurrentBombPowerUp class and fix constructor argument mismatch&#10;&#10;- Implemented the `ConcurrentBombPowerUp` class in `core/src/de/tum/cit/ase/bomberquest/gameobject/PowerUps/ConcurrentBombPowerUp.java`&#10;- Added constructor to initialize power-up properties and references to `GameMap` and `GameObjectManager`&#10;- Implemented `applyEffect` method to increase the player's concurrent bombs&#10;- Implemented `render` method to visually represent the power-up&#10;- Added collision detection and effect application logic in `update` method&#10;- Fixed constructor argument mismatch in `ConcurrentBombPowerUp` to match the superclass constructor's parameters">
+    <task id="LOCAL-00007" summary="Creation of the Character.java class as the superclass of the Player class as well as the Enemy class. Superclass as the common factor with attributes as well as functionality&#10;&#10;Also minor changes were maid to different object classes">
       <option name="closed" value="true" />
-      <created>1734898320692</created>
+      <created>1734940937964</created>
       <option name="number" value="00007" />
       <option name="presentableId" value="LOCAL-00007" />
       <option name="project" value="LOCAL" />
-      <updated>1734898320692</updated>
+      <updated>1734940937964</updated>
     </task>
-    <task id="LOCAL-00008" summary="- Added `ConcurrentBombPowerUp` class to `core/src/de/tum/cit/ase/bomberquest/gameobject/PowerUps/ConcurrentBombPowerUp.java`">
+    <task id="LOCAL-00008" summary="Creation of the Character.java class as the superclass of the Player class as well as the Enemy class. Superclass as the common factor with attributes as well as functionality&#10;&#10;Also minor changes were maid to different object classes">
       <option name="closed" value="true" />
-      <created>1734967882472</created>
+      <created>1734940963679</created>
       <option name="number" value="00008" />
       <option name="presentableId" value="LOCAL-00008" />
       <option name="project" value="LOCAL" />
-      <updated>1734967882472</updated>
+      <updated>1734940963679</updated>
     </task>
-    <task id="LOCAL-00009" summary="Added comments to methods in CountdownTimer, Blast, BlastRadiusPowerUp, Bombs, ConcurrentBombPowerUp, CountdownTimer, Pathfinding, PowerUps class for better clarity and documentation.">
+    <task id="LOCAL-00009" summary="Creation of the Character.java class as the superclass of the Player class as well as the Enemy class. Superclass as the common factor with attributes as well as functionality&#10;&#10;Also minor changes were maid to different object classes">
       <option name="closed" value="true" />
-      <created>1735043986693</created>
+      <created>1734941302313</created>
       <option name="number" value="00009" />
       <option name="presentableId" value="LOCAL-00009" />
       <option name="project" value="LOCAL" />
-      <updated>1735043986693</updated>
+      <updated>1734941302313</updated>
     </task>
-    <task id="LOCAL-00010" summary="Started the implementation of Pathfinding">
+    <task id="LOCAL-00010" summary="Updates on various object classes as the GameObjectManager class has been implemented which enforces various abstract methods (render, isActive and getBoundingRectangle) through the GameObject class">
       <option name="closed" value="true" />
-      <created>1735045026108</created>
+      <created>1734947780154</created>
       <option name="number" value="00010" />
       <option name="presentableId" value="LOCAL-00010" />
       <option name="project" value="LOCAL" />
-      <updated>1735045026108</updated>
+      <updated>1734947780154</updated>
     </task>
-    <task id="LOCAL-00011" summary="Refactored Pathfinding class to include comments for better clarity and documentation. Implemented BFS algorithm with path reconstruction and neighbor retrieval methods. DFS, Dijkstra, A* will follow. Check for need in Enemy so it randomizes the distribution of algorithms">
+    <task id="LOCAL-00011" summary="Player clas and minor changes in other classes">
       <option name="closed" value="true" />
-      <created>1735045437779</created>
+      <created>1734969666276</created>
       <option name="number" value="00011" />
       <option name="presentableId" value="LOCAL-00011" />
       <option name="project" value="LOCAL" />
-      <updated>1735045437779</updated>
+      <updated>1734969666276</updated>
     </task>
-    <task id="LOCAL-00012" summary="Pathfinding dfs implemented,">
+    <task id="LOCAL-00012" summary="Player class. Adjusted render, update method and included standingAnimation attribute in the Character.java and in the constructor of the Playerclass">
       <option name="closed" value="true" />
-      <created>1735047029649</created>
+      <created>1735212668700</created>
       <option name="number" value="00012" />
       <option name="presentableId" value="LOCAL-00012" />
       <option name="project" value="LOCAL" />
-      <updated>1735047029649</updated>
+      <updated>1735212668700</updated>
     </task>
-    <task id="LOCAL-00013" summary="Refactored Pathfinding class and Node class to fix access issues and constructor mismatches&#10;&#10;- Added public getter methods for `fCost` and `position` in `Node` class&#10;- Updated `Node` class to include a constructor that accepts an `int[]` for position, along with `gCost` and `fCost`&#10;- Modified `aStar` method in `Pathfinding` class to use the new getter methods and constructor&#10;- Fixed issues with accessing private fields and constructor parameter mismatches">
+    <task id="LOCAL-00013" summary="First changes in the Enemy class. Final adjustments in the Player class like animations, movement handling and texture disposal">
       <option name="closed" value="true" />
-      <created>1735048040635</created>
+      <created>1735976355487</created>
       <option name="number" value="00013" />
       <option name="presentableId" value="LOCAL-00013" />
       <option name="project" value="LOCAL" />
-      <updated>1735048040635</updated>
+      <updated>1735976355487</updated>
     </task>
-    <task id="LOCAL-00014" summary="Refactored Pathfinding and Node classes to fix constructor mismatches and improve pathfinding algorithms&#10;&#10;- Added public getter methods for `fCost` and `position` in `Node` class&#10;- Updated `Node` class to include a constructor that accepts an `int[]` for position, along with `gCost` and `fCost`&#10;- Modified `aStar` and `dijkstra` methods in `Pathfinding` class to use the new getter methods and constructor&#10;- Fixed issues with accessing private fields and constructor parameter mismatches&#10;- Ensured `PriorityQueue` in `aStar` and `dijkstra` methods correctly adds `Node` objects&#10;&#10;&#10;TODO: COMMENTS FOR ALL METHODS">
+    <task id="LOCAL-00014" summary="Final changes in the Enemy class as well as the outsourcing of the CollisionDetection into a seperate  class with a static method.">
       <option name="closed" value="true" />
-      <created>1735048432518</created>
+      <created>1736071910309</created>
       <option name="number" value="00014" />
       <option name="presentableId" value="LOCAL-00014" />
       <option name="project" value="LOCAL" />
-      <updated>1735048432518</updated>
+      <updated>1736071910309</updated>
     </task>
-    <task id="LOCAL-00015" summary="Added comments to Pathfinding methods and constructors for better code understanding and documentation.">
+    <task id="LOCAL-00015" summary="Comments in the Enemy class as well as the implementation of the MapReader.java which reads map files stored in the internal assets of the games">
       <option name="closed" value="true" />
-      <created>1735050956557</created>
+      <created>1736076095021</created>
       <option name="number" value="00015" />
       <option name="presentableId" value="LOCAL-00015" />
       <option name="project" value="LOCAL" />
-      <updated>1735050956557</updated>
+      <updated>1736076095022</updated>
     </task>
-    <task id="LOCAL-00016" summary="Adjusted Hud constructor to accept SpriteBatch and BitmapFont parameters, and added comments for better code understanding.">
+    <task id="LOCAL-00016" summary="GameScreen implementation and changes in other classes to make the internal functionality work">
       <option name="closed" value="true" />
-      <created>1735052371269</created>
+      <created>1736191862681</created>
       <option name="number" value="00016" />
       <option name="presentableId" value="LOCAL-00016" />
       <option name="project" value="LOCAL" />
-      <updated>1735052371269</updated>
+      <updated>1736191862681</updated>
     </task>
-    <task id="LOCAL-00017" summary="Updated README.md to include detailed project information and instructions.">
+    <task id="LOCAL-00017" summary="Adjustments in the GameScreen.java. Addtionally, the deleting of the obsolete Player class and combination of the functionality into one Player class">
       <option name="closed" value="true" />
-      <created>1735694310647</created>
+      <created>1736411921799</created>
       <option name="number" value="00017" />
       <option name="presentableId" value="LOCAL-00017" />
       <option name="project" value="LOCAL" />
-      <updated>1735694310650</updated>
+      <updated>1736411921799</updated>
     </task>
-    <task id="LOCAL-00018" summary="Created GameMenu, GameOverScreen, and Credits classes as placeholders for their respective screen implementations.">
+    <task id="LOCAL-00018" summary="Adjustments in the GameScreen.java. Addtionally, the deleting of the obsolete Player class and combination of the functionality into one Player class">
       <option name="closed" value="true" />
-      <created>1735803605178</created>
+      <created>1736412003431</created>
       <option name="number" value="00018" />
       <option name="presentableId" value="LOCAL-00018" />
       <option name="project" value="LOCAL" />
-      <updated>1735803605178</updated>
+      <updated>1736412003431</updated>
     </task>
-    <task id="LOCAL-00019" summary="Implemented MapParser class fully (Review still necessary)">
+    <task id="LOCAL-00019" summary="Changes in various classes to enhance the implementation and comply with requirements of the game">
       <option name="closed" value="true" />
-      <created>1736013801848</created>
+      <created>1736457384310</created>
       <option name="number" value="00019" />
       <option name="presentableId" value="LOCAL-00019" />
       <option name="project" value="LOCAL" />
-      <updated>1736013801848</updated>
+      <updated>1736457384310</updated>
     </task>
-    <task id="LOCAL-00020" summary="Implemented Credits class fully (creditsText missing)">
+    <task id="LOCAL-00020" summary="New cool down feature in the HUD class and adjustments in the GameScreen.java as well as the player class">
       <option name="closed" value="true" />
-      <created>1736015608361</created>
+      <created>1736458678847</created>
       <option name="number" value="00020" />
       <option name="presentableId" value="LOCAL-00020" />
       <option name="project" value="LOCAL" />
-      <updated>1736015608361</updated>
+      <updated>1736458678847</updated>
     </task>
-    <task id="LOCAL-00021" summary="Implemented GameOverScreen class: improved structure, added detailed comments, and ensured functionality.">
+    <task id="LOCAL-00021" summary="Adjustments in the Player class as well as the GameScreen.java class">
       <option name="closed" value="true" />
-      <created>1736017066898</created>
+      <created>1736460068639</created>
       <option name="number" value="00021" />
       <option name="presentableId" value="LOCAL-00021" />
       <option name="project" value="LOCAL" />
-      <updated>1736017066898</updated>
+      <updated>1736460068639</updated>
     </task>
-    <task id="LOCAL-00022" summary="Refactored GameOverScreen class:&#10;- Improved structure and readability.&#10;- Added detailed comments for better understanding.&#10;- Ensured functionality remains consistent.&#10;- Added GL20 clear color to render method for screen clearing.&#10;- Removed unnecessary Screen interface implementation.&#10;- Adjusted variable names for clarity.&#10;- Added proper disposal of resources in the dispose method.">
+    <task id="LOCAL-00022" summary="Adjustments in the Player class as well and the Enemy class as well as the GameScreen.java class">
       <option name="closed" value="true" />
-      <created>1736017597907</created>
+      <created>1736500197530</created>
       <option name="number" value="00022" />
       <option name="presentableId" value="LOCAL-00022" />
       <option name="project" value="LOCAL" />
-      <updated>1736017597907</updated>
+      <updated>1736500197530</updated>
     </task>
-    <task id="LOCAL-00023" summary="Refactored MenuScreen class (IGNORE LAST COMMIT MESSAGE PLEASE) :&#10;- Improved structure and readability.&#10;- Added detailed comments for better understanding.&#10;- Ensured functionality remains consistent.&#10;- Added GL20 clear color to render method for screen clearing.&#10;- Removed unnecessary Screen interface implementation.&#10;- Adjusted variable names for clarity.&#10;- Added proper disposal of resources in the dispose method.">
+    <task id="LOCAL-00023" summary="Adjustments in the Player class as well and the Enemy class as well as the GameScreen.java class">
       <option name="closed" value="true" />
-      <created>1736017689406</created>
+      <created>1737231731490</created>
       <option name="number" value="00023" />
       <option name="presentableId" value="LOCAL-00023" />
       <option name="project" value="LOCAL" />
-      <updated>1736017689406</updated>
+      <updated>1737231731490</updated>
     </task>
-    <task id="LOCAL-00024" summary="TODO Credits updated">
+    <task id="LOCAL-00024" summary="Adjustments in the Player class as well and the Enemy class as well as the GameScreen.java class">
       <option name="closed" value="true" />
-      <created>1736017739913</created>
+      <created>1737231842181</created>
       <option name="number" value="00024" />
       <option name="presentableId" value="LOCAL-00024" />
       <option name="project" value="LOCAL" />
-      <updated>1736017739913</updated>
+      <updated>1737231842181</updated>
     </task>
-    <task id="LOCAL-00025" summary="Refactored BomberQuestGame and implemented GameOverScreen:&#10;- Created GameOverScreen class implementing the Screen interface.&#10;- Added necessary methods (show, render, resize, pause, resume, hide, dispose) in GameOverScreen.&#10;- Integrated GameOverScreen with BomberQuestGame.&#10;- Updated BomberQuestGame to properly switch to GameOverScreen.&#10;- Ensured proper disposal of previous screens when switching screens.&#10;- Fixed issue with setScreen method not accepting GameOverScreen.&#10;- Added comments to goToCreditsScreen method in BomberQuestGame.&#10;- Initialized spriteBatch and skin in BomberQuestGame create method.&#10;- Added background music playback in BomberQuestGame create method.">
-      <option name="closed" value="true" />
-      <created>1736020765290</created>
-      <option name="number" value="00025" />
-      <option name="presentableId" value="LOCAL-00025" />
-      <option name="project" value="LOCAL" />
-      <updated>1736020765290</updated>
-    </task>
-    <task id="LOCAL-00026" summary="Text added in Credits after discussion">
-      <option name="closed" value="true" />
-      <created>1736023661414</created>
-      <option name="number" value="00026" />
-      <option name="presentableId" value="LOCAL-00026" />
-      <option name="project" value="LOCAL" />
-      <updated>1736023661414</updated>
-    </task>
-    <task id="LOCAL-00027" summary="Text added in Credits after discussion">
-      <option name="closed" value="true" />
-      <created>1736023679211</created>
-      <option name="number" value="00027" />
-      <option name="presentableId" value="LOCAL-00027" />
-      <option name="project" value="LOCAL" />
-      <updated>1736023679211</updated>
-    </task>
-    <task id="LOCAL-00028" summary="GameObjectManager Comments added for understandability">
-      <option name="closed" value="true" />
-      <created>1736418486510</created>
-      <option name="number" value="00028" />
-      <option name="presentableId" value="LOCAL-00028" />
-      <option name="project" value="LOCAL" />
-      <updated>1736418486510</updated>
-    </task>
-    <task id="LOCAL-00029" summary="Add VictoryScreen class with UI components and victory music&#10;&#10;- Implement VictoryScreen class to display the victory screen after level completion.&#10;- Set up OrthographicCamera and ScreenViewport for stage management.&#10;- Add UI elements including a victory message label and a button to return to the main menu.&#10;- Integrate victory music that plays when the screen is shown.&#10;- Implement necessary methods from the Screen interface: render, resize, dispose, show, pause, resume, and hide.">
-      <option name="closed" value="true" />
-      <created>1736433973313</created>
-      <option name="number" value="00029" />
-      <option name="presentableId" value="LOCAL-00029" />
-      <option name="project" value="LOCAL" />
-      <updated>1736433973313</updated>
-    </task>
-    <task id="LOCAL-00030" summary="BomberQuestGame openFileChooser method implemented.&#10;&#10;//Comments will be added later">
-      <option name="closed" value="true" />
-      <created>1736434863808</created>
-      <option name="number" value="00030" />
-      <option name="presentableId" value="LOCAL-00030" />
-      <option name="project" value="LOCAL" />
-      <updated>1736434863808</updated>
-    </task>
-    <task id="LOCAL-00031" summary="Implement BomberQuestGame class with screen management and file chooser&#10;&#10;- Add methods to switch between different screens: goToMenu, goToGame, gameOver, victory, goToCreditsScreen.&#10;- Implement openFileChooser method to select .properties files from the &quot;maps&quot; directory.&#10;- Initialize and dispose of resources like SpriteBatch and Skin.&#10;- Add detailed comments explaining the functionality and purpose of each method.">
-      <option name="closed" value="true" />
-      <created>1736435141079</created>
-      <option name="number" value="00031" />
-      <option name="presentableId" value="LOCAL-00031" />
-      <option name="project" value="LOCAL" />
-      <updated>1736435141079</updated>
-    </task>
-    <task id="LOCAL-00032" summary="Added Comments to BomberQuestGame">
-      <option name="closed" value="true" />
-      <created>1736435441151</created>
-      <option name="number" value="00032" />
-      <option name="presentableId" value="LOCAL-00032" />
-      <option name="project" value="LOCAL" />
-      <updated>1736435441151</updated>
-    </task>
-    <task id="LOCAL-00033" summary="Fixed Player java 51 bug">
-      <option name="closed" value="true" />
-      <created>1736533448651</created>
-      <option name="number" value="00033" />
-      <option name="presentableId" value="LOCAL-00033" />
-      <option name="project" value="LOCAL" />
-      <updated>1736533448651</updated>
-    </task>
-    <task id="LOCAL-00034" summary="Fixed Credits and BomberQuestGame">
-      <option name="closed" value="true" />
-      <created>1736540419438</created>
-      <option name="number" value="00034" />
-      <option name="presentableId" value="LOCAL-00034" />
-      <option name="project" value="LOCAL" />
-      <updated>1736540419438</updated>
-    </task>
-    <task id="LOCAL-00035" summary="Fixed runtime exception caused by missing map properties file&#10;&#10;- Updated `MapReader` to handle missing file exceptions gracefully.&#10;- Corrected the file path in `GameScreen` constructor to ensure the map properties file is correctly loaded.&#10;- Added error handling in `GameScreen` to log and handle file not found exceptions.&#10;- Ensured `MenuScreen` properly triggers the game start without causing runtime errors.">
-      <option name="closed" value="true" />
-      <created>1736549853693</created>
-      <option name="number" value="00035" />
-      <option name="presentableId" value="LOCAL-00035" />
-      <option name="project" value="LOCAL" />
-      <updated>1736549853693</updated>
-    </task>
-    <task id="LOCAL-00036" summary="Blast &quot;fixed&quot; (honestly probably not it's impossible to test this if the MapLoader isn't working)">
-      <option name="closed" value="true" />
-      <created>1736626748806</created>
-      <option name="number" value="00036" />
-      <option name="presentableId" value="LOCAL-00036" />
-      <option name="project" value="LOCAL" />
-      <updated>1736626748806</updated>
-    </task>
-    <task id="LOCAL-00037" summary="GameScreen Problems">
-      <option name="closed" value="true" />
-      <created>1736762129033</created>
-      <option name="number" value="00037" />
-      <option name="presentableId" value="LOCAL-00037" />
-      <option name="project" value="LOCAL" />
-      <updated>1736762129033</updated>
-    </task>
-    <task id="LOCAL-00038" summary="GameScreen Peer Programming">
-      <option name="closed" value="true" />
-      <created>1736762208449</created>
-      <option name="number" value="00038" />
-      <option name="presentableId" value="LOCAL-00038" />
-      <option name="project" value="LOCAL" />
-      <updated>1736762208449</updated>
-    </task>
-    <task id="LOCAL-00039" summary="GameScreen Peer Programming">
-      <option name="closed" value="true" />
-      <created>1736763316101</created>
-      <option name="number" value="00039" />
-      <option name="presentableId" value="LOCAL-00039" />
-      <option name="project" value="LOCAL" />
-      <updated>1736763316101</updated>
-    </task>
-    <task id="LOCAL-00040" summary="GameScreen Peer Programming">
-      <option name="closed" value="true" />
-      <created>1736764415894</created>
-      <option name="number" value="00040" />
-      <option name="presentableId" value="LOCAL-00040" />
-      <option name="project" value="LOCAL" />
-      <updated>1736764415894</updated>
-    </task>
-    <task id="LOCAL-00041" summary="GameScreen Peer Programming">
-      <option name="closed" value="true" />
-      <created>1736779392170</created>
-      <option name="number" value="00041" />
-      <option name="presentableId" value="LOCAL-00041" />
-      <option name="project" value="LOCAL" />
-      <updated>1736779392170</updated>
-    </task>
-    <task id="LOCAL-00042" summary="Added CellType, like discussed. Added comments for understanding to Cell Type">
-      <option name="closed" value="true" />
-      <created>1737319062338</created>
-      <option name="number" value="00042" />
-      <option name="presentableId" value="LOCAL-00042" />
-      <option name="project" value="LOCAL" />
-      <updated>1737319062338</updated>
-    </task>
-    <task id="LOCAL-00043" summary="Created Map, added comments detailing what this class (hopefully) will do. This will help us get away from the properties loading error, hopefully.">
-      <option name="closed" value="true" />
-      <created>1737319972699</created>
-      <option name="number" value="00043" />
-      <option name="presentableId" value="LOCAL-00043" />
-      <option name="project" value="LOCAL" />
-      <updated>1737319972699</updated>
-    </task>
-    <task id="LOCAL-00044" summary="Created Map, added comments detailing what this class (hopefully) will do. This will help us get away from the properties loading error, hopefully.">
-      <option name="closed" value="true" />
-      <created>1737320535772</created>
-      <option name="number" value="00044" />
-      <option name="presentableId" value="LOCAL-00044" />
-      <option name="project" value="LOCAL" />
-      <updated>1737320535772</updated>
-    </task>
-    <task id="LOCAL-00045" summary="Implement SpriteSheet class for managing sprite sheets&#10;&#10;- Added SpriteSheet class to handle sprite sheet management and manipulation.&#10;- Included methods for splitting texture into frames and accessing frame data.&#10;- Added getters and setters for texture, rows, columns, frames, and other properties.&#10;- Documented the class and its methods for better understanding and maintenance.">
-      <option name="closed" value="true" />
-      <created>1737323427994</created>
-      <option name="number" value="00045" />
-      <option name="presentableId" value="LOCAL-00045" />
-      <option name="project" value="LOCAL" />
-      <updated>1737323427994</updated>
-    </task>
-    <task id="LOCAL-00046" summary="Implement SpriteSheet class for managing sprite sheets&#10;&#10;- Added SpriteSheet class to handle sprite sheet management and manipulation.&#10;- Included methods for splitting texture into frames and accessing frame data.&#10;- Added getters and setters for texture, rows, columns, frames, and other properties.&#10;- Documented the class and its methods for better understanding and maintenance.">
-      <option name="closed" value="true" />
-      <created>1737323447886</created>
-      <option name="number" value="00046" />
-      <option name="presentableId" value="LOCAL-00046" />
-      <option name="project" value="LOCAL" />
-      <updated>1737323447886</updated>
-    </task>
-    <task id="LOCAL-00047" summary="Add SpriteSheet class for managing and manipulating sprite sheets&#10;&#10;- Implemented SpriteSheet class to handle sprite sheet textures&#10;- Added methods for flipping frames, setting animation playback parameters, and drawing frames&#10;- Included detailed comments explaining the functionality of each method">
-      <option name="closed" value="true" />
-      <created>1737325013874</created>
-      <option name="number" value="00047" />
-      <option name="presentableId" value="LOCAL-00047" />
-      <option name="project" value="LOCAL" />
-      <updated>1737325013874</updated>
-    </task>
-    <task id="LOCAL-00048" summary="Map Attribute geladen, Todo's für morgen">
-      <option name="closed" value="true" />
-      <created>1737325326828</created>
-      <option name="number" value="00048" />
-      <option name="presentableId" value="LOCAL-00048" />
-      <option name="project" value="LOCAL" />
-      <updated>1737325326828</updated>
-    </task>
-    <task id="LOCAL-00049" summary="Map Attribute geladen, Todo's für morgen">
-      <option name="closed" value="true" />
-      <created>1737325425607</created>
-      <option name="number" value="00049" />
-      <option name="presentableId" value="LOCAL-00049" />
-      <option name="project" value="LOCAL" />
-      <updated>1737325425607</updated>
-    </task>
-    <task id="LOCAL-00050" summary="Comments written for a revision of our Code">
-      <option name="closed" value="true" />
-      <created>1737326903170</created>
-      <option name="number" value="00050" />
-      <option name="presentableId" value="LOCAL-00050" />
-      <option name="project" value="LOCAL" />
-      <updated>1737326903171</updated>
-    </task>
-    <task id="LOCAL-00051" summary="Created class SoundsManager">
-      <option name="closed" value="true" />
-      <created>1737327519306</created>
-      <option name="number" value="00051" />
-      <option name="presentableId" value="LOCAL-00051" />
-      <option name="project" value="LOCAL" />
-      <updated>1737327519306</updated>
-    </task>
-    <option name="localTasksCounter" value="52" />
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -555,53 +345,59 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ID_WIDTH">
+                <map>
+                  <entry key="Table.Default.Author.ColumnIdWidth" value="30" />
+                  <entry key="Table.Default.Date.ColumnIdWidth" value="31" />
+                  <entry key="Table.Space.CommitStatus.ColumnIdWidth" value="30" />
+                </map>
+              </option>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="origin/main" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Implemented GameOverScreen class: improved structure, added detailed comments, and ensured functionality." />
-    <MESSAGE value="Refactored GameOverScreen class:&#10;- Improved structure and readability.&#10;- Added detailed comments for better understanding.&#10;- Ensured functionality remains consistent.&#10;- Added GL20 clear color to render method for screen clearing.&#10;- Removed unnecessary Screen interface implementation.&#10;- Adjusted variable names for clarity.&#10;- Added proper disposal of resources in the dispose method." />
-    <MESSAGE value="Refactored MenuScreen class (IGNORE LAST COMMIT MESSAGE PLEASE) :&#10;- Improved structure and readability.&#10;- Added detailed comments for better understanding.&#10;- Ensured functionality remains consistent.&#10;- Added GL20 clear color to render method for screen clearing.&#10;- Removed unnecessary Screen interface implementation.&#10;- Adjusted variable names for clarity.&#10;- Added proper disposal of resources in the dispose method." />
-    <MESSAGE value="TODO Credits updated" />
-    <MESSAGE value="Refactored BomberQuestGame and implemented GameOverScreen:&#10;- Created GameOverScreen class implementing the Screen interface.&#10;- Added necessary methods (show, render, resize, pause, resume, hide, dispose) in GameOverScreen.&#10;- Integrated GameOverScreen with BomberQuestGame.&#10;- Updated BomberQuestGame to properly switch to GameOverScreen.&#10;- Ensured proper disposal of previous screens when switching screens.&#10;- Fixed issue with setScreen method not accepting GameOverScreen.&#10;- Added comments to goToCreditsScreen method in BomberQuestGame.&#10;- Initialized spriteBatch and skin in BomberQuestGame create method.&#10;- Added background music playback in BomberQuestGame create method." />
-    <MESSAGE value="Text added in Credits after discussion" />
-    <MESSAGE value="GameObjectManager Comments added for understandability" />
-    <MESSAGE value="Add VictoryScreen class with UI components and victory music&#10;&#10;- Implement VictoryScreen class to display the victory screen after level completion.&#10;- Set up OrthographicCamera and ScreenViewport for stage management.&#10;- Add UI elements including a victory message label and a button to return to the main menu.&#10;- Integrate victory music that plays when the screen is shown.&#10;- Implement necessary methods from the Screen interface: render, resize, dispose, show, pause, resume, and hide." />
-    <MESSAGE value="BomberQuestGame openFileChooser method implemented.&#10;&#10;//Comments will be added later" />
-    <MESSAGE value="Implement BomberQuestGame class with screen management and file chooser&#10;&#10;- Add methods to switch between different screens: goToMenu, goToGame, gameOver, victory, goToCreditsScreen.&#10;- Implement openFileChooser method to select .properties files from the &quot;maps&quot; directory.&#10;- Initialize and dispose of resources like SpriteBatch and Skin.&#10;- Add detailed comments explaining the functionality and purpose of each method." />
-    <MESSAGE value="Added Comments to BomberQuestGame" />
-    <MESSAGE value="Fixed Player java 51 bug" />
-    <MESSAGE value="Fixed Credits and BomberQuestGame" />
-    <MESSAGE value="Fixed runtime exception caused by missing map properties file&#10;&#10;- Updated `MapReader` to handle missing file exceptions gracefully.&#10;- Corrected the file path in `GameScreen` constructor to ensure the map properties file is correctly loaded.&#10;- Added error handling in `GameScreen` to log and handle file not found exceptions.&#10;- Ensured `MenuScreen` properly triggers the game start without causing runtime errors." />
-    <MESSAGE value="Blast &quot;fixed&quot; (honestly probably not it's impossible to test this if the MapLoader isn't working)" />
-    <MESSAGE value="GameScreen Problems" />
-    <MESSAGE value="GameScreen Peer Programming" />
-    <MESSAGE value="GameScreen Comment added" />
-    <MESSAGE value="Added CellType, like discussed. Added comments for understanding to Cell Type" />
-    <MESSAGE value="Created Map, added comments detailing what this class (hopefully) will do. This will help us get away from the properties loading error, hopefully." />
-    <MESSAGE value="Implement SpriteSheet class for managing sprite sheets&#10;&#10;- Added SpriteSheet class to handle sprite sheet management and manipulation.&#10;- Included methods for splitting texture into frames and accessing frame data.&#10;- Added getters and setters for texture, rows, columns, frames, and other properties.&#10;- Documented the class and its methods for better understanding and maintenance." />
-    <MESSAGE value="Add SpriteSheet class for managing and manipulating sprite sheets&#10;&#10;- Implemented SpriteSheet class to handle sprite sheet textures&#10;- Added methods for flipping frames, setting animation playback parameters, and drawing frames&#10;- Included detailed comments explaining the functionality of each method" />
-    <MESSAGE value="Map Attribute geladen, Todo's für morgen" />
-    <MESSAGE value="Comments written for a revision of our Code" />
-    <MESSAGE value="Created class SoundsManager" />
-    <option name="LAST_COMMIT_MESSAGE" value="Created class SoundsManager" />
+    <MESSAGE value="Ralph und Jonas" />
+    <MESSAGE value="Implementation of the GameObject.java class as the common superclass of all the other" />
+    <MESSAGE value="Implementation of the GameObject.java class as the common superclass of all the other object classes" />
+    <MESSAGE value="Change of the implementation of the superclass GameObject.java with a second texture argument which refers to the things.png&#10;2.) Creation of the abstract class Wall from which the Destructible and InDestructibleWall.java will inherit" />
+    <MESSAGE value="Creation of the Character.java class as the superclass of the Player class as well as the Enemy class. Superclass as the common factor with attributes as well as functionality&#10;&#10;Also minor changes were maid to different object classes" />
+    <MESSAGE value="Updates on various object classes as the GameObjectManager class has been implemented which enforces various abstract methods (render, isActive and getBoundingRectangle) through the GameObject class" />
+    <MESSAGE value="Player clas and minor changes in other classes" />
+    <MESSAGE value="Player class. Adjusted render, update method and included standingAnimation attribute in the Character.java and in the constructor of the Playerclass" />
+    <MESSAGE value="First changes in the Enemy class. Final adjustments in the Player class like animations, movement handling and texture disposal" />
+    <MESSAGE value="Final changes in the Enemy class as well as the outsourcing of the CollisionDetection into a seperate  class with a static method." />
+    <MESSAGE value="Comments in the Enemy class as well as the implementation of the MapReader.java which reads map files stored in the internal assets of the games" />
+    <MESSAGE value="GameScreen implementation and changes in other classes to make the internal functionality work" />
+    <MESSAGE value="Adjustments in the GameScreen.java. Addtionally, the deleting of the obsolete Player class and combination of the functionality into one Player class" />
+    <MESSAGE value="Changes in various classes to enhance the implementation and comply with requirements of the game" />
+    <MESSAGE value="New cool down feature in the HUD class and adjustments in the GameScreen.java as well as the player class" />
+    <MESSAGE value="Adjustments in the Player class as well as the GameScreen.java class" />
+    <MESSAGE value="Adjustments in the Player class as well and the Enemy class as well as the GameScreen.java class" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adjustments in the Player class as well and the Enemy class as well as the GameScreen.java class" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/core/src/de/tum/cit/ase/bomberquest/MapManager/MapParser.java</url>
-          <line>196</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.lang.RuntimeException" package="java.lang" />
+          <option name="timeStamp" value="2" />
+        </breakpoint>
       </breakpoints>
     </breakpoint-manager>
-  </component>
-  <component name="XSLT-Support.FileAssociations.UIState">
-    <expand />
-    <select />
   </component>
 </project>
