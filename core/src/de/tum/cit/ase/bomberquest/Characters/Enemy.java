@@ -21,6 +21,7 @@ import de.tum.cit.ase.bomberquest.util.SpriteSheet;
 
 import java.util.List;
 
+//Todo Enemy angleichen an Cell und Map Logik
 public class Enemy extends Entity {
 
 
@@ -34,7 +35,12 @@ public class Enemy extends Entity {
     int currentTargetIndex;
     int scaleX = 1;
 
-    public Enemy(Vector2 pos, Map map) {
+    //TODO KONSTRUTUR ANGLEICHEN
+    public Enemy(Vector2 pos, Texture texture) {
+        super(pos, texture);
+    }
+
+    /*public Enemy(Vector2 pos, Map map) {
         super(pos, null);
         sheet = new SpriteSheet(new Texture("enemy.png"),1,3);
         sheet.setPlay(0, 2, 0.1f, true);
@@ -48,6 +54,6 @@ public class Enemy extends Entity {
         speed = 0.25F;
         target = new Vector2(pos.x ,pos.y);
         vel = new Vector2(0,0);
-    }
+    }*/
 
 }
