@@ -13,6 +13,7 @@ import de.tum.cit.ase.bomberquest.Characters.Entity;
 import de.tum.cit.ase.bomberquest.gameobject.GameObject;
 import de.tum.cit.ase.bomberquest.util.SpriteSheet;
 
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -81,6 +82,37 @@ public class Map {
         rows = 0;
         random = new Random();
 
+        try {
+// Load a properties file from the specified path
+            prop.load(new FileInputStream(path));
+
+// Iterate through each entry in the properties file
+            for (java.util.Map.Entry<Object, Object> entry : prop.entrySet()) {
+                String key = (String) entry.getKey();
+                try {
+                    // Attempt to parse the first part of the key as an integer to skip any malformed entries
+                    Integer.parseInt(key.split(",")[0]);
+                } catch (Exception e) {
+                    // If parsing fails, skip this entry
+                    continue;
+                }
+                // Extract the column and row values from the key
+                int col = Integer.parseInt(key.split(",")[0]);
+                int row = Integer.parseInt(key.split(",")[1]);
+
+                // Update the maximum column value if the current column is greater
+                if (col > cols) {
+                    cols = col;
+                }
+                // Update the maximum row value if the current row is greater
+                if (row > rows) {
+                    rows = row;
+                }
+            }
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
 
