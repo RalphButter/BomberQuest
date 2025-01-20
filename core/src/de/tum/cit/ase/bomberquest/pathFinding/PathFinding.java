@@ -133,8 +133,53 @@ public class PathFinding {
 
     }
 
+    List<Vector2> showPath(Node node) {
+        Node tmp = node;
+        List<Node> tracepath = new ArrayList<>();
+        List<Vector2> path = new ArrayList<>();
+        while (tmp != null)
+        {
+            tracepath.add(tmp);
+            tmp = tmp.getParent();
+        }
+        for (int i = tracepath.size() - 1; i >= 0; i--) {
+            Node n = tracepath.get(i);
+            path.add(new Vector2(n.getCol(), n.getRow()));
+        }
+
+        if(path.size() > 0){
+            path.remove(0);
+        }
+
+        return path;
+    }
 
 
+    public List<Vector2> findPath(int col,int row, int toCol,int toRow) {
+        startNode = new Node(row,col,null);
+        endNode = new Node(toRow,toCol,null);
+
+        open_list = new ArrayList<>();
+        close_list = new ArrayList<>();
+
+        open_list.add(startNode);
+        while (open_list.size() != 0) {
+
+            //Sleep(1);
+            int i_min = findMinFNode();
+            Node currentNode = open_list.get(i_min);
+
+
+            close_list.add(currentNode);
+            if (currentNode.equal(endNode)) {
+                return showPath(currentNode);
+            }
+
+            open_list.remove(i_min);
+            exploreNeightbour(currentNode);
+        }
+        return new ArrayList<>();
+    }
 
 
 

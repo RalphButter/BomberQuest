@@ -24,12 +24,8 @@ public class Enemy extends Entity {
     int scaleX = 1;
 
     //TODO KONSTRUTUR ANGLEICHEN
-    public Enemy(Vector2 pos, Texture texture) {
+    public Enemy(Vector2 pos, Map map) {
         super(pos, texture);
-    }
-
-    /*public Enemy(Vector2 pos, Map map) {
-        super(pos, null);
         sheet = new SpriteSheet(new Texture("enemy.png"),1,3);
         sheet.setPlay(0, 2, 0.1f, true);
         pathFinding = new PathFinding(map);
@@ -42,6 +38,11 @@ public class Enemy extends Entity {
         speed = 0.25F;
         target = new Vector2(pos.x ,pos.y);
         vel = new Vector2(0,0);
-    }*/
+    }
+
+
+
+
+
 
 }
