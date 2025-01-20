@@ -136,7 +136,7 @@ public class Map {
             boolean hasExit = false;
 
             boolean c = false;
-            List<Cell> destructibleWalls = new ArrayList<>(); // To store destructible walls
+            List<GameObject> destructibleWalls = new ArrayList<>(); // To store destructible walls
             for (java.util.Map.Entry<Object, Object> entry : prop.entrySet()) {
                 String key = (String) entry.getKey();
                 int value = Integer.valueOf((String) entry.getValue());
