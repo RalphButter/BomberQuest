@@ -211,7 +211,7 @@ public class GameScreen implements Screen {
 
         if (!paused) {
 
-            checkPlayerDeath();
+            //checkPlayerDeath();
 
             // Player-Wall collision detection
             for (Wall wall : walls) {
@@ -235,6 +235,8 @@ public class GameScreen implements Screen {
 
             // Enemy Update Method
             // Update enemies
+            /*
+            //TODO CHECK IF IMPLEMENTED CORRECTLY
             for (Enemy enemy : enemies) {
                 Node playerNode = grid[(int) (player.getX() / GameScreen.TILE_SIZE_PX)][(int) (player.getY() / GameScreen.TILE_SIZE_PX)];
                 enemy.updateState(delta, playerNode, grid); // Handle AI and pathfinding
@@ -242,7 +244,7 @@ public class GameScreen implements Screen {
             }
 
             //TODO: Implement the following methods in the Map Class?
-         /*for (Enemy enemy : enemies) {
+         for (Enemy enemy : enemies) {
                 for (Blast blast : blasts) {
                     if (blast.getBoundingRectangle().overlaps(enemy.getBoundingRectangle())) {
                         enemy.die();
@@ -254,7 +256,8 @@ public class GameScreen implements Screen {
 
 
             // Enemy-Wall collision detection
-            for (Wall wall : walls) {
+            //TODO CHECK IF IMPLEMENTED CORRECTLY IN MAP
+            /*for (Wall wall : walls) {
                 for (Enemy enemy : enemies) {
                     if (enemy.getRectangle().overlaps(wall.getWallRectangle())) {
                         enemy.handleCollision();
@@ -280,7 +283,7 @@ public class GameScreen implements Screen {
                         enemy.handleCollision();
                     }
                 }
-            }
+            }*/
 
             if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
                 // Call the placeBomb method on the player
@@ -331,9 +334,10 @@ public class GameScreen implements Screen {
             // Call draw methods
             spriteBatch.begin();
             draw(spriteBatch, map.getPlayer());
-            for (Enemy enemy : enemies) {
+            //TODO I am not sure what this was
+            /*for (Enemy enemy : enemies) {
                 draw(spriteBatch, enemy);
-            }
+            }*/
             spriteBatch.end();
 
             // HUD: Set batch to now draw what the Hud camera sees.
@@ -412,7 +416,8 @@ public class GameScreen implements Screen {
             Integer objectId = MapParser.getObjects().get(wallPosition);
 
             // Handle objects revealed under the wall
-            if (objectId != null) {
+            //TODO CHECK IF MAP IS IMPLEMENTED THIS CORRECTLY
+            /*if (objectId != null) {
                 switch (objectId) {
                     case 4: // Exit
                         gameObjectManager.addGameObject(new Exit(wall.getX(), wall.getY(), true, false));
@@ -432,7 +437,7 @@ public class GameScreen implements Screen {
                         System.out.println("Unknown object beneath the wall at: " + wallPosition);
                         break;
                 }
-            }
+            }*/
 
             // Remove the destructible wall from the game
             walls.remove(wall);
@@ -488,7 +493,8 @@ public class GameScreen implements Screen {
         return walls;
     }
 
-    private void checkPlayerDeath() {
+    //TODO STILL NEEDS TO BE IMPLEMENTED
+    /*private void checkPlayerDeath() {
         // Check for player collision with enemies
         for (Enemy enemy : enemies) {
             if (enemy.getBoundingRectangle().overlaps(player.getRectangle())) {
@@ -497,7 +503,7 @@ public class GameScreen implements Screen {
                 gameOver();
                 return; // Stop further updates
             }
-        }
+        }*/
 
         // Check for player collision with blasts
         /*for (Blast blast : blasts) {
@@ -512,4 +518,3 @@ public class GameScreen implements Screen {
 
 
 
-}

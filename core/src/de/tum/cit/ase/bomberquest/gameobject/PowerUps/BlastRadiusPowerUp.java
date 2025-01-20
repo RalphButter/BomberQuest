@@ -1,28 +1,41 @@
 package de.tum.cit.ase.bomberquest.gameobject.PowerUps;
 
+import de.tum.cit.ase.bomberquest.Characters.Entity;
 import de.tum.cit.ase.bomberquest.gameobject.Blast;
 import de.tum.cit.ase.bomberquest.gameobject.GameObjectManager;
 import de.tum.cit.ase.bomberquest.map.GameMap;
 
 import java.awt.*;
-//TODO Eigentlich ist ja nur position und Texture relevant, hier müssen wir vereinfachen
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector2;
 
-public class BlastRadiusPowerUp extends Blast {
+public class BlastRadiusPowerUp extends Entity {
+    // Call the superclass constructor with the position and texture for the BlastRadiusPowerUp
+    public BlastRadiusPowerUp(Vector2 pos) {
+        super(pos, new Texture("maxRadiusPU.png"));
+    }
+
+}
+
+
+/*
     private static final int BLAST_RADIUS_INCREMENT = 1;
     private static final int MAX_BLAST_RADIUS = 8;
     private Rectangle bounds; // For collision detection
 
-    /**
-     * Constructor for creating a new Blast.
-     *
-     * @param x                 The X-coordinate of the bomb.
-     * @param y                 The Y-coordinate of the bomb.
-     * @param blastRadius       The radius of the blast.
-     * @param blastDuration     How long the blast remains active.
-     * @param blastDamage       Damage dealt by the blast.
-     * @param gameMap           Reference to the game map.
-     * @param gameObjectManager Reference to the game object manager.
-     */
+    */
+/**
+ * Constructor for creating a new Blast.
+ *
+ * @param x                 The X-coordinate of the bomb.
+ * @param y                 The Y-coordinate of the bomb.
+ * @param blastRadius       The radius of the blast.
+ * @param blastDuration     How long the blast remains active.
+ * @param blastDamage       Damage dealt by the blast.
+ * @param gameMap           Reference to the game map.
+ * @param gameObjectManager Reference to the game object manager.
+ *//*
+
     public BlastRadiusPowerUp(float x, float y, int blastRadius, float blastDuration, int blastDamage, GameMap gameMap, GameObjectManager gameObjectManager) {
         // Call the superclass constructor with the provided parameters
         super(x, y, blastRadius, blastDuration, blastDamage, gameMap, gameObjectManager);
@@ -32,12 +45,15 @@ public class BlastRadiusPowerUp extends Blast {
     }
 
 
-    /*
-     * Applies the blast radius increase effect to the player.
-     *
-     * @param player The player who collected the power-up.
-     */
-    /*@Override
+    */
+/*
+ * Applies the blast radius increase effect to the player.
+ *
+ * @param player The player who collected the power-up.
+ *//*
+
+ */
+/*@Override
     public void applyEffect(Player player) {
         if (player.getBlastRadius() < MAX_BLAST_RADIUS) {
             player.setBlastRadius(player.getBlastRadius() + BLAST_RADIUS_INCREMENT);
@@ -45,13 +61,16 @@ public class BlastRadiusPowerUp extends Blast {
         }
         // Remove the power-up from the game map after collection
         gameObjectManager.removeGameObject(this);
-    }*/
+    }*//*
 
-    /**
-     * Renders the blast radius power-up on the screen.
-     *
-     * @param g The Graphics object used for rendering.
-     */
+
+ */
+/**
+ * Renders the blast radius power-up on the screen.
+ *
+ * @param g The Graphics object used for rendering.
+ *//*
+
     //BITTE ANPASSEN!!!
     public void render(Graphics g) {
         // Set the color to red for the outer circle of the power-up
@@ -69,21 +88,23 @@ public class BlastRadiusPowerUp extends Blast {
         // Draw a horizontal line for the plus sign
         g.drawLine((int)getX() + 8, (int)getY() + 16, (int)getX() + 24, (int)getY() + 16);
     }
-    /**
-     * Checks for collision with the player and applies the effect if collided.
-     *
-     * @param player The player object.
-     */
+    */
+/**
+ * Checks for collision with the player and applies the effect if collided.
+ *
+ * @param player The player object.
+ *//*
+
 
     //BITTE ANPASSEN!!!
 
-    /*@Override
+    */
+/*@Override
     public void update(Player player) {
         if (bounds.overlaps(player.getBounds())) {
             applyEffect(player);
         }
-    }*/
+    }*//*
 
 
-
-}
+ */

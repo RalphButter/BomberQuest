@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Rectangle;
 
 //TODO GameObject aufteilen in GameObject und Entity
 
-public abstract class GameObject {
+public class GameObject {
     private float x, y;  // Position in the game grid (or world coordinates)
     private boolean walkable;  // Can other objects walk over this?
     private
@@ -84,19 +84,19 @@ public abstract class GameObject {
 
 
     // Abstract method for specific updates (to be implemented by subclasses)
-    public abstract void update(float deltaTime);
+    //public abstract void update(float deltaTime);
 
-    public abstract void render(SpriteBatch batch);
+    //public abstract void render(SpriteBatch batch);
 
     // Getter for the bounding rectangle of the object
-    public abstract Rectangle getBoundingRectangle();
+    //public abstract Rectangle getBoundingRectangle();
 
     // Dispose resources
     public void dispose() {
         texture.dispose();
     }
     //Needs to be fixed?
-    public abstract boolean isActive();
+    //public abstract boolean isActive();
 
 
 
