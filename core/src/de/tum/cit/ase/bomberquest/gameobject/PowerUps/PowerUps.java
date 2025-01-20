@@ -7,6 +7,8 @@ import de.tum.cit.ase.bomberquest.Characters.Player;
 
 import java.awt.*;
 
+
+//TODO WE DON'T NEED THIS CLASS PROBABLY
 abstract class PowerUp  extends GameObject {
     protected GameMap gameMap;
     protected GameObjectManager gameObjectManager;

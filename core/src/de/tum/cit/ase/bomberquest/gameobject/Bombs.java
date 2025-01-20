@@ -48,7 +48,7 @@ public Bombs(float x, float y, GameMap gameMap, GameObjectManager gameObjectMana
         // Check if the elapsed time has reached or exceeded the fuse time
         if (elapsedTime >= fuseTime) {
             // Trigger the explosion
-            explode();
+            //explode();
 
             // Mark the bomb for removal
             setActive(false);
@@ -57,12 +57,12 @@ public Bombs(float x, float y, GameMap gameMap, GameObjectManager gameObjectMana
 
     private void setActive(boolean b) {
     }
-
-    private void explode() {
+    //TODO GGf. in Map
+    /*private void explode() {
         // Create a new blast at the bomb's position
         Blast blast = new Blast(getX(), getY(), (int) radius, 0.5f, 1, gameMap, gameObjectManager);
         gameObjectManager.addGameObject(blast);
-    }
+    }*/
 
     @Override
     public void render(SpriteBatch batch) {

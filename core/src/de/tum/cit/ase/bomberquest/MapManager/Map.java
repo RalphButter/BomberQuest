@@ -7,11 +7,15 @@ package de.tum.cit.ase.bomberquest.MapManager;
 //TODO DAVOR!!! SPRITE SHEET ERSTELLEN
 //TODO ES müssen evtl. die anderen Klassen, die mit Gamobject zu tun haben auch geändert werden.
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
+import de.tum.cit.ase.bomberquest.Characters.Entity;
 import de.tum.cit.ase.bomberquest.gameobject.GameObject;
 import de.tum.cit.ase.bomberquest.util.SpriteSheet;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.Random;
 
 /**
@@ -67,5 +71,18 @@ public class Map {
     //Todo Wir brauchen noch eine draw + drawWall function
     //Todo Konstrutur (mache ich (Ralph))
     //TODO Wir müssen davor Enemy, etc. machen. Diese Klasse kann erst zum Schluss implementiert werden
+
+    //TODO UNSER SCHWIERIGSTER TEIL ;)
+    public Map(String path,List<Entity> entities) {
+        mapSheet = new SpriteSheet(new Texture("basictiles.png"),15,8);
+        //TODO Wir Brauchen Zelle
+        Properties prop = new Properties();
+        cols = 0;
+        rows = 0;
+        random = new Random();
+
+    }
+
+
 
 }

@@ -115,10 +115,12 @@ public class GameScreen implements Screen {
         //config.mimeTypes = new String[] { "properties" }; // Use 'mimeTypes' instead of 'filter'        // Instantiate the correct NativeFileChooser based on the platform
 
         //Ab hier muss das Lambda in sein
-        NativeFileChooser fileChooser = getNativeFileChooser();
+        //TODO: Implement the following methods in the Map Class?
 
+        //NativeFileChooser fileChooser = getNativeFileChooser();
 
-        fileChooser.chooseFile(config, new NativeFileChooserCallback() {
+        //TODO: Implement the following methods in the Map Class?
+        /*fileChooser.chooseFile(config, new NativeFileChooserCallback() {
             @Override
             public void onFileChosen(FileHandle fileHandle) {
                 try {
@@ -132,7 +134,7 @@ public class GameScreen implements Screen {
                     System.err.println("Error reading file: " + e.getMessage());
                     mapLines = new ArrayList<>();
                     // Handle the error, possibly by loading a default map
-                    loadDefaultMap();
+                    //loadDefaultMap();
                 }
             }
 
@@ -141,7 +143,9 @@ public class GameScreen implements Screen {
                 System.err.println("File selection was canceled.");
                 mapLines = new ArrayList<>();
                 // Handle the cancellation, possibly by loading a default map
-                loadDefaultMap();
+                //TODO: Implement the following methods in the Map Class?
+
+                //loadDefaultMap();
             }
 
             @Override
@@ -149,9 +153,10 @@ public class GameScreen implements Screen {
                 System.err.println("File chooser error: " + e.getMessage());
                 mapLines = new ArrayList<>();
                 // Handle the error appropriately
-                loadDefaultMap();
+                //TODO: Implement the following methods in the Map Class?
+                //loadDefaultMap();
             }
-        });
+        });*/
 
 
 
@@ -218,14 +223,14 @@ public class GameScreen implements Screen {
                     }
                 }
             }
-
-            for (Blast blast : blasts) {
+//TODO: Implement the following methods in the Map Class?
+            /*for (Blast blast : blasts) {
                 for (Wall wall : walls) {
                     if (wall instanceof DestructibleWall && blast.getBoundingRectangle().overlaps(wall.getWallRectangle())) {
                         handleDestructibleWall(wall);
                     }
                 }
-            }
+            }*/
 
 
             // Enemy Update Method
@@ -236,7 +241,8 @@ public class GameScreen implements Screen {
                 enemy.update(delta, walls); // Handle movement and animation
             }
 
-            for (Enemy enemy : enemies) {
+            //TODO: Implement the following methods in the Map Class?
+         /*for (Enemy enemy : enemies) {
                 for (Blast blast : blasts) {
                     if (blast.getBoundingRectangle().overlaps(enemy.getBoundingRectangle())) {
                         enemy.die();
@@ -244,7 +250,7 @@ public class GameScreen implements Screen {
                         break; // Stop further checks for this enemy
                     }
                 }
-            }
+            }*/
 
 
             // Enemy-Wall collision detection
@@ -417,7 +423,9 @@ public class GameScreen implements Screen {
                         System.out.println("Concurrent Bomb Power-Up revealed at: " + wallPosition);
                         break;
                     case 6: // Blast Radius Power-Up
-                        gameObjectManager.addGameObject(new BlastRadiusPowerUp(wall.getX(), wall.getY(), 1, 0.5f, 1, map, gameObjectManager));
+                        //TODO: Implement the following methods in the Map Class?
+
+                        //gameObjectManager.addGameObject(new BlastRadiusPowerUp(wall.getX(), wall.getY(), 1, 0.5f, 1, map, gameObjectManager));
                         System.out.println("Blast Radius Power-Up revealed at: " + wallPosition);
                         break;
                     default:
@@ -443,15 +451,15 @@ public class GameScreen implements Screen {
 
 
     }
-
-    private boolean isBombExplodedNear(Wall wall) {
+//TODO: Implement the following methods in the Map Class?
+    /*private boolean isBombExplodedNear(Wall wall) {
         for (Blast blast : blasts) {
             if (blast.getBoundingRectangle().overlaps(wall.getRectangle())) {
                 return true;
             }
         }
         return false;
-    }
+    }*/
 
     private void destroyWall(Wall wall) {
         // Logic to destroy the wall
@@ -460,11 +468,13 @@ public class GameScreen implements Screen {
         // Additional logic to update the game state
     }
 
-    private void explode(float x, float y) {
+
+//TODO: Implement the following methods in the Map Class?
+    /*private void explode(float x, float y) {
         Blast blast = new Blast(x, y, (int) radius, 0.5f, 1, gameMap, gameObjectManager);
         gameObjectManager.addGameObject(blast);
         blasts.add(blast);
-    }
+    }*/
 
     private void gameOver() {
         // Logic to handle game over, e.g., show game over screen, stop music, etc.
@@ -490,14 +500,14 @@ public class GameScreen implements Screen {
         }
 
         // Check for player collision with blasts
-        for (Blast blast : blasts) {
+        /*for (Blast blast : blasts) {
             if (blast.getBoundingRectangle().overlaps(player.getRectangle())) {
                 player.setAlive(false);
                 System.out.println("Player hit by explosion!");
                 gameOver();
                 return; // Stop further updates
             }
-        }
+        }*/
     }
 
 
