@@ -221,4 +221,4 @@ public class Blast extends Entity {
     public void setActive(boolean active) {
         isActive = active;
     }*/
-}
+
