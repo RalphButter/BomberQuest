@@ -1,22 +1,10 @@
 package de.tum.cit.ase.bomberquest.Characters;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import de.tum.cit.ase.bomberquest.MapManager.Map;
 import de.tum.cit.ase.bomberquest.gameobject.GameObject;
-import de.tum.cit.ase.bomberquest.gameobject.Wall;
-import de.tum.cit.ase.bomberquest.texture.Drawable;
-import de.tum.cit.ase.bomberquest.util.CollisionDetection;
-import de.tum.cit.ase.bomberquest.MapManager.Node;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import de.tum.cit.ase.bomberquest.util.Rectangle;
-import de.tum.cit.ase.bomberquest.Characters.PathFinding;
+import de.tum.cit.ase.bomberquest.pathFinding.PathFinding;
 import de.tum.cit.ase.bomberquest.util.SpriteSheet;
 
 import java.util.List;
