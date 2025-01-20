@@ -10,6 +10,9 @@ package de.tum.cit.ase.bomberquest.MapManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import de.tum.cit.ase.bomberquest.Characters.Entity;
+import de.tum.cit.ase.bomberquest.gameobject.Cell;
+import de.tum.cit.ase.bomberquest.gameobject.CellType;
+import de.tum.cit.ase.bomberquest.gameobject.Exit;
 import de.tum.cit.ase.bomberquest.gameobject.GameObject;
 import de.tum.cit.ase.bomberquest.util.SpriteSheet;
 
@@ -60,13 +63,15 @@ public class Map {
 
     Vector2 pos; // The position of the map in the game world
 
-    GameObject entryGameObject; // The entry point game object, marking the start position in the map
-    GameObject exitGameObject; // The exit point game object, marking the end position in the map
-    GameObject[][] grid; // A 2D array to store game objects within the map grid
-    List<GameObject> emptyGameObjects; // A list of empty game objects for managing available positions
-    Random random; // A random number generator for procedural content and random events
-    int keyCount = 0; // A counter for tracking the number of keys collected or required
-    Vector2 playerPos; // The position of the player within the map
+// Variables for managing the map's cells, randomization, and player position
+    GameObject entryGameObject;
+    GameObject exitGameObject;
+    GameObject[][] grid;
+    List<GameObject> emptyGameObjects;
+    Random random;
+    int keyCount = 0;
+    Vector2 playerPos;
+
 
 
     //Todo Wir brauchen noch eine draw + drawWall function
@@ -83,10 +88,10 @@ public class Map {
         random = new Random();
 
         try {
-// Load a properties file from the specified path
+            // Load a properties file from the specified path
             prop.load(new FileInputStream(path));
 
-// Iterate through each entry in the properties file
+            // Iterate through each entry in the properties file
             for (java.util.Map.Entry<Object, Object> entry : prop.entrySet()) {
                 String key = (String) entry.getKey();
                 try {
@@ -109,6 +114,67 @@ public class Map {
                     rows = row;
                 }
             }
+
+            cols += 1; // Adjust for zero-based indexing to include all columns
+            rows += 1; // Adjust for zero-based indexing to include all rows
+            // Initialize the grid with the specified number of rows
+            grid = new GameObject[rows][];
+            for(int row = 0; row < rows;row++){
+                // Initialize each row with the specified number of columns
+                grid[row] = new GameObject[cols];
+                for (int col = 0; col < cols;col++){
+                    // Create a new Cell object for each position in the grid
+                    //TODO We need to fix GameObject
+                    grid[row][col] = new GameObject(row,col,null);
+                }
+            }
+
+
+            boolean hasExit = false;
+
+            boolean c = false;
+            List<Cell> destructibleWalls = new ArrayList<>(); // To store destructible walls
+            for (java.util.Map.Entry<Object, Object> entry : prop.entrySet()) {
+                String key = (String) entry.getKey();
+                int value = Integer.valueOf((String) entry.getValue());
+                try {
+                    // Skip error format
+                    Integer.parseInt(key.split(",")[0]);
+                } catch (Exception e) {
+                    continue;
+                }
+                //This code snippet extracts the column and row values from a string key
+                int col = Integer.parseInt(key.split(",")[0]);
+                int row = Integer.parseInt(key.split(",")[1]);
+
+                GameObject gameObject = grid[row][col];
+                gameObject.cellType = CellType.fromId(value);
+                switch (gameObject.cellType) {
+                    case DESTRUCTIBLE_WALL:
+                        //TODO I am sure this is correct. We need to fix GameObject
+                        destructibleWalls.add(gameObject); // Add to destructible walls list
+                        break;
+                    case ENTRANCE:
+                        entryGameObject = gameObject; // Set the entry game object
+                        break;
+                    case EXIT:
+                        System.out.println("has exit 1");
+                        exitGameObject = gameObject; // Set the exit game object
+                        hasExit = true; // Mark that an exit has been found
+                        gameObject.cellType = CellType.DESTRUCTIBLE_WALL; // Change cell type to destructible wall
+                        grid[gameObject.row][gameObject.col].cellType = CellType.DESTRUCTIBLE_WALL; // Update grid cell type
+                        //TODO we need to fix Exit
+                        entities.add(new Exit(new Vector2(gameObject.col * 16, gameObject.row * 16))); // Add exit entity
+                        break;
+                    case ENEMY:
+                        // Handle enemy logic if needed
+                        break;
+                }
+            }
+
+
+
+
         }
         catch (Exception ex) {
             ex.printStackTrace();
