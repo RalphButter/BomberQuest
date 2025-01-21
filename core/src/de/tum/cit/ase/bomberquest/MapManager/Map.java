@@ -58,6 +58,9 @@ public class Map {
         mapSheet = new SpriteSheet(new Texture("basictiles.png"), 15, 8);
         Properties prop = new Properties();
         random = new Random();
+        emptyGameObjects = new ArrayList<>();
+        cols = 0;
+        rows = 0;
 
         try {
             // Load the properties file containing the map data
@@ -74,20 +77,140 @@ public class Map {
                 int col = Integer.parseInt(key.split(",")[0]);
                 int row = Integer.parseInt(key.split(",")[1]);
 
-                cols = Math.max(cols, col);
-                rows = Math.max(rows, row);
-            }
+                if(col > cols){
+                    cols = col;
+                }
+                if(row > rows){
+                    rows = row;
+                }            }
 
             cols += 1; // Adjust for zero-based indexing
             rows += 1;
 
-            // Initialize grid
-            grid = new GameObject[rows][cols];
-            for (int row = 0; row < rows; row++) {
-                for (int col = 0; col < cols; col++) {
+            // Initialize the grid with the specified number of rows
+            grid = new GameObject[rows][];
+            // Iterate through each row
+            for(int row = 0; row < rows; row++){
+                // Initialize each row with the specified number of columns
+                grid[row] = new GameObject[cols];
+                // Iterate through each column in the current row
+                for (int col = 0; col < cols; col++){
+                    // Create a new GameObject for each cell in the grid
                     grid[row][col] = new GameObject(row, col, null);
                 }
             }
+            // Flag to check if the map has an exit
+            boolean hasExit = false;
+
+            boolean c = false;
+            List<GameObject> destructibleWalls = new ArrayList<>(); // To store destructible walls
+
+// Iterate through each entry in the properties file
+            for (java.util.Map.Entry<Object, Object> entry : prop.entrySet()) {
+                String key = (String) entry.getKey();
+                int value = Integer.valueOf((String) entry.getValue());
+                try {
+                    // Skip entries with incorrect format
+                    Integer.parseInt(key.split(",")[0]);
+                } catch (Exception e) {
+                    continue;
+                }
+                int col = Integer.parseInt(key.split(",")[0]);
+                int row = Integer.parseInt(key.split(",")[1]);
+
+                // Get the game object at the specified grid position
+                GameObject gameObject = grid[row][col];
+                gameObject.cellType = CellType.fromId(value);
+
+                // Handle different cell types
+                switch (gameObject.cellType) {
+                    case DESTRUCTIBLE_WALL:
+                        destructibleWalls.add(gameObject); // Add to destructible walls list
+                        break;
+                    case ENTRANCE:
+                        entryGameObject = gameObject; // Set the entrance game object
+                        break;
+                    case EXIT:
+                        System.out.println("has exit 1");
+                        exitGameObject = gameObject; // Set the exit game object
+                        hasExit = true;
+                        gameObject.cellType = CellType.DESTRUCTIBLE_WALL;
+                        grid[gameObject.row][gameObject.col].cellType = CellType.DESTRUCTIBLE_WALL;
+                        entities.add(new Exit(new Vector2(gameObject.col * 16, gameObject.row * 16))); // Add exit entity
+                        break;
+                    case ENEMY:
+                        // Handle enemy logic if needed
+                        break;
+                }
+            }
+
+            // If no exit is found, randomly assign one from destructible walls
+            if (!hasExit && !destructibleWalls.isEmpty()) {
+                Random random = new Random();
+                GameObject randomGameObject = destructibleWalls.get(random.nextInt(destructibleWalls.size()));
+                hasExit = true;
+                // Add a new Exit entity at the randomly selected destructible wall position
+                entities.add(new Exit(new Vector2(randomGameObject.col * 16, randomGameObject.row * 16)));
+            }
+
+            // Iterate through each row in the grid
+            for(int row = 0; row < rows; row++){
+                // Iterate through each column in the current row
+                for(int col = 0; col < cols; col++){
+                    // Check if the cell is empty or contains an enemy
+                    if(grid[row][col].cellType == null || grid[row][col].cellType == CellType.ENEMY){
+                        // Add the cell to the list of empty game objects
+                        emptyGameObjects.add(grid[row][col]);
+                    }
+                }
+            }
+
+            // Iterate through each entry in the properties file
+            for (java.util.Map.Entry<Object, Object> entry : prop.entrySet()) {
+                String key = (String) entry.getKey();
+                int value = Integer.valueOf((String) entry.getValue());
+                try {
+                    // Skip entries with incorrect format
+                    Integer.parseInt(key.split(",")[0]);
+                } catch (Exception e) {
+                    continue;
+                }
+                int col = Integer.parseInt(key.split(",")[0]);
+                int row = Integer.parseInt(key.split(",")[1]);
+
+                // Get the game object at the specified grid position
+                GameObject gameObject = grid[row][col];
+                gameObject.cellType = CellType.fromId(value);
+
+                // Handle different cell types
+                switch (gameObject.cellType) {
+                    case ENEMY:
+                        // Randomly decide whether to add a Monkey or an Enemy
+                        if (random.nextInt(10) <= 3) {
+                            // Uncomment and add Monkey if needed
+                            // gameObjects.add(new Monkey(new Vector2(cell.col * 16, cell.row * 16), this));
+                        } else {
+                            entities.add(new Enemy(new Vector2(gameObject.col * 16, gameObject.row * 16), this));
+                        }
+                        break;
+                    case EXIT:
+                        // Set the cell type to DESTRUCTIBLE_WALL for exit cells
+                        grid[gameObject.row][gameObject.col].cellType = CellType.DESTRUCTIBLE_WALL;
+                        break;
+                    case CONCURRENT_PU:
+                        // Add a MaxRadiusPU entity and set the cell type to DESTRUCTIBLE_WALL
+                        entities.add(new MaxRadiusPU(new Vector2(gameObject.col * 16, gameObject.row * 16)));
+                        grid[gameObject.row][gameObject.col].cellType = CellType.DESTRUCTIBLE_WALL;
+                        break;
+                    case BLAST_RADIUS_PU:
+                        // Add a MaxBombPU entity and set the cell type to DESTRUCTIBLE_WALL
+                        entities.add(new MaxBombPU(new Vector2(gameObject.col * 16, gameObject.row * 16)));
+                        grid[gameObject.row][gameObject.col].cellType = CellType.DESTRUCTIBLE_WALL;
+                        break;
+                }
+            }
+
+
 
         } catch (Exception ex) {
             ex.printStackTrace();

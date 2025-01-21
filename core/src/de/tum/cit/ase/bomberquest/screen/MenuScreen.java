@@ -25,7 +25,6 @@ import de.tum.cit.ase.bomberquest.util.Manager;
  */
 public class MenuScreen implements Screen {
 
-    private final BomberQuestGame game;
     private final Stage stage;
     private Music menuMusic; // Background music for the menu
 
@@ -35,27 +34,23 @@ public class MenuScreen implements Screen {
      * @param game The main game instance, used to transition between screens and access resources.
      */
     public MenuScreen(BomberQuestGame game) {
-        this.game = game;
+        // Create a new OrthographicCamera instance
         var camera = new OrthographicCamera();
         camera.zoom = 1.5f; // Set camera zoom for a closer view
 
-        Viewport viewport = new ScreenViewport(camera); // Create a viewport with the camera
-        stage = new Stage(viewport, game.getSpriteBatch()); // Create a stage for UI elements
-        Gdx.input.setInputProcessor(stage); // Enable input handling for the stage
+        // Create a viewport with the camera
+        Viewport viewport = new ScreenViewport(camera);
 
-        // Initialize background music
-        menuMusic = Gdx.audio.newMusic(Gdx.files.internal("audio/background.mp3"));
-        menuMusic.setLooping(true);
-        menuMusic.setVolume(0.2f);
-        menuMusic.play();
+        // Create a stage for UI elements with the viewport and the game's sprite batch
+        stage = new Stage(viewport, game.getSpriteBatch());
 
-        Table table = new Table(); // Create a table for layout
+        // Create a table for layout
+        Table table = new Table();
         table.setFillParent(true); // Make the table fill the stage
         stage.addActor(table); // Add the table to the stage
 
         // Add a label as a title
-        Label titleLabel = new Label("BomberQuest", game.getSkin(), "title");
-        table.add(titleLabel).padBottom(80).row();
+        table.add(new Label("BomberQuest", game.getSkin(), "title")).padBottom(80).row();
 
         // Create and add buttons
         TextButton goToGameButton = new TextButton("Go To Game", game.getSkin());

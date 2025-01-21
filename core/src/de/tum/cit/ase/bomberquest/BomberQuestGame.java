@@ -195,18 +195,18 @@ public class BomberQuestGame extends Game {
         }
     }
 
-    /**
-     * Switches to the given screen and disposes of the previous screen.
-     * @param screen the new screen
-     */
-    @Override
-    public void setScreen(Screen screen) {
-        Screen previousScreen = getScreen(); // Use getter for clarity
-        super.setScreen(screen);
-        if (previousScreen != null) {
-            previousScreen.dispose();
-        }
-    }
+//    /**
+//     * Switches to the given screen and disposes of the previous screen.
+//     * @param screen the new screen
+//     */
+//    @Override
+//    public void setScreen(Screen screen) {
+//        Screen previousScreen = getScreen(); // Use getter for clarity
+//        super.setScreen(screen);
+//        if (previousScreen != null) {
+//            previousScreen.dispose();
+//        }
+//    }
 
     /** Cleans up resources when the game is disposed. */
     @Override
