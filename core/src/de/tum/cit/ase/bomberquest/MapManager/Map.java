@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import de.tum.cit.ase.bomberquest.Characters.Enemy;
 import de.tum.cit.ase.bomberquest.Characters.Entity;
+import de.tum.cit.ase.bomberquest.Characters.Player;
 import de.tum.cit.ase.bomberquest.gameobject.Cell;
 import de.tum.cit.ase.bomberquest.gameobject.CellType;
 import de.tum.cit.ase.bomberquest.gameobject.Exit;
@@ -257,8 +258,110 @@ public class Map {
     private void drawCell(Batch batch, GameObject gameObject, TextureRegion textureRegion){
         batch.draw(textureRegion, pos.x + gameObject.col * cellSize,pos.y + gameObject.row * cellSize,mapSheet.getWidth()/2,mapSheet.getHeight()/2,mapSheet.getWidth(),mapSheet.getHeight(),1,1,0);
     }
-//
+
+    public GameObject getCell(int row, int col){
+        return grid[row][col];
+    }
 
 
+    public GameObject getRandomEmptyCell(){
+        int randNum = random.nextInt(emptyGameObjects.size());
+        return emptyGameObjects.get(randNum);
+    }
+
+    public int getKeyCount(){
+        return keyCount;
+    }
+
+    public void draw(Batch batch, Player player){
+        batch.begin();
+
+        for(int row = 0; row < rows;row++){
+            for(int col = 0; col < cols;col++){
+                GameObject gameObject = grid[row][col];
+                if(Vector2.dst(player.pos.x,player.pos.y, gameObject.col*16, gameObject.row*16) > 1500){
+                    continue;
+                }
+
+                if(gameObject.cellType == null){
+                    drawCell(batch, gameObject,mapSheet.getTexture(64));
+                }
+                else {
+                    switch (gameObject.cellType){
+                        case INDESTRUCTIBLE_WALL:
+                            drawCell(batch, gameObject,mapSheet.getTexture(0));
+                            break;
+                        case DESTRUCTIBLE_WALL:
+                            drawCell(batch, gameObject,mapSheet.getTexture(15));
+                            break;
+                        case ENTRANCE:
+                            drawCell(batch, gameObject,mapSheet.getTexture(11));
+                            break;
+                        case EXIT:
+                            drawCell(batch, gameObject,mapSheet.getTexture(35));
+                            break;
+                        case ENEMY:
+                        case KEY:
+                            drawCell(batch, gameObject,mapSheet.getTexture(11));
+                            break;
+                    }
+                }
+
+            }
+        }
+
+        batch.end();
+    }
+
+    public void drawWall(Batch batch,Player player){
+        batch.begin();
+
+        for(int row = 0; row < rows;row++){
+            for(int col = 0; col < cols;col++){
+                GameObject gameObject = grid[row][col];
+                if(Vector2.dst(player.pos.x,player.pos.y, gameObject.col*16, gameObject.row*16) > 1500){
+                    continue;
+                }
+
+                if(gameObject.cellType == null){
+
+                }
+                else {
+                    switch (gameObject.cellType){
+                        case DESTRUCTIBLE_WALL:
+                            drawCell(batch, gameObject,mapSheet.getTexture(15));
+                            break;
+                    }
+                }
+
+            }
+        }
+
+        batch.end();
+    }
+
+
+    public GameObject getEntryCell(){
+        return entryGameObject;
+    }
+    public GameObject getExitCell(){
+        return exitGameObject;
+    }
+
+    public int getRows() {
+        return rows;
+    }
+
+    public void setRows(int rows) {
+        this.rows = rows;
+    }
+
+    public int getCols() {
+        return cols;
+    }
+
+    public void setCols(int cols) {
+        this.cols = cols;
+    }
 
 }

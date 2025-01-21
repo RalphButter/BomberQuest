@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import de.tum.cit.ase.bomberquest.util.Rectangle;
 
 public class Entity {
-    protected Vector2 pos;
+    public Vector2 pos;
     public Texture texture;
     public boolean destroyFlag = false;
 
