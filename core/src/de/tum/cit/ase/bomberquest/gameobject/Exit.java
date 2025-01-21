@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import de.tum.cit.ase.bomberquest.Characters.Entity;
 
 //TODO Eigentlich ist ja nur position und Texture relevant, hier müssen wir vereinfachen
 public class Exit extends Entity {
