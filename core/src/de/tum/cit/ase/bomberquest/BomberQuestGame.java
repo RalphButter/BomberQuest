@@ -175,7 +175,7 @@ public class BomberQuestGame extends Game {
      * Called when the player wins. Switches to the Victory screen.
      */
     public void victory() {
-        this.setScreen(new VictoryScreen(this)); // Set the current screen to VictoryScreen
+//        this.setScreen(new WinScreen(this)); // Set the current screen to VictoryScreen
         if (gameScreen != null) {
             gameScreen.dispose(); // Dispose the game screen if it exists
             gameScreen = null;
