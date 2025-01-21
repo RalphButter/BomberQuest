@@ -59,35 +59,35 @@ public class MenuScreen implements Screen {
 
         // Create and add buttons
         TextButton goToGameButton = new TextButton("Go To Game", game.getSkin());
+        TextButton loadGameButton = new TextButton("Load Map", game.getSkin());
         TextButton creditsButton = new TextButton("Credits", game.getSkin());
         TextButton exitButton = new TextButton("Exit", game.getSkin());
 
         table.add(goToGameButton).width(300).row();
-        table.add(creditsButton).width(300).padTop(20).row();
-        table.add(exitButton).width(300).padTop(20);
+        table.add(loadGameButton).width(300).row();
+        table.add(exitButton).width(300).row();
 
         // Button listeners
         goToGameButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.openFileChooser();
-                game.goToGame();
-                menuMusic.pause();
+                game.goToGame(); // Change to the game screen when button is pressed
             }
         });
-        creditsButton.addListener(new ChangeListener() {
+        loadGameButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.goToCreditsScreen();
-                menuMusic.dispose();
+                game.loadGame(); // Change to the game screen when button is pressed
             }
         });
         exitButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                Gdx.app.exit();
+                System.exit(0);
             }
         });
+
+        Manager.getInstance().soundsManager.playMenuMusic();
     }
 
     /**

@@ -3,6 +3,7 @@ package de.tum.cit.ase.bomberquest;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -15,6 +16,9 @@ import de.tum.cit.ase.bomberquest.screen.*;
 import games.spooky.gdx.nativefilechooser.NativeFileChooser;
 import games.spooky.gdx.nativefilechooser.NativeFileChooserCallback;
 import games.spooky.gdx.nativefilechooser.NativeFileChooserConfiguration;
+
+import java.io.File;
+import java.io.FilenameFilter;
 
 /**
  * The BomberQuestGame class represents the core of the Bomber Quest game.
@@ -266,6 +270,47 @@ public class BomberQuestGame extends Game {
             gameScreen = new GameScreen(this,"maps/map-1.properties");
         }
         this.setScreen(gameScreen);
+    }
+
+    public void loadGame() {
+        // Create a new configuration for the file chooser
+        NativeFileChooserConfiguration conf = new NativeFileChooserConfiguration();
+
+        // Set the directory to the local "maps" folder
+        conf.directory = Gdx.files.local("/maps");
+
+        // Set a name filter to only accept files ending with ".properties"
+        conf.nameFilter = new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String name) {
+                return name.endsWith(".properties");
+            }
+        };
+
+        // Set the title of the file chooser dialog
+        conf.title = "Choose map";
+
+        // Open the file chooser with the specified configuration
+        fileChooser.chooseFile(conf, new NativeFileChooserCallback() {
+            @Override
+            public void onFileChosen(FileHandle file) {
+                // Print the path of the chosen file
+                System.out.println(file.path());
+                // Create a new game screen with the chosen file path and set it as the current screen
+                gameScreen = new GameScreen(that, file.path());
+                setScreen(gameScreen);
+            }
+
+            @Override
+            public void onCancellation() {
+                // Handle cancellation (optional)
+            }
+
+            @Override
+            public void onError(Exception exception) {
+                // Handle error (optional)
+            }
+        });
     }
 
 

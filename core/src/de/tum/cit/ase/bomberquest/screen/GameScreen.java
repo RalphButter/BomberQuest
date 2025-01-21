@@ -67,6 +67,7 @@ public class GameScreen implements Screen {
     // Stage used for managing and rendering UI elements
     private final Stage stage;
 
+
     // Viewport used to handle the camera's view and manage the rendering area
     private Viewport viewport;
 
@@ -82,6 +83,7 @@ public class GameScreen implements Screen {
     // Camera that follows the player
     FollowCamera followCamera;
 
+
     //Player stats
     int score ;
     float time ;
@@ -89,9 +91,31 @@ public class GameScreen implements Screen {
     int keyCount; // TODO Needs to be set to 1 after all enemies are dead
 
 
+    // Label to display the player's current score
+    Label scoreLabel;
+    // Label to display the number of hearts (lives) the player has left
+    Label heartLabel;
+    // Label to display the remaining time in the game
+    Label timeLabel;
+    // Label to display the current bomb explosion radius
+    Label radiusLabel;
+    // Label to display the maximum number of bombs the player can place
+    Label maxBombLabel;
+    // Label to display the number of enemies remaining in the game
+    Label enemyCountLabel;
+    // Label to indicate whether the exit is locked or unlocked
+    Label exitUnlockLabel;
+
+
     //For the Pause Menu
     Table pauseMenu;
     boolean gamePause = false;
+
+    //Players initial values
+    int explodeRadius = 1;
+    int maxBomb = 1;
+    boolean canExit = false;
+
 
     public GameScreen(BomberQuestGame game, String mapPath) {
         this.game = game;
@@ -102,7 +126,6 @@ public class GameScreen implements Screen {
         // This line creates a new `Stage` object, which is used to manage and render UI elements in the game.
         stage = new Stage();
 
-        // viewport = new FillViewport(Gdx.graphics.getWidth(),Gdx.graphics.getHeight(),camera);
         // ExtendViewportPermalink
         viewport = new ScreenViewport(camera);
 
@@ -124,6 +147,10 @@ public class GameScreen implements Screen {
 
         //TODO GOOGLE HOW TO LOAD MAPPATH
     }
+
+
+
+
 
 
     @Override
@@ -149,6 +176,28 @@ public class GameScreen implements Screen {
             if(time < 0){
                 game.goToGameOverScreen(score,time);
                 return;
+            }
+
+            // Update the time label with the formatted time value
+            timeLabel.setText(String.format("%.0f", time));
+
+            // Update the radius label with the current bomb explosion radius
+            radiusLabel.setText("bomb radius: " + explodeRadius);
+            // Update the max bomb label with the current maximum number of bombs
+            maxBombLabel.setText("max bomb: " + maxBomb);
+            //TODO Score and heart label
+
+            // Update the enemy count label with the current number of enemies
+            enemyCountLabel.setText("enemies: " + countEnemy());
+
+            // Check if there are no enemies left
+            if (countEnemy() == 0) {
+                // Set the exit to be unlocked
+                canExit = true;
+                // Update the exit unlock label to indicate the exit is unlocked
+                exitUnlockLabel.setText("exit: unlocked!");
+                // TODO Change the color of the exit unlock label to green
+
             }
 
         }
