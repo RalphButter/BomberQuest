@@ -1,13 +1,12 @@
 package de.tum.cit.ase.bomberquest.screen;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -20,9 +19,11 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import de.tum.cit.ase.bomberquest.BomberQuestGame;
 import de.tum.cit.ase.bomberquest.Characters.Entity;
+import de.tum.cit.ase.bomberquest.MapManager.Map;
 import de.tum.cit.ase.bomberquest.MapManager.MapReader;
 import de.tum.cit.ase.bomberquest.gameobject.*;
 import de.tum.cit.ase.bomberquest.gameobject.MaxBombPU;
@@ -47,6 +48,7 @@ import de.tum.cit.ase.bomberquest.map.Chest;
 import de.tum.cit.ase.bomberquest.Characters.Enemy;
 import de.tum.cit.ase.bomberquest.Characters.Player;
 import com.badlogic.gdx.math.Rectangle;
+import de.tum.cit.ase.bomberquest.util.FollowCamera;
 import games.spooky.gdx.nativefilechooser.NativeFileChooser;
 import games.spooky.gdx.nativefilechooser.NativeFileChooserCallback;
 import games.spooky.gdx.nativefilechooser.NativeFileChooserConfiguration;
@@ -54,6 +56,7 @@ import games.spooky.gdx.nativefilechooser.NativeFileChooserConfiguration;
 import static de.tum.cit.ase.bomberquest.MapManager.MapParser.initializeMap;
 
 public class GameScreen implements Screen {
+    //Core components
     // Reference to the main game object
     private final BomberQuestGame game;
     // Camera used to control the view in the game
@@ -63,7 +66,20 @@ public class GameScreen implements Screen {
     // Stage used for managing and rendering UI elements
     private final Stage stage;
 
+    // Viewport used to handle the camera's view and manage the rendering area
+    private Viewport viewport;
 
+
+    // List to store all game entities
+    List<Entity> objects;
+    // Batch used for drawing 2D graphics
+    Batch batch;
+    // Map representing the game world
+    Map map;
+    // Player character in the game
+    Player player;
+    // Camera that follows the player
+    FollowCamera followCamera;
 
     public GameScreen(BomberQuestGame game, String mapPath) {
         this.game = game;
@@ -71,15 +87,48 @@ public class GameScreen implements Screen {
         camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         // Retrieve the font from the game's skin
         font = game.getSkin().getFont("font");
-        // Create a stage for UI elements
+        // This line creates a new `Stage` object, which is used to manage and render UI elements in the game.
         stage = new Stage();
+
+        // viewport = new FillViewport(Gdx.graphics.getWidth(),Gdx.graphics.getHeight(),camera);
+        // ExtendViewportPermalink
+        viewport = new ScreenViewport(camera);
+
+        batch = game.getSpriteBatch(); // Get the SpriteBatch from the game instance for rendering
+        map = new Map(mapPath, objects); // Create a new Map object with the specified map path and list of game entities
+        player = new Player(new Vector2(map.getEntryCell().col * 16, map.getEntryCell().row * 16)); // Create a new Player object at the map's entry cell position
+        //Initialize input processing for the game method
+        initInput();
+        followCamera = new FollowCamera(camera, map); // Create a FollowCamera to follow the player within the map
 
 
 
         //TODO GOOGLE HOW TO LOAD MAPPATH
     }
 
-    @Override
+
+    //TODO TEST NEEDED IF THIS WORKS!!!
+    void initInput() {
+        InputMultiplexer mixInput = new InputMultiplexer(); // Create an InputMultiplexer to handle multiple input processors
+        mixInput.addProcessor(stage); // Add the stage as an input processor to handle UI input
+        mixInput.addProcessor(new InputAdapter(){ // Add a new InputAdapter to handle player input
+            @Override
+            public boolean keyDown(int keycode) {
+                player.onKeyDown(keycode); // Call the player's onKeyDown method when a key is pressed
+                return super.keyDown(keycode); // Return the result of the superclass method
+            }
+
+            @Override
+            public boolean keyUp(int keycode) {
+                player.onKeyUp(keycode); // Call the player's onKeyUp method when a key is released
+                return super.keyUp(keycode); // Return the result of the superclass method
+            }
+        });
+        Gdx.input.setInputProcessor(mixInput); // Set the InputMultiplexer as the input processor for the game
+
+    }
+
+        @Override
     public void show() {
 
     }
