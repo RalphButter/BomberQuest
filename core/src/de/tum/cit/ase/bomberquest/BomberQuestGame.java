@@ -185,17 +185,6 @@ public class BomberQuestGame extends Game {
     }
 
     /**
-     * Switches to the game screen, disposing of the menu screen if it exists.
-     */
-    public void goToGame() {
-        if (gameScreen == null) {
-            //Yeah, I am gonna set default map 1 we can load the other over the load Menu part TODO CHECK IF LOAD WORKS
-            gameScreen = new GameScreen(this,"maps/map-1.properties");
-        }
-        this.setScreen(gameScreen);
-    }
-
-    /**
      * Switches to the given screen and disposes of the previous screen.
      * @param screen the new screen
      */
@@ -220,7 +209,7 @@ public class BomberQuestGame extends Game {
 
 
     /**
-     * Switches to the game over screen.
+     * Switches to the GameOver screen.
      *
      * @param score The player's score at the time of game over.
      * @param time The time elapsed in the game.
@@ -234,6 +223,33 @@ public class BomberQuestGame extends Game {
         // Set the current screen to the game over screen
         this.setScreen(gameOverScreen);
     }
+
+    /**
+     * Switches to the WinScreen, disposing of the menu screen if it exists.
+     */
+    public void goToVictoryScreen(int score, float time) {
+        // Check if the win screen is already created
+        if (winScreen == null) {
+            // Create a new win screen with the current score and time
+            winScreen = new WinScreen(this, score, time);
+        }
+        // Set the current screen to the win screen
+        this.setScreen(winScreen);
+    }
+
+    /**
+     * Switches to the game screen, disposing of the menu screen if it exists.
+     */
+    public void goToGame() {
+        if (gameScreen == null) {
+            //Yeah, I am gonna set default map 1 we can load the other over the load Menu part TODO CHECK IF LOAD WORKS
+            gameScreen = new GameScreen(this,"maps/map-1.properties");
+        }
+        this.setScreen(gameScreen);
+    }
+
+
+
 }
 
 
