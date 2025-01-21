@@ -257,7 +257,7 @@ public class Map {
     private void drawCell(Batch batch, GameObject gameObject, TextureRegion textureRegion){
         batch.draw(textureRegion, pos.x + gameObject.col * cellSize,pos.y + gameObject.row * cellSize,mapSheet.getWidth()/2,mapSheet.getHeight()/2,mapSheet.getWidth(),mapSheet.getHeight(),1,1,0);
     }
-
+//
 
 
 
