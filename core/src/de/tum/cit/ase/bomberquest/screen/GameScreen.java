@@ -209,6 +209,53 @@ public class GameScreen implements Screen {
 
 
 
+        // Create a table to hold the score information
+        Table scoreTable = new Table();
+        table.add(scoreTable).minHeight(10); // Add the score table to the main table with a minimum height
+        // Set the background of the score table to a stone texture
+        scoreTable.setBackground(new TextureRegionDrawable(new Texture("stone.png")));
+        // Create a label for the score text
+        Label label2 = new Label("Score: ", game.getSkin());
+        label2.setColor(Color.WHITE); // Set the color of the score text label to white
+        label2.setFontScale(0.6f); // Set the font scale of the score text label
+        // Create a label to display the player's current score
+        scoreLabel = new Label("3400", game.getSkin());
+        scoreLabel.setFontScale(0.6f); // Set the font scale of the score label
+        scoreLabel.setColor(Color.MAGENTA); // Set the color of the score label to magenta
+        // Add the score text label and score label to the score table with padding
+        scoreTable.add(label2).pad(10);
+        scoreTable.add(scoreLabel);
+
+// Create a table to hold the key information (bomb radius, max bombs, enemy count, and exit status)
+        Table keyTable = new Table();
+        table.add(keyTable).minHeight(10); // Add the key table to the main table with a minimum height
+
+// Set the background of the key table to a stone texture
+        keyTable.setBackground(new TextureRegionDrawable(new Texture("stone.png")));
+
+// Create a label to display the current bomb explosion radius
+        radiusLabel = new Label("bomb radius: " + explodeRadius, game.getSkin());
+        radiusLabel.setFontScale(0.6f); // Set the font scale of the radius label
+        radiusLabel.setColor(Color.WHITE); // Set the color of the radius label to white
+        keyTable.add(radiusLabel).pad(10); // Add the radius label to the key table with padding
+
+// Create a label to display the maximum number of bombs the player can place
+        maxBombLabel = new Label("max bomb: " + explodeRadius, game.getSkin());
+        maxBombLabel.setFontScale(0.6f); // Set the font scale of the max bomb label
+        maxBombLabel.setColor(Color.WHITE); // Set the color of the max bomb label to white
+        keyTable.add(maxBombLabel).pad(10); // Add the max bomb label to the key table with padding
+
+        // Create a label to display the number of enemies remaining in the game
+        enemyCountLabel = new Label("enemies: " + countEnemy(), game.getSkin());
+        enemyCountLabel.setFontScale(0.6f); // Set the font scale of the enemy count label
+        enemyCountLabel.setColor(Color.WHITE); // Set the color of the enemy count label to white
+        keyTable.add(enemyCountLabel).pad(10); // Add the enemy count label to the key table with padding
+
+        // Create a label to indicate whether the exit is locked or unlocked
+        exitUnlockLabel = new Label("exit: locked!", game.getSkin());
+        exitUnlockLabel.setFontScale(0.6f); // Set the font scale of the exit unlock label
+        exitUnlockLabel.setColor(Color.RED); // Set the color of the exit unlock label to red
+        keyTable.add(exitUnlockLabel).pad(10); // Add the exit unlock label to the key table with padding
     }
 
 

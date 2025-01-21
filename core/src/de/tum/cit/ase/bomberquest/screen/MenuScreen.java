@@ -54,7 +54,7 @@ public class MenuScreen implements Screen {
         stage.addActor(table); // Add the table to the stage
 
         // Add a label as a title
-        Label titleLabel = new Label("BomberMan", game.getSkin(), "title");
+        Label titleLabel = new Label("BomberQuest", game.getSkin(), "title");
         table.add(titleLabel).padBottom(80).row();
 
         // Create and add buttons
@@ -65,6 +65,7 @@ public class MenuScreen implements Screen {
 
         table.add(goToGameButton).width(300).row();
         table.add(loadGameButton).width(300).row();
+        table.add(creditsButton).width(300).row();
         table.add(exitButton).width(300).row();
 
         // Button listeners
@@ -78,6 +79,12 @@ public class MenuScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 game.loadGame(); // Change to the game screen when button is pressed
+            }
+        });
+        creditsButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.goToCreditsScreen(); // Change to the game screen when button is pressed
             }
         });
         exitButton.addListener(new ChangeListener() {
