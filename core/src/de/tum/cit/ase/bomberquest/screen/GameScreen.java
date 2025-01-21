@@ -150,12 +150,17 @@ public class GameScreen implements Screen {
 
     public GameScreen(BomberQuestGame game, String mapPath) {
         this.game = game;
+        objects = new ArrayList();
+
         // Create a new OrthographicCamera with the screen's width and height
         camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        // Retrieve the font from the game's skin
-        font = game.getSkin().getFont("font");
+        // ExtendViewportPermalink
+        viewport = new ScreenViewport(camera);
         // This line creates a new `Stage` object, which is used to manage and render UI elements in the game.
         stage = new Stage();
+
+        // Retrieve the font from the game's skin
+        font = game.getSkin().getFont("font");
 
         // ExtendViewportPermalink
         viewport = new ScreenViewport(camera);
@@ -166,6 +171,7 @@ public class GameScreen implements Screen {
         //Initialize input processing for the game method
         initInput();
         followCamera = new FollowCamera(camera, map); // Create a FollowCamera to follow the player within the map
+        spawnPU();
 
 
         score  = 0;
@@ -173,8 +179,6 @@ public class GameScreen implements Screen {
         heart = 3;
         keyCount = 0;
 
-        //WE need a Powerup Spawner. According to ChatGPT our map is max 200 big (TODO CHECK IN CASE OF ERROR)
-        spawnPU();
 
         createUI();
 
@@ -295,8 +299,6 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float v) {
-        //TODO implement createUI
-        // Check if the ESCAPE key was just pressed
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             // Toggle the game pause state
             gamePause = !gamePause; //Sets it to true if it is false and vice versa
@@ -422,7 +424,42 @@ public class GameScreen implements Screen {
             }
         }
 
+            // Draw the map and player
+            map.draw(batch, player);
+
+// Draw each entity within a certain distance from the player (fog of war)
+            for (Entity obj : objects) {
+                if (Vector2.dst(player.getPos().x, player.getPos().y, obj.getPos().x, obj.getPos().y) > 2000) { // fog of war
+                    continue;
+                }
+                obj.draw(batch);
+            }
+
+            // Draw the walls of the map
+            map.drawWall(batch, player);
+
+            // Draw the player
+            player.draw(batch);
+
+            // Update the stage with a maximum delta time of 1/30th of a second
+            stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+
+            // Draw the stage
+            stage.draw();
+            // debug
+//        Utils.getInstance().drawRect(player.getRect(),camera);
+//        for(int row = 0; row < map.getRows();row++) {
+//            for (int col = 0; col < map.getCols(); col++) {
+//                Cell cell = map.getCell(row,col);
+//                Utils.getInstance().drawRect(cell.getRect(),camera);
+//            }
+//        }
+
+            viewport.apply(false);
+
     }
+
+
     }
 
 

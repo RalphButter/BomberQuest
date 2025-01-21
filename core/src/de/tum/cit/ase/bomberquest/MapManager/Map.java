@@ -299,6 +299,37 @@ public class Map {
                 mapSheet.getWidth(), mapSheet.getHeight(), 1, 1, 0);
     }
 
+
+
+    // Draw destructible walls within a certain distance from the player
+    public void drawWall(Batch batch, Player player) {
+        batch.begin();
+
+        // Iterate through each row in the grid
+        for (int row = 0; row < rows; row++) {
+            // Iterate through each column in the current row
+            for (int col = 0; col < cols; col++) {
+                GameObject gameObject = grid[row][col];
+                // Check if the game object is within a certain distance from the player
+                if (Vector2.dst(player.pos.x, player.pos.y, gameObject.col * 16, gameObject.row * 16) > 1500) {
+                    continue;
+                }
+
+                // Check if the cell type is not null
+                if (gameObject.cellType != null) {
+                    // Draw the destructible wall
+                    switch (gameObject.cellType) {
+                        case DESTRUCTIBLE_WALL:
+                            drawCell(batch, gameObject, mapSheet.getTexture(15));
+                            break;
+                    }
+                }
+            }
+        }
+
+        batch.end();
+    }
+
     public GameObject getEntryCell(){
         return entryGameObject;
     }
