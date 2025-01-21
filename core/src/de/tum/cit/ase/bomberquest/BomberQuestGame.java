@@ -186,11 +186,11 @@ public class BomberQuestGame extends Game {
      * Switches to the game screen, disposing of the menu screen if it exists.
      */
     public void goToGame() {
-        this.setScreen(new GameScreen(this)); // Set the current screen to GameScreen
-        if (menuScreen != null) {
-            menuScreen.dispose(); // Dispose the menu screen if it exists
-            menuScreen = null;
+        if (gameScreen == null) {
+            //Yeah, I am gonna set default map 1 we can load the other over the load Menu part TODO CHECK IF LOAD WORKS
+            gameScreen = new GameScreen(this,"maps/map-1.properties");
         }
+        this.setScreen(gameScreen);
     }
 
     /**
