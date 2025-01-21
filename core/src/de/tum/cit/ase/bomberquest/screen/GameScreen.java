@@ -17,6 +17,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -87,6 +88,11 @@ public class GameScreen implements Screen {
     int heart;
     int keyCount; // TODO Needs to be set to 1 after all enemies are dead
 
+
+    //For the Pause Menu
+    Table pauseMenu;
+    boolean gamePause = false;
+
     public GameScreen(BomberQuestGame game, String mapPath) {
         this.game = game;
         // Create a new OrthographicCamera with the screen's width and height
@@ -113,8 +119,28 @@ public class GameScreen implements Screen {
         heart = 3;
         keyCount = 0;
 
+        //WE need a Powerup Spawner. According to ChatGPT our map is max 200 big (TODO CHECK IN CASE OF ERROR)
+        spawnPU();
 
         //TODO GOOGLE HOW TO LOAD MAPPATH
+    }
+
+
+    @Override
+    public void render(float v) {
+        //TODO implement createUI
+        // Check if the ESCAPE key was just pressed
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            // Toggle the game pause state
+            gamePause = !gamePause; //Sets it to true if it is false and vice versa
+            // Show the pause menu based on the game pause state (if true it shows the menu, if false it hides it)
+            pauseMenu.setVisible(gamePause);
+        }
+        // Clear the screen with a black color
+        ScreenUtils.clear(0, 0, 0, 1);
+
+
+
     }
 
 
@@ -152,6 +178,20 @@ public class GameScreen implements Screen {
         return count;
     }
 
+
+
+
+    void spawnPU(){
+        // Get a random empty cell from the map
+        GameObject emptyGameObject = map.getRandomEmptyCell();
+
+        // Ensure the empty cell is within 200 units from the player's position
+        while (Vector2.dst(player.getPos().x, player.getPos().y, emptyGameObject.col * 16, emptyGameObject.row * 16) > 200) {
+            emptyGameObject = map.getRandomEmptyCell();
+        }
+    }
+
+
     int countBomb(){
         int count = 0;
         for (Entity obj : objects){
@@ -167,10 +207,7 @@ public class GameScreen implements Screen {
 
     }
 
-    @Override
-    public void render(float v) {
 
-    }
 
     @Override
     public void resize(int i, int i1) {
