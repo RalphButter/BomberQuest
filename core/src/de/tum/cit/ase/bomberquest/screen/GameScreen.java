@@ -81,6 +81,12 @@ public class GameScreen implements Screen {
     // Camera that follows the player
     FollowCamera followCamera;
 
+    //Player stats
+    int score ;
+    float time ;
+    int heart;
+    int keyCount; // TODO Needs to be set to 1 after all enemies are dead
+
     public GameScreen(BomberQuestGame game, String mapPath) {
         this.game = game;
         // Create a new OrthographicCamera with the screen's width and height
@@ -101,6 +107,11 @@ public class GameScreen implements Screen {
         initInput();
         followCamera = new FollowCamera(camera, map); // Create a FollowCamera to follow the player within the map
 
+
+        score  = 0;
+        time = 300;
+        heart = 3;
+        keyCount = 0;
 
 
         //TODO GOOGLE HOW TO LOAD MAPPATH
