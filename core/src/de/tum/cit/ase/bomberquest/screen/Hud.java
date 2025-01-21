@@ -20,6 +20,8 @@ import de.tum.cit.ase.bomberquest.Characters.Player;
  * A Heads-Up Display (HUD) that displays information on the screen.
  * It uses a separate camera so that it is always fixed on the screen.
  */
+
+//THIS CLASS WILL BE UNECESSARY WHEN MOVED INTO GAMESCREEN (AS WE DISCUSSED)
 public class Hud {
     
     /** The SpriteBatch used to draw the HUD. This is the same as the one used in the GameScreen. */
@@ -146,7 +148,7 @@ public class Hud {
         labelTime.setText(String.format("Time: %03d", displayTime));
 
         // Update the blast radius label with the current blast radius
-        labelBlastRadius.setText("Blast Radius: " + blast.getBlastRadius());
+        //labelBlastRadius.setText("Blast Radius: " + blast.getBlastRadius());
         // Update the concurrent bombs label with the current number of concurrent bombs
         labelConcurrentBombs.setText("Concurrent Bombs: " + player.getConcurrentBombs());
         // Update the remaining enemies label with the current number of remaining enemies

@@ -91,6 +91,7 @@ public class GameScreen implements Screen {
     private final World world;
     private List<String> mapLines; // Declare mapLines
 
+    //TODO I would implement the HUD here and
     public GameScreen(BomberQuestGame game) {
         this.game = game;
         this.spriteBatch = game.getSpriteBatch();
