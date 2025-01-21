@@ -178,8 +178,6 @@ public class GameScreen implements Screen {
         time = 300;
         heart = 3;
         keyCount = 0;
-
-
         createUI();
 
     }
@@ -219,6 +217,10 @@ public class GameScreen implements Screen {
         // Set the background of the score table to a stone texture
         scoreTable.setBackground(new TextureRegionDrawable(new Texture("stone.png")));
         // Create a label for the score text
+
+        Label label3 = new Label("Time:",game.getSkin());
+        timeLabel = new Label("120s",game.getSkin());
+
         Label label2 = new Label("Score: ", game.getSkin());
         label2.setColor(Color.WHITE); // Set the color of the score text label to white
         label2.setFontScale(0.6f); // Set the font scale of the score text label
@@ -327,7 +329,7 @@ public class GameScreen implements Screen {
             }
 
             // Update the time label with the formatted time value
-            timeLabel.setText(String.format("%.0f", time));
+            timeLabel.setText(String.format("%.0f",time) );
             // Update the radius label with the current bomb explosion radius
             radiusLabel.setText("bomb radius: " + explodeRadius);
             // Update the max bomb label with the current maximum number of bombs
