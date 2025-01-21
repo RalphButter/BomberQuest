@@ -12,7 +12,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import de.tum.cit.ase.bomberquest.audio.MusicTrack;
 import de.tum.cit.ase.bomberquest.map.GameMap;
+import de.tum.cit.ase.bomberquest.screen.GameScreen;
 import de.tum.cit.ase.bomberquest.screen.*;
+import de.tum.cit.ase.bomberquest.screen.WinScreen;
+import de.tum.cit.ase.bomberquest.screen.MenuScreen;
 import games.spooky.gdx.nativefilechooser.NativeFileChooser;
 import games.spooky.gdx.nativefilechooser.NativeFileChooserCallback;
 import games.spooky.gdx.nativefilechooser.NativeFileChooserConfiguration;
@@ -67,7 +70,9 @@ public class BomberQuestGame extends Game {
      * @param fileChooser The file chooser for the game, typically used in desktop environment.
      */
     public BomberQuestGame(NativeFileChooser fileChooser) {
+        super();
         this.fileChooser = fileChooser;
+        that = this;
     }
 
     /**
@@ -82,28 +87,7 @@ public class BomberQuestGame extends Game {
         skin = new Skin(Gdx.files.internal("skin/craftacular/craftacular-ui.json")); // Load UI skin
         this.loadCharacterAnimation(); // Load character animation
         //MusicTrack.BACKGROUND.play(); // Play some background music
-        //goToMenu(); // Navigate to the menu screen
-    }
-
-    /**
-     * Loads the character animation from the character.png file.
-     */
-    private void loadCharacterAnimation() {
-        Texture walkSheet = new Texture(Gdx.files.internal("character.png"));
-
-        int frameWidth = 16;
-        int frameHeight = 32;
-        int animationFrames = 4; //TODO I am not sure here check if it is correct
-
-        // libGDX internal Array instead of ArrayList because of performance
-        Array<TextureRegion> walkFrames = new Array<>(TextureRegion.class);
-
-        // Add all frames to the animation
-        for (int col = 0; col < animationFrames; col++) {
-            walkFrames.add(new TextureRegion(walkSheet, col * frameWidth, 0, frameWidth, frameHeight));
-        }
-
-        characterDownAnimation = new Animation<>(0.1f, walkFrames);
+        goToMenu(); // Navigate to the menu screen
     }
 
     /**
@@ -111,7 +95,10 @@ public class BomberQuestGame extends Game {
      */
     public void goToMenu() {
         this.setScreen(new MenuScreen(this)); // Set the current screen to MenuScreen
-        // No need to dispose here; it's handled in the overridden setScreen method
+        if (gameScreen != null) {
+            gameScreen.dispose(); // Dispose the game screen if it exists
+            gameScreen = null;
+        }
     }
 
     /** Returns the skin for UI elements. */
@@ -313,6 +300,28 @@ public class BomberQuestGame extends Game {
         });
     }
 
+
+    /**
+     * Loads the character animation from the character.png file.
+     */
+    private void loadCharacterAnimation() {
+        System.out.println("Working Directory: " + new File(".").getAbsolutePath());
+        Texture walkSheet = new Texture(Gdx.files.internal("character.png"));
+
+        int frameWidth = 16;
+        int frameHeight = 32;
+        int animationFrames = 4; //TODO I am not sure here check if it is correct
+
+        // libGDX internal Array instead of ArrayList because of performance
+        Array<TextureRegion> walkFrames = new Array<>(TextureRegion.class);
+
+        // Add all frames to the animation
+        for (int col = 0; col < animationFrames; col++) {
+            walkFrames.add(new TextureRegion(walkSheet, col * frameWidth, 0, frameWidth, frameHeight));
+        }
+
+        characterDownAnimation = new Animation<>(0.1f, walkFrames);
+    }
 
 
 }

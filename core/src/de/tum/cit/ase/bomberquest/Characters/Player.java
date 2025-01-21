@@ -29,10 +29,10 @@ import java.util.List;
  */
 public class Player extends Entity {
 
-    boolean onGround = false; // Indicates if the player is on the ground
+    //boolean onGround = false; // Indicates if the player is on the ground. There isn't time to implement this :(
     float speed; // Movement speed of the player
     boolean dead = false; // Tracks if the player is dead
-    boolean jumping = false; // Indicates if the player is jumping
+    //boolean jumping = false; // Indicates if the player is jumping. There isn't time to implement this :(
 
     // Sprite sheets for different movement directions
     SpriteSheet walkSheet_down;

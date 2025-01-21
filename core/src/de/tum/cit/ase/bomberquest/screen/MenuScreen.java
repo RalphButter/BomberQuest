@@ -104,6 +104,7 @@ public class MenuScreen implements Screen {
      */
     @Override
     public void render(float delta) {
+        //TODO CHECK NECESSITY Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); Instead of the following line
         ScreenUtils.clear(Color.BLACK); // Clear the screen
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f)); // Update the stage
         stage.draw(); // Draw the stage

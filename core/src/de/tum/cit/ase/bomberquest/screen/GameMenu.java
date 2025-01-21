@@ -42,7 +42,8 @@ public class GameMenu implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 game.setScreen(gameScreen);
-                gameScreen.setPaused(false);
+                //I don't think we will need this class but I keep the code here just in case
+                //gameScreen.setPaused(false);
             }
         });
         table.add(continueButton).width(300).padTop(20).row();

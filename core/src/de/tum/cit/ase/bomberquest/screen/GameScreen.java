@@ -226,20 +226,20 @@ public class GameScreen implements Screen {
         scoreTable.add(label2).pad(10);
         scoreTable.add(scoreLabel);
 
-// Create a table to hold the key information (bomb radius, max bombs, enemy count, and exit status)
+        // Create a table to hold the key information (bomb radius, max bombs, enemy count, and exit status)
         Table keyTable = new Table();
         table.add(keyTable).minHeight(10); // Add the key table to the main table with a minimum height
 
-// Set the background of the key table to a stone texture
+        // Set the background of the key table to a stone texture
         keyTable.setBackground(new TextureRegionDrawable(new Texture("stone.png")));
 
-// Create a label to display the current bomb explosion radius
+        // Create a label to display the current bomb explosion radius
         radiusLabel = new Label("bomb radius: " + explodeRadius, game.getSkin());
         radiusLabel.setFontScale(0.6f); // Set the font scale of the radius label
         radiusLabel.setColor(Color.WHITE); // Set the color of the radius label to white
         keyTable.add(radiusLabel).pad(10); // Add the radius label to the key table with padding
 
-// Create a label to display the maximum number of bombs the player can place
+        // Create a label to display the maximum number of bombs the player can place
         maxBombLabel = new Label("max bomb: " + explodeRadius, game.getSkin());
         maxBombLabel.setFontScale(0.6f); // Set the font scale of the max bomb label
         maxBombLabel.setColor(Color.WHITE); // Set the color of the max bomb label to white
@@ -256,6 +256,39 @@ public class GameScreen implements Screen {
         exitUnlockLabel.setFontScale(0.6f); // Set the font scale of the exit unlock label
         exitUnlockLabel.setColor(Color.RED); // Set the color of the exit unlock label to red
         keyTable.add(exitUnlockLabel).pad(10); // Add the exit unlock label to the key table with padding
+
+
+        //ADDED FUNCTION SO WHEN YOU CLICK ESC THE GAME PAUSES AND YOU CAN SELECT THE MENU OR Another Level
+        // Create a table for the pause menu
+        pauseMenu = new Table();
+        pauseMenu.setFillParent(true); // Make the pause menu table fill the stage
+        // Add a label to the pause menu with a message
+        pauseMenu.add(new Label("Pause. Press 'ESC' to continue!", game.getSkin())).padBottom(20).row();
+        // Create and add a button to load the game
+        TextButton loadBtn = new TextButton("Load", game.getSkin());
+        pauseMenu.add(loadBtn).width(200).row(); // Add the load button to the pause menu with a specified width
+        loadBtn.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.loadGame(); // Load the game when the button is pressed
+            }
+        });
+        // Create and add a button to exit to the menu
+        TextButton gotoMenuBtn = new TextButton("Exit", game.getSkin());
+        pauseMenu.add(gotoMenuBtn).width(200).row(); // Add the exit button to the pause menu with a specified width
+        gotoMenuBtn.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.goToMenu(); // Go to the menu when the button is pressed
+            }
+        });
+        // Initially hide the pause menu
+        pauseMenu.setVisible(false);
+        // Add the pause menu to the stage
+        stage.addActor(pauseMenu);
+        // Play the game music
+        Manager.getInstance().soundsManager.playGameMusic();
+
     }
 
 
@@ -279,7 +312,13 @@ public class GameScreen implements Screen {
         batch.setProjectionMatrix(viewport.getCamera().combined);
 
         if(!gamePause) {
+            // Create a list to hold newly added entities
+            List<Entity> addedObjects = new ArrayList<>();
 
+            followCamera.follow(player.getPos());
+
+            // update time,score,heart
+            time -= v;
             if(time < 0){
                 game.goToGameOverScreen(score,time);
                 return;
@@ -287,13 +326,13 @@ public class GameScreen implements Screen {
 
             // Update the time label with the formatted time value
             timeLabel.setText(String.format("%.0f", time));
-
             // Update the radius label with the current bomb explosion radius
             radiusLabel.setText("bomb radius: " + explodeRadius);
             // Update the max bomb label with the current maximum number of bombs
             maxBombLabel.setText("max bomb: " + maxBomb);
-            //TODO Score and heart label
-
+            //core and heart label
+            scoreLabel.setText(score);
+            heartLabel.setText(heart);
             // Update the enemy count label with the current number of enemies
             enemyCountLabel.setText("enemies: " + countEnemy());
 
@@ -303,22 +342,87 @@ public class GameScreen implements Screen {
                 canExit = true;
                 // Update the exit unlock label to indicate the exit is unlocked
                 exitUnlockLabel.setText("exit: unlocked!");
-                // TODO Change the color of the exit unlock label to green
-
+                // Change the color of the exit unlock label to green
+                exitUnlockLabel.setColor(Color.GREEN);
             }
 
+            // Update the player's state and position based on the map
+            player.update(map);
+            // Check if the player can place more bombs
+            if(countBomb() < maxBomb){
+                player.shoot(addedObjects); // Player shoots (places a bomb) if allowed
+            } else {
+                player.shooting = false; // Disable shooting if the max bomb limit is reached
+            }
+            // Update the state of all existing entities in the game
+            for(Entity obj : objects){
+                obj.update();
+            }
+
+
+        // Check for collisions between the player and other objects
+        for(Entity obj : objects){
+            if(obj instanceof Enemy && obj.getRect().collide(player.getRect())){
+                // If the player collides with an enemy, the player dies
+                playerDie();
+            }
+            else if(obj instanceof Exit && obj.getRect().collide(player.getRect())){
+                // If the player collides with the exit and can exit, go to the victory screen
+                if(canExit){
+                    score += 100;
+                    game.goToVictoryScreen(score, time);
+                }
+            }
+            else if(obj instanceof MaxRadiusPU && obj.getRect().collide(player.getRect())){
+                // If the player collides with a MaxRadiusPU, increase the explosion radius
+                obj.destroyFlag = true;
+                score += 50;
+                explodeRadius += 1;
+                if(explodeRadius > 8){
+                    explodeRadius = 8;
+                }
+                Manager.getInstance().soundsManager.play("item", 1.0f);
+            }
+            else if(obj instanceof MaxBombPU && obj.getRect().collide(player.getRect())){
+                // If the player collides with a MaxBombPU, increase the maximum number of bombs
+                obj.destroyFlag = true;
+                score += 50;
+                maxBomb += 1;
+                if(maxBomb > 8){
+                    maxBomb = 8;
+                }
+                Manager.getInstance().soundsManager.play("item", 1.0f);
+            }
         }
 
         // Check for collisions between objects
         for(Entity obj : objects){
             for(Entity otherObj: objects){
                 if(obj == otherObj){
-                    continue; // Skip if the objects are the same
+                    continue; // Skip checking collision with itself
                 }
-                // Additional collision logic can be added here
+                // Add collision handling logic here if needed
             }
         }
 
+        // Handle bomb explosions
+        for(Entity obj : objects){
+            if(obj instanceof Bombs && obj.destroyFlag){
+                explode((Bombs) obj, addedObjects); // Explode the bomb and add resulting objects
+            }
+        }
+
+        // Add newly created objects to the main objects list
+        objects.addAll(addedObjects);
+
+        // Remove objects that are marked for destruction
+        for(int i = 0; i < objects.size(); i++){
+            if(objects.get(i).destroyFlag){
+                objects.remove(i);
+            }
+        }
+
+    }
     }
 
 
@@ -343,9 +447,77 @@ public class GameScreen implements Screen {
 
     }
 
+    public void explode(Bombs bomb,List<Entity> addedObjects) {
+        // Get the bomb's position and radius
+        Vector2 bombPosition = bomb.getPos();
+        int explosionRadius = explodeRadius; // Use the current explosion radius
+
+        // Calculate the grid coordinates of the bomb
+        int bombRow = (int)(bombPosition.y / 16);
+        int bombCol = (int)(bombPosition.x / 16);
+
+        // List to store game objects affected by the explosion
+        List<GameObject> explosionGameObjects = new ArrayList<>();
+
+        // Iterate through the grid cells within the explosion radius
+        int[][] directions = {
+                {0, 1},  // Right
+                {0, -1}, // Left
+                {1, 0},  // Down
+                {-1, 0},  // Up,
+                {0,0} // center
+        };
 
 
-    int countEnemy(){
+        // Check each direction for the explosion
+        for (int[] dir : directions) {
+            for (int i = 1; i <= explosionRadius; i++) {
+                int row = bombRow + dir[0] * i;
+                int col = bombCol + dir[1] * i;
+                Manager.getInstance().soundsManager.play("boom", 1.0f); // Play explosion sound
+
+                // Check if the cell is within the grid boundaries
+                if (row >= 0 && row < map.getRows() && col >= 0 && col < map.getCols()) {
+                    GameObject gameObject = map.getCell(row, col);
+
+                    explosionGameObjects.add(gameObject); // Add the game object to the explosion list
+                    addedObjects.add(new Blast(new Vector2(gameObject.col * 16 - 4, gameObject.row * 16 - 8))); // Add blast effect
+
+                    // Remove destructible walls and stop explosion if an indestructible wall is hit
+                    if (gameObject.cellType == CellType.DESTRUCTIBLE_WALL) {
+                        gameObject.cellType = null;
+                        score += 10;
+                    } else if (gameObject.cellType == CellType.INDESTRUCTIBLE_WALL) {
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Check if the explosion hits the player
+        for (GameObject gameObject : explosionGameObjects) {
+            if (gameObject.getRect().collide(player.getRect())) {
+                playerDie();
+                return;
+            }
+        }
+
+        // Check if the explosion hits any enemies
+        for (Entity obj : objects) {
+            for (GameObject gameObject : explosionGameObjects) {
+                if (obj instanceof Enemy) {
+                    if (gameObject.getRect().collide(obj.getRect())) {
+                        obj.destroyFlag = true;
+                    }
+                }
+            }
+        }
+    }
+
+
+
+
+        int countEnemy(){
         int count = 0;
         for (Entity obj : objects){
             //TODO IN CASE OF ERROR IF ENEMY IS CORRECT
@@ -366,6 +538,22 @@ public class GameScreen implements Screen {
         // Ensure the empty cell is within 200 units from the player's position
         while (Vector2.dst(player.getPos().x, player.getPos().y, emptyGameObject.col * 16, emptyGameObject.row * 16) > 200) {
             emptyGameObject = map.getRandomEmptyCell();
+        }
+    }
+
+
+
+    // Handle the player's death
+    void playerDie(){
+        heart--; // Decrease the player's heart count
+        // Get the entry cell of the map and set the player's position to the entry point
+        GameObject entryGameObject = map.getEntryCell();
+        player.setPos(new Vector2(entryGameObject.col * 16, entryGameObject.row * 16));
+        // Play the death sound effect
+        Manager.getInstance().soundsManager.play("death", 1.0f);
+        // If the player has no hearts left, go to the game over screen
+        if(heart <= 0){
+            game.goToGameOverScreen(score, time);
         }
     }
 
