@@ -8,6 +8,8 @@ package de.tum.cit.ase.bomberquest.MapManager;
 //TODO ES müssen evtl. die anderen Klassen, die mit Gamobject zu tun haben auch geändert werden.
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import de.tum.cit.ase.bomberquest.Characters.Enemy;
 import de.tum.cit.ase.bomberquest.Characters.Entity;
@@ -246,6 +248,14 @@ public class Map {
         }
         pos = new Vector2( 0,0);
 
+    }
+
+    public void chasePlayer(Vector2 playerPos){
+
+    }
+
+    private void drawCell(Batch batch, GameObject gameObject, TextureRegion textureRegion){
+        batch.draw(textureRegion, pos.x + gameObject.col * cellSize,pos.y + gameObject.row * cellSize,mapSheet.getWidth()/2,mapSheet.getHeight()/2,mapSheet.getWidth(),mapSheet.getHeight(),1,1,0);
     }
 
 
