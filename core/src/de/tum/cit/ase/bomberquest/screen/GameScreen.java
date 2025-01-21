@@ -139,6 +139,29 @@ public class GameScreen implements Screen {
 
     }
 
+
+
+    int countEnemy(){
+        int count = 0;
+        for (Entity obj : objects){
+            //TODO IN CASE OF ERROR IF ENEMY IS CORRECT
+            if(obj instanceof Enemy){
+                count++;
+            }
+        }
+        return count;
+    }
+
+    int countBomb(){
+        int count = 0;
+        for (Entity obj : objects){
+            if(obj instanceof Bombs){
+                count++;
+            }
+        }
+        return count;
+    }
+
         @Override
     public void show() {
 
