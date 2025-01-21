@@ -24,19 +24,14 @@ public Rectangle(float x, float y, float w, float h) {
      * @return True if the rectangles collide, false otherwise
      */
     public boolean collide(Rectangle b) {
-        // Assign the current rectangle to a local variable
         Rectangle rectangle = this;
-        // Assign the input rectangle to a local variable
         Rectangle r = b;
-
-        // Check if the rectangles overlap on the x and y axes
-        if (r.x < rectangle.x + rectangle.w && // r's left edge is to the left of rectangle's right edge
-                r.x + r.w > rectangle.x &&         // r's right edge is to the right of rectangle's left edge
-                r.y < rectangle.y + rectangle.h && // r's top edge is above rectangle's bottom edge
-                r.h + r.y > rectangle.y) {         // r's bottom edge is below rectangle's top edge
-            return true; // Rectangles collide
+        if (r.x < rectangle.x + rectangle.w &&
+                r.x + r.w > rectangle.x &&
+                r.y < rectangle.y + rectangle.h &&
+                r.h + r.y > rectangle.y) {
+            return true;
         }
-
-        return false; // Rectangles do not collide
+        return false;
     }
 }
