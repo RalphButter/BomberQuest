@@ -3,8 +3,12 @@ package de.tum.cit.ase.bomberquest;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.Array;
 import de.tum.cit.ase.bomberquest.audio.MusicTrack;
 import de.tum.cit.ase.bomberquest.map.GameMap;
 import de.tum.cit.ase.bomberquest.screen.*;
@@ -33,12 +37,16 @@ public class BomberQuestGame extends Game {
     /** The game's UI skin. This is used to style the game's UI elements. */
     private Skin skin;
 
+    // Character animation downwards
+    private Animation<TextureRegion> characterDownAnimation;
+    NativeFileChooser fileChooser;
+    BomberQuestGame that;
+
     /**
      * The file chooser for loading map files from the user's computer.
      * This will give you access to a {@link com.badlogic.gdx.files.FileHandle} object,
      * which you can use to read the contents of the map file as a String, and then parse it into a {@link GameMap}.
      */
-    private final NativeFileChooser fileChooser;
     private String filePath;
 
 
@@ -67,10 +75,31 @@ public class BomberQuestGame extends Game {
     @Override
     public void create() {
         this.spriteBatch = new SpriteBatch(); // Create SpriteBatch for rendering
-        this.skin = new Skin(Gdx.files.internal("skin/craftacular/craftacular-ui.json")); // Load UI skin
-        this.map = new GameMap(this); // Create a new game map (you should change this to load the map from a file instead)
-        MusicTrack.BACKGROUND.play(); // Play some background music
-        goToMenu(); // Navigate to the menu screen
+        skin = new Skin(Gdx.files.internal("skin/craftacular/craftacular-ui.json")); // Load UI skin
+        this.loadCharacterAnimation(); // Load character animation
+        //MusicTrack.BACKGROUND.play(); // Play some background music
+        //goToMenu(); // Navigate to the menu screen
+    }
+
+    /**
+     * Loads the character animation from the character.png file.
+     */
+    private void loadCharacterAnimation() {
+        Texture walkSheet = new Texture(Gdx.files.internal("character.png"));
+
+        int frameWidth = 16;
+        int frameHeight = 32;
+        int animationFrames = 4; //TODO I am not sure here check if it is correct
+
+        // libGDX internal Array instead of ArrayList because of performance
+        Array<TextureRegion> walkFrames = new Array<>(TextureRegion.class);
+
+        // Add all frames to the animation
+        for (int col = 0; col < animationFrames; col++) {
+            walkFrames.add(new TextureRegion(walkSheet, col * frameWidth, 0, frameWidth, frameHeight));
+        }
+
+        characterDownAnimation = new Animation<>(0.1f, walkFrames);
     }
 
     /**
@@ -125,16 +154,7 @@ public class BomberQuestGame extends Game {
         // No need to dispose here; it's handled in the overridden setScreen method
     }
 
-    /**
-     * Called when the player loses all lives. Switches to the GameOver screen.
-     */
-    public void gameOver(int score,float time) {
-        //Necessary to be safe
-        if (gameOverScreen == null) {
-            gameOverScreen = new GameOverScreen(this,score,time);
-        }
-        this.setScreen(gameOverScreen); //Necessary to switch to gameOverScreen
-    }
+
 
     /**
      * Opens a file chooser dialog to select a file from the "maps" directory.
@@ -265,3 +285,14 @@ public class BomberQuestGame extends Game {
 public void goToGame() {
     this.setScreen(new GameScreen(this)); // Set the current screen to GameScreen
 }*/
+
+/**
+ * Called when the player loses all lives. Switches to the GameOver screen.
+ */
+//public void gameOver(int score,float time) {
+//    //Necessary to be safe
+//    if (gameOverScreen == null) {
+//        gameOverScreen = new GameOverScreen(this,score,time);
+//    }
+//    this.setScreen(gameOverScreen); //Necessary to switch to gameOverScreen
+//}
