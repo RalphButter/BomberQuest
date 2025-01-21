@@ -6,6 +6,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -18,6 +19,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -55,6 +57,35 @@ import games.spooky.gdx.nativefilechooser.NativeFileChooserCallback;
 import games.spooky.gdx.nativefilechooser.NativeFileChooserConfiguration;
 
 import static de.tum.cit.ase.bomberquest.MapManager.MapParser.initializeMap;
+//I have to import this for the heart image
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.*;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
+import de.tum.cit.ase.bomberquest.BomberQuestGame;
+import de.tum.cit.ase.bomberquest.MapManager.Map;
+import de.tum.cit.ase.bomberquest.Characters.Player;
+import de.tum.cit.ase.bomberquest.util.FollowCamera;
+import de.tum.cit.ase.bomberquest.util.Manager;
+
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class GameScreen implements Screen {
     //Core components
@@ -145,11 +176,40 @@ public class GameScreen implements Screen {
         //WE need a Powerup Spawner. According to ChatGPT our map is max 200 big (TODO CHECK IN CASE OF ERROR)
         spawnPU();
 
-        //TODO GOOGLE HOW TO LOAD MAPPATH
+        createUI();
+
     }
 
+    /**
+     * Creates and sets up the user interface (UI) elements for the game screen.
+     * This includes labels for displaying game statistics such as score, time, hearts, bomb radius, max bombs, and enemy count.
+     * It also sets up the pause menu with options to load a game or exit to the menu.
+     */
+    void createUI(){
+        Table table = new Table(); // Create a table for layout
+        table.setFillParent(true); // Make the table fill the stage
+        stage.addActor(table); // Add the table to the stage
+
+        table.center().bottom();
 
 
+        // Create a table to hold the heart (lives) information
+        Table heartTable = new Table();
+        table.add(heartTable).minHeight(10); // Add the heart table to the main table with a minimum height
+        // Set the background of the heart table to a stone texture
+        heartTable.setBackground(new TextureRegionDrawable(new Texture("stone.png")));
+        // Create an image for the heart icon
+        Image hearthImg = new Image(new Texture("heart.png"));
+        // Create a label to display the number of hearts (lives) the player has
+        heartLabel = new Label("1", game.getSkin());
+        heartLabel.setColor(Color.RED); // Set the color of the heart label to red
+        // Add the heart label and heart image to the heart table with padding
+        heartTable.add(heartLabel).pad(10);
+        heartTable.add(hearthImg);
+
+
+
+    }
 
 
 
