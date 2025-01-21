@@ -118,6 +118,27 @@ public class SpriteSheet {
     }
 
 
+    /**
+     * Plays the animation by updating the current frame based on the elapsed time.
+     * This method increments the countTime variable by the time elapsed since the last frame.
+     * If the countTime exceeds the specified time for each frame, the current frame is updated.
+     * If the animation reaches the end and loop is true, it restarts from the beginning.
+     * If loop is false, the animation stops at the last frame.
+     */
+    public void play() {
+        countTime += Gdx.graphics.getDeltaTime();
+        if(countTime >= time) {
+            countTime = 0;
+            current++;
+            if(current > to && loop) {
+                current = from;
+            }
+            else if(current > to && !loop){
+                current = to;
+            }
+        }
+
+    }
     public void draw(Batch batch,Vector2 pos,float scaleX,float scaleY){
         batch.draw(frames[current], pos.x, pos.y,width/2,height/2,width,height,scaleX,scaleY,0);
     }
@@ -213,5 +234,10 @@ public class SpriteSheet {
 
     public void setHeight(int height) {
         this.height = height;
+    }
+
+    void dispose()
+    {
+        texture.dispose();
     }
 }
