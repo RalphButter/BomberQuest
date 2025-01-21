@@ -150,7 +150,7 @@ public class Hud {
         // Update the blast radius label with the current blast radius
         //labelBlastRadius.setText("Blast Radius: " + blast.getBlastRadius());
         // Update the concurrent bombs label with the current number of concurrent bombs
-        labelConcurrentBombs.setText("Concurrent Bombs: " + player.getConcurrentBombs());
+//        labelConcurrentBombs.setText("Concurrent Bombs: " + player.getConcurrentBombs());
         // Update the remaining enemies label with the current number of remaining enemies
         labelRemainingEnemies.setText("Enemies: " + remainingEnemies);
 
