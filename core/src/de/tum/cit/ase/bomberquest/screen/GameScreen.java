@@ -168,7 +168,7 @@ public class GameScreen implements Screen {
         initializeMap(mapLines); // Centralized parsing and validation
         this.map = new GameMap(game);
 
-        this.player = new Player(this.world, MapParser.getEntry().x, MapParser.getEntry().y);
+//        this.player = new Player(this.world, MapParser.getEntry().x, MapParser.getEntry().y);
 
         this.mapCamera = new OrthographicCamera();
         this.viewport = new ExtendViewport(800, 600, mapCamera);
