@@ -139,7 +139,29 @@ public class GameScreen implements Screen {
         // Clear the screen with a black color
         ScreenUtils.clear(0, 0, 0, 1);
 
+        // Update the camera's matrices
+        camera.update();
+        // Set the batch's projection matrix to the camera's combined matrix
+        batch.setProjectionMatrix(viewport.getCamera().combined);
 
+        if(!gamePause) {
+
+            if(time < 0){
+                game.goToGameOverScreen(score,time);
+                return;
+            }
+
+        }
+
+        // Check for collisions between objects
+        for(Entity obj : objects){
+            for(Entity otherObj: objects){
+                if(obj == otherObj){
+                    continue; // Skip if the objects are the same
+                }
+                // Additional collision logic can be added here
+            }
+        }
 
     }
 

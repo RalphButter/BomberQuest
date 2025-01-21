@@ -21,6 +21,8 @@ public class BomberQuestGame extends Game {
     // Screens for different game states
     private GameScreen gameScreen;
     private MenuScreen menuScreen;
+    private WinScreen winScreen;
+    private GameOverScreen gameOverScreen;
 
     /**
      * Sprite Batch for rendering game elements.
@@ -126,12 +128,12 @@ public class BomberQuestGame extends Game {
     /**
      * Called when the player loses all lives. Switches to the GameOver screen.
      */
-    public void gameOver() {
-        this.setScreen(new GameOverScreen(this)); // Set the current screen to GameOverScreen
-        if (gameScreen != null) {
-            gameScreen.dispose(); // Dispose the game screen if it exists
-            gameScreen = null;
+    public void gameOver(int score,float time) {
+        //Necessary to be safe
+        if (gameOverScreen == null) {
+            gameOverScreen = new GameOverScreen(this,score,time);
         }
+        this.setScreen(gameOverScreen); //Necessary to switch to gameOverScreen
     }
 
     /**
@@ -214,6 +216,23 @@ public class BomberQuestGame extends Game {
         }
         spriteBatch.dispose(); // Dispose the spriteBatch
         skin.dispose(); // Dispose the skin
+    }
+
+
+    /**
+     * Switches to the game over screen.
+     *
+     * @param score The player's score at the time of game over.
+     * @param time The time elapsed in the game.
+     */
+    public void goToGameOverScreen(int score, float time) {
+        // Check if the game over screen is already created
+        if (gameOverScreen == null) {
+            // Create a new game over screen with the current score and time
+            gameOverScreen = new GameOverScreen(this, score, time);
+        }
+        // Set the current screen to the game over screen
+        this.setScreen(gameOverScreen);
     }
 }
 
