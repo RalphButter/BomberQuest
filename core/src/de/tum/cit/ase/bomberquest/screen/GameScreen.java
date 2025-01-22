@@ -38,6 +38,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import de.tum.cit.ase.bomberquest.util.Manager;
 
 //ICH WEIß NICHT; WARUM ES NICHT PUSHED
+//NEUER KOMMENTAR
 public class GameScreen implements Screen {
     //Core components
     // Reference to the main game object
