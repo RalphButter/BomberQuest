@@ -76,7 +76,7 @@ public class Credits implements Screen {
         viewport.apply();
 
         // Debug logs for scrollPosition and layout height
-        Gdx.app.log("DEBUG", "scrollPosition: " + scrollPosition + ", layout height: " + layout.height);
+        //Gdx.app.log("DEBUG", "scrollPosition: " + scrollPosition + ", layout height: " + layout.height);
 
         // Begin the local SpriteBatch to draw elements
         spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
