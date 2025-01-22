@@ -90,7 +90,7 @@ public class GameScreen implements Screen {
     Label exitUnlockLabel;
 
 
-
+    //Mergefehlerbehebung
 
 
     //For the Pause Menu
@@ -261,6 +261,7 @@ public class GameScreen implements Screen {
         Manager.getInstance().soundsManager.playGameMusic();
 
     }
+
 
 
 
