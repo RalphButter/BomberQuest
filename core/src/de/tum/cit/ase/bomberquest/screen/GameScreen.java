@@ -171,8 +171,8 @@ public class GameScreen implements Screen {
         //Initialize input processing for the game method
         initInput();
         followCamera = new FollowCamera(camera, map); // Create a FollowCamera to follow the player within the map
-        spawnPU();
 
+        spawnPU();
 
         score  = 0;
         time = 300;
@@ -211,15 +211,25 @@ public class GameScreen implements Screen {
 
 
 
-        // Create a table to hold the score information
-        Table scoreTable = new Table();
-        table.add(scoreTable).minHeight(10); // Add the score table to the main table with a minimum height
-        // Set the background of the score table to a stone texture
-        scoreTable.setBackground(new TextureRegionDrawable(new Texture("stone.png")));
-        // Create a label for the score text
-
+        // time
+        Table timeTable = new Table();
+        table.add(timeTable).minHeight(10);
+        timeTable.setBackground(new TextureRegionDrawable(new Texture("stone.png")));
         Label label3 = new Label("Time:",game.getSkin());
         timeLabel = new Label("120s",game.getSkin());
+        label3.setColor(Color.WHITE);
+        label3.setFontScale(0.6f);
+        timeLabel.setFontScale(0.6f);
+        timeLabel.setColor(Color.WHITE);
+        timeTable.add(label3).pad(10);
+        timeTable.add(timeLabel);
+
+
+
+        // score
+        Table scoreTable = new Table();
+        table.add(scoreTable).minHeight(10);
+        scoreTable.setBackground(new TextureRegionDrawable(new Texture("stone.png")));
 
         Label label2 = new Label("Score: ", game.getSkin());
         label2.setColor(Color.WHITE); // Set the color of the score text label to white
@@ -235,7 +245,6 @@ public class GameScreen implements Screen {
         // Create a table to hold the key information (bomb radius, max bombs, enemy count, and exit status)
         Table keyTable = new Table();
         table.add(keyTable).minHeight(10); // Add the key table to the main table with a minimum height
-
         // Set the background of the key table to a stone texture
         keyTable.setBackground(new TextureRegionDrawable(new Texture("stone.png")));
 
@@ -268,6 +277,7 @@ public class GameScreen implements Screen {
         // Create a table for the pause menu
         pauseMenu = new Table();
         pauseMenu.setFillParent(true); // Make the pause menu table fill the stage
+
         // Add a label to the pause menu with a message
         pauseMenu.add(new Label("Pause. Press 'ESC' to continue!", game.getSkin())).padBottom(20).row();
         // Create and add a button to load the game
@@ -317,8 +327,6 @@ public class GameScreen implements Screen {
 
         if(!gamePause) {
             // Create a list to hold newly added entities
-            List<Entity> addedObjects = new ArrayList<>();
-
             followCamera.follow(player.getPos());
 
             // update time,score,heart
@@ -349,7 +357,7 @@ public class GameScreen implements Screen {
                 // Change the color of the exit unlock label to green
                 exitUnlockLabel.setColor(Color.GREEN);
             }
-
+            List<Entity> addedObjects = new ArrayList<>();
             // Update the player's state and position based on the map
             player.update(map);
             // Check if the player can place more bombs

@@ -1,7 +1,9 @@
 package de.tum.cit.ase.bomberquest.screen;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -72,6 +74,7 @@ public class WinScreen implements Screen {
      */
     @Override
     public void show() {
+        Gdx.input.setInputProcessor(stage);
     }
 
     /**
@@ -81,6 +84,9 @@ public class WinScreen implements Screen {
      */
     @Override
     public void render(float delta) {
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clear the screen
+        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f)); // Update the stage
+        stage.draw(); // Draw the stage
     }
 
     /**
@@ -91,6 +97,7 @@ public class WinScreen implements Screen {
      */
     @Override
     public void resize(int width, int height) {
+        stage.getViewport().update(width, height, true); // Update the stage viewport on resize
     }
 
     /**
@@ -119,5 +126,6 @@ public class WinScreen implements Screen {
      */
     @Override
     public void dispose() {
+        stage.dispose();
     }
 }

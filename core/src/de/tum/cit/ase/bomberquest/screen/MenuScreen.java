@@ -40,7 +40,6 @@ public class MenuScreen implements Screen {
 
         // Create a viewport with the camera
         Viewport viewport = new ScreenViewport(camera);
-
         // Create a stage for UI elements with the viewport and the game's sprite batch
         stage = new Stage(viewport, game.getSpriteBatch());
 

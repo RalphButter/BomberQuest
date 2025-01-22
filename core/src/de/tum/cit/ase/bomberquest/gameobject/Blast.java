@@ -48,6 +48,5 @@ public class Blast extends Entity {
         batch.draw(t, pos.x ,pos.y ,sheet.getWidth()/2,sheet.getHeight()/2,sheet.getWidth(),sheet.getHeight(),1,1,0);
         batch.end();
     }
-
 }
 

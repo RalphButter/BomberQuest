@@ -220,7 +220,7 @@ public class SpriteSheet {
         this.loop = loop;
     }
 
-    public int getWidth() {
+    public float getWidth() {
         return width;
     }
 
@@ -228,7 +228,7 @@ public class SpriteSheet {
         this.width = width;
     }
 
-    public int getHeight() {
+    public float getHeight() {
         return height;
     }
 

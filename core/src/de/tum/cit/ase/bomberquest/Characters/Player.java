@@ -3,6 +3,7 @@ package de.tum.cit.ase.bomberquest.Characters;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -77,47 +78,40 @@ public class Player extends Entity {
         facingDir = new Vector2(1, 0);
     }
 
-    /**
-     * Creates a Box2D body to handle physics-based movement and collisions.
-     *
-     * @param world  The Box2D world to add the body to.
-     * @param startX The initial X position.
-     * @param startY The initial Y position.
-     * @return The created Box2D body.
-     */
-    private Body createHitbox(World world, float startX, float startY) {
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(startX, startY);
-        Body body = world.createBody(bodyDef);
-        CircleShape circle = new CircleShape();
-        circle.setRadius(0.3f);
-        body.createFixture(circle, 1.0f);
-        circle.dispose();
-        body.setUserData(this);
-        return body;
-    }
+
 
     /**
      * Handles key release events to stop movement.
      *
      * @param keycode The released key.
      */
+    //TODO I DON'T KNOW IF THIS IS CORRECT
     public void onKeyUp(int keycode) {
-        switch (keycode) {
+        switch(keycode) {
             case Input.Keys.A:
-                if (dir.x == -1) dir.x = 0;
+                if (dir.x == -1) {
+                    dir.x = 0 ;
+                }
                 break;
             case Input.Keys.D:
-                if (dir.x == 1) dir.x = 0;
+                if (dir.x == 1) {
+                    dir.x = 0;
+                }
                 break;
             case Input.Keys.W:
-                if (dir.y == 1) dir.y = 0;
+                if (dir.y == 1) {
+                    dir.y = 0;
+                }
                 break;
             case Input.Keys.S:
-                if (dir.y == -1) dir.y = 0;
+                if (dir.y == -1) {
+                    dir.y = 0;
+                }
+                break;
+            case Input.Keys.SPACE:
                 break;
         }
+
     }
 
     /**
@@ -169,17 +163,23 @@ public class Player extends Entity {
         }
 
         // Check for collisions with walls
-        for (int row = 0; row < map.getRows(); row++) {
+        for(int row = 0; row < map.getRows();row++) {
             for (int col = 0; col < map.getCols(); col++) {
-                GameObject gameObject = map.getCell(row, col);
-                if ((gameObject.cellType == CellType.INDESTRUCTIBLE_WALL ||
-                        gameObject.cellType == CellType.DESTRUCTIBLE_WALL) &&
-                        gameObject.getRect().collide(this.getRect())) {
+                GameObject gameObject = map.getCell(row,col);
+                if((gameObject.cellType == CellType.INDESTRUCTIBLE_WALL || gameObject.cellType == CellType.DESTRUCTIBLE_WALL) && gameObject.getRect().collide(this.getRect())){
                     pos = prevPos;
                     return;
                 }
             }
         }
+
+        if(pos.x < 0){
+            pos.x = 0;
+        }
+        if(pos.y < 0){
+            pos.y = 0;
+        }
+
     }
 
 
@@ -199,8 +199,49 @@ public class Player extends Entity {
 
     }
 
+    @Override
+    public void draw(Batch batch) {
+        // Begin the batch for drawing
+        batch.begin();
+        // Get the current frame of the sprite sheet
+        TextureRegion t = sheet.getCurrentFrame();
+        // Draw the current frame at the player's position with scaling and rotation
+        batch.draw(t, pos.x, pos.y, sheet.getWidth() / 2, sheet.getHeight() / 2, sheet.getWidth(), sheet.getHeight(), 1, 1, 0);
+        // End the batch after drawing
+        batch.end();
+    }
+
+
+    @Override
+    public Rectangle getRect(){
+        return new Rectangle(pos.x + 2,pos.y + 2,sheet.getWidth() - 4,sheet.getHeight()/2 - 4);
+    }
+
     public Vector2 getCenter(){
         return new Vector2(getRect().x + getRect().w/2,getRect().y + getRect().h/2);
     }
 
 }
+
+
+
+/**
+ //     * Creates a Box2D body to handle physics-based movement and collisions.
+ //     *
+ //     * @param world  The Box2D world to add the body to.
+ //     * @param startX The initial X position.
+ //     * @param startY The initial Y position.
+ //     * @return The created Box2D body.
+ //     */
+//    private Body createHitbox(World world, float startX, float startY) {
+//        BodyDef bodyDef = new BodyDef();
+//        bodyDef.type = BodyDef.BodyType.DynamicBody;
+//        bodyDef.position.set(startX, startY);
+//        Body body = world.createBody(bodyDef);
+//        CircleShape circle = new CircleShape();
+//        circle.setRadius(0.3f);
+//        body.createFixture(circle, 1.0f);
+//        circle.dispose();
+//        body.setUserData(this);
+//        return body;
+//    }
