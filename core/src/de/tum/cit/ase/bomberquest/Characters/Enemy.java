@@ -30,18 +30,31 @@ public class Enemy extends Entity {
     //TODO KONSTRUTUR ANGLEICHEN
     public Enemy(Vector2 pos, Map map) {
         super(pos, null);
-        sheet = new SpriteSheet(new Texture("enemy.png"),1,3);
+        // Initialize the sprite sheet for the enemy with the texture "enemy.png", 1 row, and 3 columns
+        sheet = new SpriteSheet(new Texture("enemy.png"), 1, 3);
+        // Set the sprite sheet to play the animation from frame 0 to frame 2 with a frame duration of 0.1 seconds, looping
         sheet.setPlay(0, 2, 0.1f, true);
+
+        // Initialize the pathfinding system with the current map
         pathFinding = new PathFinding(map);
 
+        // Get a random empty cell from the map to set as the target for the enemy
         GameObject randomGameObject = pathFinding.getMap().getRandomEmptyCell();
-        path = pathFinding.findPath((int)pos.x/16,(int)pos.y/16, randomGameObject.col, randomGameObject.row );
-        for(Vector2 v: path){
+        // Find a path from the enemy's current position to the target cell
+        path = pathFinding.findPath((int) pos.x / 16, (int) pos.y / 16, randomGameObject.col, randomGameObject.row);
+
+        // Iterate through the path (currently does nothing, but can be used for debugging or future logic)
+        for (Vector2 v : path) {
         }
+
+        // Set the current target index to 0, indicating the start of the path
         currentTargetIndex = 0;
+        // Set the enemy's movement speed
         speed = 0.25F;
-        target = new Vector2(pos.x ,pos.y);
-        vel = new Vector2(0,0);
+        // Initialize the target position to the enemy's current position
+        target = new Vector2(pos.x, pos.y);
+        // Initialize the velocity vector to zero
+        vel = new Vector2(0, 0);
     }
 
 
