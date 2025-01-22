@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 
 
-
+//WE CAN DELETE THIS CLASS
 public abstract class Character {
     private float x;  // X-coordinate of the character
     private float y;  // Y-coordinate of the character

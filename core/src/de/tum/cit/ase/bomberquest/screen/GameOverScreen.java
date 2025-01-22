@@ -33,12 +33,6 @@ public class GameOverScreen implements Screen  {
     // Stage manages the viewport and handles the drawing and input of UI elements
     private final Stage stage;
 
-    // SpriteBatch is used for drawing 2D graphics efficiently
-    private SpriteBatch batch; // SpriteBatch for drawing animations
-
-    // Music instance to play the game-over sound
-    private Music gameOverSound; // Music to play on game over
-
     /**
      * Constructor for MenuScreen. Sets up the camera, viewport, stage, and UI elements.
      *
@@ -53,7 +47,6 @@ public class GameOverScreen implements Screen  {
 
         // Create a viewport with the camera
         Viewport viewport = new ScreenViewport(camera);
-
         // Create a stage for UI elements with the viewport and sprite batch
         stage = new Stage(viewport, game.getSpriteBatch());
 
@@ -97,6 +90,8 @@ public class GameOverScreen implements Screen  {
 
     @Override
     public void show() {
+        // Set the input processor so the stage can receive input events
+        Gdx.input.setInputProcessor(stage);
 
     }
 
@@ -148,10 +143,6 @@ public class GameOverScreen implements Screen  {
     public void dispose() {
         // Dispose of the stage and SpriteBatch to free resources
         stage.dispose();
-        batch.dispose();
-
-        // Dispose of the game-over music to prevent memory leaks
-        gameOverSound.dispose();
     }
 }
 
