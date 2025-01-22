@@ -1,90 +1,41 @@
 package de.tum.cit.ase.bomberquest.screen;
 
 import com.badlogic.gdx.*;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTile;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import de.tum.cit.ase.bomberquest.BomberQuestGame;
 import de.tum.cit.ase.bomberquest.Characters.Entity;
 import de.tum.cit.ase.bomberquest.MapManager.Map;
-import de.tum.cit.ase.bomberquest.MapManager.MapReader;
 import de.tum.cit.ase.bomberquest.gameobject.*;
 import de.tum.cit.ase.bomberquest.gameobject.MaxBombPU;
 import de.tum.cit.ase.bomberquest.gameobject.MaxRadiusPU;
-import de.tum.cit.ase.bomberquest.map.GameMap;
-import de.tum.cit.ase.bomberquest.texture.Drawable;
-import de.tum.cit.ase.bomberquest.screen.Hud;
 
 
-import java.awt.*;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import de.tum.cit.ase.bomberquest.MapManager.MapParser;
 
-import java.util.Arrays;
 import java.util.List;
-import de.tum.cit.ase.bomberquest.MapManager.Node;
-import de.tum.cit.ase.bomberquest.map.Flowers;
-import de.tum.cit.ase.bomberquest.map.Chest;
+
 import de.tum.cit.ase.bomberquest.Characters.Enemy;
 import de.tum.cit.ase.bomberquest.Characters.Player;
-import com.badlogic.gdx.math.Rectangle;
 import de.tum.cit.ase.bomberquest.util.FollowCamera;
-import games.spooky.gdx.nativefilechooser.NativeFileChooser;
-import games.spooky.gdx.nativefilechooser.NativeFileChooserCallback;
-import games.spooky.gdx.nativefilechooser.NativeFileChooserConfiguration;
 
-import static de.tum.cit.ase.bomberquest.MapManager.MapParser.initializeMap;
 //I have to import this for the heart image
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.*;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
-import de.tum.cit.ase.bomberquest.BomberQuestGame;
-import de.tum.cit.ase.bomberquest.MapManager.Map;
-import de.tum.cit.ase.bomberquest.Characters.Player;
-import de.tum.cit.ase.bomberquest.util.FollowCamera;
 import de.tum.cit.ase.bomberquest.util.Manager;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class GameScreen implements Screen {
@@ -432,7 +383,7 @@ public class GameScreen implements Screen {
             if(objects.get(i).destroyFlag){
                 objects.remove(i);
             }
-        }
+        }}
 
             // Draw the map and player
             map.draw(batch, player);
@@ -467,7 +418,7 @@ public class GameScreen implements Screen {
 
             viewport.apply(false);
 
-    }
+
 
 
     }
@@ -624,6 +575,8 @@ public class GameScreen implements Screen {
 
     @Override
     public void resize(int i, int i1) {
+        camera.setToOrtho(false);
+        viewport.update(i,i1,false);
 
     }
 

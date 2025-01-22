@@ -13,6 +13,7 @@ import java.util.List;
  * Represents the game map.
  * Holds all the objects and entities in the game.
  */
+//THIS CLASS SERVES NO PURPOSE
 public class GameMap {
 
     // A static block is executed once when the class is referenced for the first time.
