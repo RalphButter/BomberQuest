@@ -185,13 +185,9 @@ public class Map {
                 // Handle different cell types
                 switch (gameObject.cellType) {
                     case ENEMY:
-                        // Randomly decide whether to add a Monkey or an Enemy
-                        if (random.nextInt(10) <= 3) {
-                            // Uncomment and add Monkey if needed
-                            // gameObjects.add(new Monkey(new Vector2(cell.col * 16, cell.row * 16), this));
-                        } else {
-                            entities.add(new Enemy(new Vector2(gameObject.col * 16, gameObject.row * 16), this));
-                        }
+                        // Add a new enemy entity at the specified grid position
+                        entities.add(new Enemy(new Vector2(gameObject.col * 16, gameObject.row * 16), this));
+
                         break;
                     case EXIT:
                         // Set the cell type to DESTRUCTIBLE_WALL for exit cells
