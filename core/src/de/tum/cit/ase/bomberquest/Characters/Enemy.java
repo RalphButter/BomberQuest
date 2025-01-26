@@ -17,7 +17,7 @@ import java.util.List;
 public class Enemy extends Entity {
 
 
-//    Pathfinding needs to be implemented
+    //    Pathfinding needs to be implemented
     SpriteSheet sheet;
     PathFinding pathFinding;
     List<Vector2> path;

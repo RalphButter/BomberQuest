@@ -328,91 +328,91 @@ public class GameScreen implements Screen {
             }
 
 
-        // Check for collisions between the player and other objects
-        for(Entity obj : objects){
-            if(obj instanceof Enemy && obj.getRect().collide(player.getRect())){
-                // If the player collides with an enemy, the player dies
-                playerDie();
-            }
-            else if(obj instanceof Exit && obj.getRect().collide(player.getRect())){
-                // If the player collides with the exit and can exit, go to the victory screen
-                if(canExit){
-                    score += 100;
-                    game.goToVictoryScreen(score, time);
+            // Check for collisions between the player and other objects
+            for(Entity obj : objects){
+                if(obj instanceof Enemy && obj.getRect().collide(player.getRect())){
+                    // If the player collides with an enemy, the player dies
+                    playerDie();
+                }
+                else if(obj instanceof Exit && obj.getRect().collide(player.getRect())){
+                    // If the player collides with the exit and can exit, go to the victory screen
+                    if(canExit){
+                        score += 100;
+                        game.goToVictoryScreen(score, time);
+                    }
+                }
+                else if(obj instanceof MaxRadiusPU && obj.getRect().collide(player.getRect())){
+                    // If the player collides with a MaxRadiusPU, increase the explosion radius
+                    obj.destroyFlag = true;
+                    score += 50;
+                    explodeRadius += 1;
+                    if(explodeRadius > 8){
+                        explodeRadius = 8;
+                    }
+                    Manager.getInstance().soundsManager.play("item", 1.0f);
+                }
+                else if(obj instanceof MaxBombPU && obj.getRect().collide(player.getRect())){
+                    // If the player collides with a MaxBombPU, increase the maximum number of bombs
+                    obj.destroyFlag = true;
+                    score += 50;
+                    maxBomb += 1;
+                    if(maxBomb > 8){
+                        maxBomb = 8;
+                    }
+                    Manager.getInstance().soundsManager.play("item", 1.0f);
                 }
             }
-            else if(obj instanceof MaxRadiusPU && obj.getRect().collide(player.getRect())){
-                // If the player collides with a MaxRadiusPU, increase the explosion radius
-                obj.destroyFlag = true;
-                score += 50;
-                explodeRadius += 1;
-                if(explodeRadius > 8){
-                    explodeRadius = 8;
+
+            // Check for collisions between objects
+            for(Entity obj : objects){
+                for(Entity otherObj: objects){
+                    if(obj == otherObj){
+                        continue; // Skip checking collision with itself
+                    }
+                    // Add collision handling logic here if needed
                 }
-                Manager.getInstance().soundsManager.play("item", 1.0f);
             }
-            else if(obj instanceof MaxBombPU && obj.getRect().collide(player.getRect())){
-                // If the player collides with a MaxBombPU, increase the maximum number of bombs
-                obj.destroyFlag = true;
-                score += 50;
-                maxBomb += 1;
-                if(maxBomb > 8){
-                    maxBomb = 8;
+
+            // Handle bomb explosions
+            for(Entity obj : objects){
+                if(obj instanceof Bombs && obj.destroyFlag){
+                    explode((Bombs) obj, addedObjects); // Explode the bomb and add resulting objects
                 }
-                Manager.getInstance().soundsManager.play("item", 1.0f);
             }
-        }
 
-        // Check for collisions between objects
-        for(Entity obj : objects){
-            for(Entity otherObj: objects){
-                if(obj == otherObj){
-                    continue; // Skip checking collision with itself
+            // Add newly created objects to the main objects list
+            objects.addAll(addedObjects);
+
+            // Remove objects that are marked for destruction
+            for(int i = 0; i < objects.size(); i++){
+                if(objects.get(i).destroyFlag){
+                    objects.remove(i);
                 }
-                // Add collision handling logic here if needed
-            }
-        }
+            }}
 
-        // Handle bomb explosions
-        for(Entity obj : objects){
-            if(obj instanceof Bombs && obj.destroyFlag){
-                explode((Bombs) obj, addedObjects); // Explode the bomb and add resulting objects
-            }
-        }
-
-        // Add newly created objects to the main objects list
-        objects.addAll(addedObjects);
-
-        // Remove objects that are marked for destruction
-        for(int i = 0; i < objects.size(); i++){
-            if(objects.get(i).destroyFlag){
-                objects.remove(i);
-            }
-        }}
-
-            // Draw the map and player
-            map.draw(batch, player);
+        // Draw the map and player
+        map.draw(batch, player);
 
 // Draw each entity within a certain distance from the player (fog of war)
-            for (Entity obj : objects) {
-                if (Vector2.dst(player.getPos().x, player.getPos().y, obj.getPos().x, obj.getPos().y) > 2000) { // fog of war
-                    continue;
-                }
-                obj.draw(batch);
+        for (Entity obj : objects) {
+            if (Vector2.dst(player.getPos().x, player.getPos().y, obj.getPos().x, obj.getPos().y) > 2000) { // fog of war
+                continue;
             }
+            obj.draw(batch);
+        }
 
-            // Draw the walls of the map
-            map.drawWall(batch, player);
+        // Draw the walls of the map
+        map.drawWall(batch, player);
 
-            // Draw the player
-            player.draw(batch);
+        // Draw the player
+        player.draw(batch);
 
-            // Update the stage with a maximum delta time of 1/30th of a second
-            stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        // Update the stage with a maximum delta time of 1/30th of a second
+        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
 
-            // Draw the stage
-            stage.draw();
-            // debug
+        // Draw the stage
+        stage.draw();
+        // debug
 //        Utils.getInstance().drawRect(player.getRect(),camera);
 //        for(int row = 0; row < map.getRows();row++) {
 //            for (int col = 0; col < map.getCols(); col++) {
@@ -421,7 +421,7 @@ public class GameScreen implements Screen {
 //            }
 //        }
 
-            viewport.apply(false);
+        viewport.apply(false);
 
 
 
@@ -520,7 +520,7 @@ public class GameScreen implements Screen {
 
 
 
-        int countEnemy(){
+    int countEnemy(){
         int count = 0;
         for (Entity obj : objects){
             //TODO IN CASE OF ERROR IF ENEMY IS CORRECT
@@ -571,7 +571,7 @@ public class GameScreen implements Screen {
         return count;
     }
 
-        @Override
+    @Override
     public void show() {
 
     }

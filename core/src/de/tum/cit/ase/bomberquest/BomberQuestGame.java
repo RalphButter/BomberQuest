@@ -145,8 +145,6 @@ public class BomberQuestGame extends Game {
         // No need to dispose here; it's handled in the overridden setScreen method
     }
 
-
-
     /**
      * Opens a file chooser dialog to select a file from the "maps" directory.
      * Only .properties files are accepted. The chosen file path is saved.
