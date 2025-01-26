@@ -26,36 +26,36 @@ public class Enemy extends Entity {
     float speed;
     int currentTargetIndex;
     int scaleX = 1;
+    float timeSinceLastPathUpdate = 0;
+
+    Player player;
 
     //TODO KONSTRUTUR ANGLEICHEN
-    public Enemy(Vector2 pos, Map map) {
+    public Enemy(Vector2 pos, Map map, Player player) {
         super(pos, null);
-        // Initialize the sprite sheet for the enemy with the texture "enemy.png", 1 row, and 3 columns
         sheet = new SpriteSheet(new Texture("enemy.png"), 1, 3);
-        // Set the sprite sheet to play the animation from frame 0 to frame 2 with a frame duration of 0.1 seconds, looping
         sheet.setPlay(0, 2, 0.1f, true);
 
-        // Initialize the pathfinding system with the current map
         pathFinding = new PathFinding(map);
 
-        // Get a random empty cell from the map to set as the target for the enemy
-        GameObject randomGameObject = pathFinding.getMap().getRandomEmptyCell();
-        // Find a path from the enemy's current position to the target cell
-        path = pathFinding.findPath((int) pos.x / 16, (int) pos.y / 16, randomGameObject.col, randomGameObject.row);
+        this.player = player;
 
-        // Iterate through the path (currently does nothing, but can be used for debugging or future logic)
-        for (Vector2 v : path) {
-        }
+        // Instead of random cell, get the player's row and column
+        int playerCol = (int)(player.pos.x / 16);
+        int playerRow = (int)(player.pos.y / 16);
 
-        // Set the current target index to 0, indicating the start of the path
+        // Now create path to the player's location
+        path = pathFinding.findPath(
+                (int) pos.x / 16, (int) pos.y / 16,
+                playerCol, playerRow
+        );
+
         currentTargetIndex = 0;
-        // Set the enemy's movement speed
-        speed = 0.25F;
-        // Initialize the target position to the enemy's current position
+        speed = 0.25f;
         target = new Vector2(pos.x, pos.y);
-        // Initialize the velocity vector to zero
         vel = new Vector2(0, 0);
     }
+
 
 
     @Override
@@ -68,37 +68,45 @@ public class Enemy extends Entity {
 
     @Override
     public void update() {
-        // Call the update method of the superclass
         super.update();
-        // Check if the enemy has reached the current target
+
+        // increment your timer
+        timeSinceLastPathUpdate += com.badlogic.gdx.Gdx.graphics.getDeltaTime();
+
+        // Recalculate path every 1 second, for example
+        if (timeSinceLastPathUpdate >= 1.0f) {
+            timeSinceLastPathUpdate = 0;
+
+            // Get player's row/col
+            int playerCol = (int)(player.pos.x / 16);
+            int playerRow = (int)(player.pos.y / 16);
+
+            // Re-do path:
+            path = pathFinding.findPath(
+                    (int) pos.x / 16, (int) pos.y / 16,
+                    playerCol, playerRow
+            );
+            currentTargetIndex = 0;
+        }
+
+        // Then proceed with your existing target-based movement
         if (Vector2.dst(pos.x, pos.y, target.x, target.y) <= 0.5) {
-            // Move to the next target in the path
-            currentTargetIndex += 1;
-            // If the end of the path is reached, find a new path
+            currentTargetIndex++;
             if (currentTargetIndex >= path.size()) {
-                GameObject randomGameObject = pathFinding.getMap().getRandomEmptyCell();
-                path = pathFinding.findPath((int) pos.x / 16, (int) pos.y / 16, randomGameObject.col, randomGameObject.row);
-                currentTargetIndex = 0;
+                // If you want them to stand still after reaching player,
+                // do so. Or recalc path again, etc.
                 return;
             }
-            // Update the target to the next position in the path
-            target = path.get(currentTargetIndex);
-            target = new Vector2(target.x * 16, target.y * 16);
-            // Calculate the direction and velocity towards the new target
+            target = path.get(currentTargetIndex).scl(16);
             Vector2 dir = new Vector2(target.x - pos.x, target.y - pos.y).nor();
-            vel = new Vector2(dir.x * speed, dir.y * speed);
+            vel = dir.scl(speed);
         }
-        // Update the position of the enemy
-        pos = pos.add(vel);
-        // Update the scale for the sprite based on the direction of movement
-        if (vel.x < 0) {
-            scaleX = -1;
-        } else {
-            scaleX = 1;
-        }
-        // Play the sprite sheet animation
+
+        pos.add(vel);
+        scaleX = vel.x < 0 ? -1 : 1;
         sheet.play();
     }
+
 
     @Override
     public void draw(Batch batch) {

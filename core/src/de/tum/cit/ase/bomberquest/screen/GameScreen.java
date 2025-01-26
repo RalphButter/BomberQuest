@@ -121,7 +121,8 @@ public class GameScreen implements Screen {
         viewport = new ScreenViewport(camera);
 
         batch = game.getSpriteBatch(); // Get the SpriteBatch from the game instance for rendering
-        map = new Map(mapPath, objects); // Create a new Map object with the specified map path and list of game entities
+        player = new Player(new Vector2(0,0));
+        map = new Map(mapPath, objects, player); // Create a new Map object with the specified map path and list of game entities
         player = new Player(new Vector2(map.getEntryCell().col * 16, map.getEntryCell().row * 16)); // Create a new Player object at the map's entry cell position
         //Initialize input processing for the game method
         initInput();
