@@ -1,7 +1,5 @@
 package de.tum.cit.ase.bomberquest.pathFinding;
 
-import de.tum.cit.ase.bomberquest.pathFinding.Node;
-
 import java.util.*;
 import com.badlogic.gdx.math.Vector2;
 import de.tum.cit.ase.bomberquest.gameobject.CellType;
@@ -115,7 +113,7 @@ public class PathFinding {
 //    Ralph bitte die Funktionen noch in der Map Klasse implementieren
 
 
-    void exploreNeightbour(Node node) {
+    void exploreNeighbour(Node node) {
         int dir_row[] = { -1, 1, 0, 0 };
         int dir_col[] = { 0, 0, -1, 1 };
         //int dir_row[4] = { -1, 1, 0, 0 };
@@ -247,7 +245,7 @@ public class PathFinding {
             }
 
             open_list.remove(i_min);
-            exploreNeightbour(currentNode);
+            exploreNeighbour(currentNode);
         }
         return new ArrayList<>();
     }
