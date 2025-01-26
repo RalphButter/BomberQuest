@@ -48,15 +48,13 @@ public class Map {
     int keyCount = 0;
     Vector2 playerPos;
 
-    Player player;
-
     /**
      * Constructs a new Map instance by loading the level data from a file.
      *
      * @param path The file path to the map properties file.
      * @param entities The list of entities (players, enemies) to be initialized.
      */
-    public Map(String path, List<Entity> entities, Player player) {
+    public Map(String path, List<Entity> entities) {
         mapSheet = new SpriteSheet(new Texture("basictiles.png"), 15, 8);
         Properties prop = new Properties();
         random = new Random();
@@ -64,7 +62,6 @@ public class Map {
         cols = 0;
         rows = 0;
 
-        this.player = player; // store the player's reference
         try {
             // Load the properties file containing the map data
             prop.load(new FileInputStream(path));
@@ -189,7 +186,7 @@ public class Map {
                 switch (gameObject.cellType) {
                     case ENEMY:
                         // Add a new enemy entity at the specified grid position
-                        entities.add(new Enemy(new Vector2(gameObject.col * 16, gameObject.row * 16), this, player));
+                        entities.add(new Enemy(new Vector2(gameObject.col * 16, gameObject.row * 16), this));
 
                         break;
                     case EXIT:
