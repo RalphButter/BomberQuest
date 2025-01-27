@@ -95,12 +95,6 @@ public class GameMap {
         }
     }
 
-    /** Returns the player on the map. */
-    //public Player getPlayer() {
-        //TODO CHECK IF I WORKED AROUND THIS ISSUE (I HOPE)
-        //return player;
-    //}
-
     /** Returns the chest on the map. */
     public Chest getChest() {
         return chest;
