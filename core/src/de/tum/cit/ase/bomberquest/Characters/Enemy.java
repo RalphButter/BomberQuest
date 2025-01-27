@@ -37,7 +37,6 @@ public class Enemy extends Entity {
 
         // Initialize the pathfinding system with the current map
         pathFinding = new PathFinding(map);
-
         // Get a random empty cell from the map to set as the target for the enemy
         GameObject randomGameObject = pathFinding.getMap().getRandomEmptyCell();
         // Find a path from the enemy's current position to the target cell
