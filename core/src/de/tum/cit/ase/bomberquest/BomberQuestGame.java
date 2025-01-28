@@ -304,7 +304,7 @@ public class BomberQuestGame extends Game {
      */
     private void loadCharacterAnimation() {
         System.out.println("Working Directory: " + new File(".").getAbsolutePath());
-        Texture walkSheet = new Texture(Gdx.files.internal("character.png"));
+        Texture walkSheet = new Texture(Gdx.files.internal("texture/character.png"));
 
         int frameWidth = 16;
         int frameHeight = 32;

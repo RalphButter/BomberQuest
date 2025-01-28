@@ -16,6 +16,6 @@ public class MaxBombPU extends Entity {
      * @param pos The position where the power-up will be placed.
      */
     public MaxBombPU(Vector2 pos) {
-        super(pos, new Texture("maxBombPU.png"));
+        super(pos, new Texture("texture/maxBombPU.png"));
     }
 }

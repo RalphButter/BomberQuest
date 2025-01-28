@@ -26,7 +26,7 @@ public class Blast extends Entity {
     public Blast(Vector2 pos) {
         super(pos, null);
 
-        sheet = new SpriteSheet(new Texture("explo1.png"),1,10);
+        sheet = new SpriteSheet(new Texture("texture/explo1.png"),1,10);
         sheet.setPlay(0,9,0.1f,false);
     }
 

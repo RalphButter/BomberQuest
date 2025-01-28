@@ -30,7 +30,7 @@ public class Bombs extends Entity {
     private boolean visible = true; // Toggle visibility
 
     public Bombs(Vector2 pos) {
-        super(pos, new Texture("bomb.png"));
+        super(pos, new Texture("texture/bomb.png"));
     }
 
     public Rectangle getRect() {

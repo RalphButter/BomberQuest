@@ -30,7 +30,7 @@ import java.util.*;
  * - Handling spatial relationships and interactions between objects.
  * - Providing utility methods for retrieving and modifying game objects.
  */
-public class Map {
+public class  Map {
     int rows; // Number of rows in the map grid
     int cols; // Number of columns in the map grid
     GameObject testGameObject; // Test object for debugging
@@ -55,7 +55,7 @@ public class Map {
      * @param entities The list of entities (players, enemies) to be initialized.
      */
     public Map(String path, List<Entity> entities) {
-        mapSheet = new SpriteSheet(new Texture("basictiles.png"), 15, 8);
+        mapSheet = new SpriteSheet(new Texture("texture/basictiles.png"), 15, 8);
         Properties prop = new Properties();
         random = new Random();
         emptyGameObjects = new ArrayList<>();

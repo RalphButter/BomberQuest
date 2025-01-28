@@ -16,9 +16,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 public enum SpriteSheet {
     
     /** The character spritesheet, which has a grid size of 16x32. */
-    CHARACTER("character.png", 16, 32),
+    CHARACTER("texture/character.png", 16, 32),
     /** The basic tiles spritesheet, which has a grid size of 16x16. */
-    BASIC_TILES("basictiles.png", 16, 16);
+    BASIC_TILES("texture/basictiles.png", 16, 16);
     
     private final Texture spritesheet;
     private final int width;

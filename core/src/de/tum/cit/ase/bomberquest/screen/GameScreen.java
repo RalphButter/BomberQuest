@@ -106,20 +106,14 @@ public class GameScreen implements Screen {
     public GameScreen(BomberQuestGame game, String mapPath) {
         this.game = game;
         objects = new ArrayList();
-
         // Create a new OrthographicCamera with the screen's width and height
         camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         // ExtendViewportPermalink
         viewport = new ScreenViewport(camera);
         // This line creates a new `Stage` object, which is used to manage and render UI elements in the game.
         stage = new Stage();
-
         // Retrieve the font from the game's skin
         font = game.getSkin().getFont("font");
-
-        // ExtendViewportPermalink
-        viewport = new ScreenViewport(camera);
-
         batch = game.getSpriteBatch(); // Get the SpriteBatch from the game instance for rendering
         map = new Map(mapPath, objects); // Create a new Map object with the specified map path and list of game entities
         player = new Player(new Vector2(map.getEntryCell().col * 16, map.getEntryCell().row * 16)); // Create a new Player object at the map's entry cell position
@@ -278,7 +272,7 @@ public class GameScreen implements Screen {
 
         // Update the camera's matrices
         camera.update();
-        // Set the batch's projection matrix to the camera's combined matrix
+        // Set the batch's projectifollowon matrix to the camera's combined matrix
         batch.setProjectionMatrix(viewport.getCamera().combined);
 
         if(!gamePause) {
@@ -363,16 +357,6 @@ public class GameScreen implements Screen {
                 }
             }
 
-            // Check for collisions between objects
-            for(Entity obj : objects){
-                for(Entity otherObj: objects){
-                    if(obj == otherObj){
-                        continue; // Skip checking collision with itself
-                    }
-                    // Add collision handling logic here if needed
-                }
-            }
-
             // Handle bomb explosions
             for(Entity obj : objects){
                 if(obj instanceof Bombs && obj.destroyFlag){
@@ -412,14 +396,6 @@ public class GameScreen implements Screen {
 
         // Draw the stage
         stage.draw();
-        // debug
-//        Utils.getInstance().drawRect(player.getRect(),camera);
-//        for(int row = 0; row < map.getRows();row++) {
-//            for (int col = 0; col < map.getCols(); col++) {
-//                Cell cell = map.getCell(row,col);
-//                Utils.getInstance().drawRect(cell.getRect(),camera);
-//            }
-//        }
 
         viewport.apply(false);
 

@@ -31,7 +31,7 @@ public class Enemy extends Entity {
     public Enemy(Vector2 pos, Map map) {
         super(pos, null);
         // Initialize the sprite sheet for the enemy with the texture "enemy.png", 1 row, and 3 columns
-        sheet = new SpriteSheet(new Texture("enemy.png"), 1, 3);
+        sheet = new SpriteSheet(new Texture("texture/enemy.png"), 1, 3);
         // Set the sprite sheet to play the animation from frame 0 to frame 2 with a frame duration of 0.1 seconds, looping
         sheet.setPlay(0, 2, 0.1f, true);
 

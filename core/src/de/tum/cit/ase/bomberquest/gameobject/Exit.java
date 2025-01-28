@@ -10,6 +10,6 @@ import de.tum.cit.ase.bomberquest.Characters.Entity;
 //TODO Eigentlich ist ja nur position und Texture relevant, hier müssen wir vereinfachen
 public class Exit extends Entity {
     public Exit(Vector2 pos) {
-        super(pos, new Texture("exit.png"));
+        super(pos, new Texture("texture/exit.png"));
     }
 }

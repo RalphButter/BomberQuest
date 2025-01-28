@@ -59,16 +59,16 @@ public class Player extends Entity {
         super(pos, null);
 
         // Load animations for walking in different directions
-        walkSheet_down = new SpriteSheet(new Texture("player_walk.png"), 4, 4);
+        walkSheet_down = new SpriteSheet(new Texture("texture/player_walk.png"), 4, 4);
         walkSheet_down.setPlay(0, 3, 0.1f, true);
 
-        walkSheet_right = new SpriteSheet(new Texture("player_walk.png"), 4, 4);
+        walkSheet_right = new SpriteSheet(new Texture("texture/player_walk.png"), 4, 4);
         walkSheet_right.setPlay(4, 7, 0.1f, true);
 
-        walkSheet_up = new SpriteSheet(new Texture("player_walk.png"), 4, 4);
+        walkSheet_up = new SpriteSheet(new Texture("texture/player_walk.png"), 4, 4);
         walkSheet_up.setPlay(8, 11, 0.1f, true);
 
-        walkSheet_left = new SpriteSheet(new Texture("player_walk.png"), 4, 4);
+        walkSheet_left = new SpriteSheet(new Texture("texture/player_walk.png"), 4, 4);
         walkSheet_left.setPlay(12, 15, 0.1f, true);
 
         sheet = walkSheet_right;
