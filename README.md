@@ -70,6 +70,7 @@ In Bomber Quest, players control a character who must navigate through a maze-li
 
 ### Project Structure
 
+- `core/src/de/tum/cit/ase/bomberquest/audio/`: Contains the class MusicTrack
 - `core/src/de/tum/cit/ase/bomberquest/Characters/`: Contains character classes such as Player and Enemy.
 - `core/src/de/tum/cit/ase/bomberquest/gameopbject/`: Contains texture and drawable classes.
 - `core/src/de/tum/cit/ase/bomberquest/map/`: Contains Chest, Flowers and the GameMap
