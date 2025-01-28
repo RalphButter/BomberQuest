@@ -7,78 +7,112 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.math.Vector2;
-
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
 import de.tum.cit.ase.bomberquest.util.Manager;
 import de.tum.cit.ase.bomberquest.util.Rectangle;
-import de.tum.cit.ase.bomberquest.util.SoundsManager;
 
-import com.badlogic.gdx.graphics.g2d.Batch;
-import java.awt.*;
-
+/**
+ * Represents a bomb that can be placed in the game.
+ * The bomb flashes at an increasing rate as it nears explosion and disappears upon detonation.
+ */
 public class Bombs extends Entity {
-    private float bombTick = 4f; // Time until the bomb explodes
-    private float bombTickInterval = bombTick;
-    private float flashInterval = 0.1f; // Initial flash interval
-    private float flashTimer = flashInterval; // Timer to control flashing
-    private boolean visible = true; // Toggle visibility
 
+    // Time until the bomb explodes
+    private float bombTick = 4f;
+
+    // Countdown timer for bomb explosion
+    private float bombTickInterval = bombTick;
+
+    // Interval for flashing effect before explosion
+    private float flashInterval = 0.1f;
+
+    // Timer to control flashing effect
+    private float flashTimer = flashInterval;
+
+    // Visibility flag used for flashing effect
+    private boolean visible = true;
+
+    /**
+     * Creates a bomb at the specified position.
+     *
+     * @param pos The position where the bomb is placed.
+     */
     public Bombs(Vector2 pos) {
         super(pos, new Texture("texture/bomb.png"));
     }
 
+    /**
+     * Returns the bounding rectangle for collision detection.
+     *
+     * @return A Rectangle representing the bomb's collision box.
+     */
     public Rectangle getRect() {
         return new Rectangle(pos.x, pos.y, texture.getWidth(), texture.getHeight());
     }
 
+    /**
+     * Updates the bomb's state, including countdown, flashing effect, and explosion handling.
+     * The bomb flashes faster as it nears explosion.
+     */
     public void update() {
-        // Decrease bombTickInterval based on delta time
-        if(isExplode()){
+        // If the bomb is set to explode, mark it for destruction
+        if (isExplode()) {
             destroyFlag = true;
         }
 
+        // Decrease countdown timer
         bombTickInterval -= Gdx.graphics.getDeltaTime();
 
-        // Calculate the new flash interval dynamically
+        // Adjust the flash interval dynamically as the explosion nears
         if (bombTickInterval > 0) {
             flashInterval = Math.max(0.1f, bombTickInterval / 10);
         }
 
-        // Update the flash timer and toggle visibility when the flash interval is reached
-        flashTimer -=  Gdx.graphics.getDeltaTime();
+        // Toggle visibility for flashing effect
+        flashTimer -= Gdx.graphics.getDeltaTime();
         if (flashTimer <= 0) {
             if (bombTickInterval < 3) {
-                // Play sound when flashing quickly (assumes a SoundManager class handles sounds)
-                Manager.getInstance().soundsManager.play("clickBomb",1.0f);
+                // Play ticking sound when flashing quickly
+                Manager.getInstance().soundsManager.play("clickBomb", 1.0f);
             }
-            visible = !visible; // Toggle visibility
-            flashTimer = flashInterval; // Reset the flash timer
+            visible = !visible; // Toggle bomb visibility
+            flashTimer = flashInterval; // Reset flash timer
         }
     }
 
-    public void draw(Batch batch){
-        if (bombTickInterval > 3){
+    /**
+     * Draws the bomb on the screen. The bomb may flash (disappear and reappear) as it nears explosion.
+     *
+     * @param batch The batch used for rendering.
+     */
+    public void draw(Batch batch) {
+        // Ensure bomb remains visible until flashing starts
+        if (bombTickInterval > 3) {
             visible = true;
         }
+
+        // Only draw the bomb if it's visible (flashing effect)
         if (visible) {
             batch.begin();
-            batch.draw(texture, pos.x, pos.y ,texture.getWidth(),texture.getHeight(),0,0,texture.getWidth(),texture.getHeight(),false,false);
+            batch.draw(texture, pos.x, pos.y,
+                    texture.getWidth(), texture.getHeight(),
+                    0, 0, texture.getWidth(), texture.getHeight(),
+                    false, false);
             batch.end();
         }
-
     }
 
-    public boolean isExplode(){
+    /**
+     * Checks if the bomb has reached its explosion time.
+     *
+     * @return True if the bomb should explode, false otherwise.
+     */
+    public boolean isExplode() {
         return bombTickInterval <= 0;
     }
 
-
+    /**
+     * Disposes of the bomb's texture to free up memory.
+     */
     public void dispose() {
         texture.dispose();
     }

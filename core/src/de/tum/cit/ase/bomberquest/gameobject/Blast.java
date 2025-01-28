@@ -16,37 +16,71 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Represents the explosion (blast) created by a bomb.
+ * Represents an explosion (blast) effect created when a bomb detonates.
+ * The blast is animated and exists for a short duration before being removed.
  */
-
-
 public class Blast extends Entity {
-    SpriteSheet sheet;
-    float  deathTime = 0;
+
+    // SpriteSheet used for the explosion animation
+    private SpriteSheet sheet;
+
+    // Timer to track the duration of the explosion before disappearing
+    private float deathTime = 0;
+
+    /**
+     * Creates a new blast at the specified position.
+     * The explosion effect is initialized with an animation.
+     *
+     * @param pos The position where the blast occurs.
+     */
     public Blast(Vector2 pos) {
         super(pos, null);
 
-        sheet = new SpriteSheet(new Texture("texture/explo1.png"),1,10);
-        sheet.setPlay(0,9,0.1f,false);
+        // Load explosion animation from sprite sheet
+        sheet = new SpriteSheet(new Texture("texture/explo1.png"), 1, 10);
+
+        // Set up the animation to play frames 0 to 9 at 0.1 seconds per frame, non-looping
+        sheet.setPlay(0, 9, 0.1f, false);
     }
 
+    /**
+     * Updates the blast animation and tracks its lifespan.
+     * The blast is marked for removal (`destroyFlag = true`) after 3 seconds.
+     */
     @Override
     public void update() {
         super.update();
+
+        // Advance the explosion animation
         sheet.play();
 
+        // Track elapsed time since the explosion started
         deathTime += Gdx.graphics.getDeltaTime();
-        if(deathTime >= 3){
+
+        // Mark the blast for destruction after 3 seconds
+        if (deathTime >= 3) {
             destroyFlag = true;
         }
     }
 
+    /**
+     * Draws the blast animation on the screen.
+     *
+     * @param batch The batch used for rendering.
+     */
     @Override
     public void draw(Batch batch) {
         batch.begin();
+
+        // Get the current frame of the explosion animation
         TextureRegion t = sheet.getCurrentFrame();
-        batch.draw(t, pos.x ,pos.y ,sheet.getWidth()/2,sheet.getHeight()/2,sheet.getWidth(),sheet.getHeight(),1,1,0);
+
+        // Draw the explosion at its position with proper scaling and centering
+        batch.draw(t, pos.x, pos.y,
+                sheet.getWidth() / 2, sheet.getHeight() / 2,
+                sheet.getWidth(), sheet.getHeight(),
+                1, 1, 0);
+
         batch.end();
     }
 }
-

@@ -5,38 +5,57 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 
-
-//WE CAN DELETE THIS CLASS
+/**
+ * Represents an abstract base class for all playable and non-playable characters in the game.
+ * This class provides movement handling, health management, bomb placement properties,
+ * and animations for different states.
+ *
+ * NOTE: Marked for deletion in the comments. If still used, it should serve as a base class
+ * for specific character types such as players and enemies.
+ */
 public abstract class Character {
-    private float x;  // X-coordinate of the character
-    private float y;  // Y-coordinate of the character
-    float prevX;    // Previous X-coordinate of the character
-    float prevY;   // Previous Y-coordinate of the character
-    private float speed;    // Speed of the character
-    private int health;     // Health of the character
-    private boolean alive;  // Flag indicating if the character is alive
+
+    // Character's position in the game world
+    private float x;
+    private float y;
+
+    // Character's previous position (used for movement tracking)
+    private float prevX;
+    private float prevY;
+
+    // Character attributes
+    private float speed; // Movement speed
+    private int health;  // Health level
+    private boolean alive; // Indicates if the character is alive
     private int bombCount; // Number of bombs the character can place
-    private int bombRange;  // Range of the bombs placed by the character
+    private int bombRange; // Range of bomb explosions
 
-    private boolean moving; // Flag indicating if the character is moving
-    private float stateTime;   // Time elapsed since the animation started
+    // Movement and animation properties
+    private boolean moving; // Indicates if the character is currently moving
+    private float stateTime; // Timer for animation playback
 
-    Texture texture;   // Texture for the character
+    // Texture representation of the character
+    private Texture texture;
 
-    private Rectangle rectangle;   // Represents the character's physical space in the game world (used for collision detection)
+    // Collision detection rectangle
+    private Rectangle rectangle;
 
-    private Direction currentDirection = Direction.STANDING; // Current direction of the character
-    private Animation<TextureRegion> walkUpAnimation;   // Animation for character movement in the up direction
-    private Animation<TextureRegion> walkDownAnimation; // Animation for character movement in the down direction
-    private Animation<TextureRegion> walkLeftAnimation; // Animation for character movement in the left direction
-    private Animation<TextureRegion> walkRightAnimation;   // Animation for character movement in the right direction
-    private Animation<TextureRegion> stadingAnimation; // Animation for character standing still
+    // Character's movement direction
+    private Direction currentDirection = Direction.STANDING;
+
+    // Character animations for movement
+    private Animation<TextureRegion> walkUpAnimation;
+    private Animation<TextureRegion> walkDownAnimation;
+    private Animation<TextureRegion> walkLeftAnimation;
+    private Animation<TextureRegion> walkRightAnimation;
+    private Animation<TextureRegion> standingAnimation;
 
     /**
-     * Constructor to initialize a Character object.
+     * Constructs a new Character at the specified position with a given hitbox.
      *
-     * @param x Initial X coordinate
-     * @param y Initial Y coordinate
+     * @param x         The initial X coordinate.
+     * @param y         The initial Y coordinate.
+     * @param rectangle The bounding rectangle for collision detection.
      */
     public Character(float x, float y, Rectangle rectangle) {
         this.x = x;
@@ -49,27 +68,42 @@ public abstract class Character {
         this.rectangle = rectangle;
     }
 
-    public void move(int x, int y) {  // Move the character to the specified position
+    /**
+     * Moves the character to the specified coordinates.
+     *
+     * @param x New X position.
+     * @param y New Y position.
+     */
+    public void move(int x, int y) {
         this.x = x;
         this.y = y;
     }
 
+    /** Increases the character's movement speed. */
     public void increaseSpeed(int speed) {
         this.speed += speed;
     }
 
+    /** Increases the character's health. */
     public void increaseHealth(int health) {
         this.health += health;
     }
 
+    /** Increases the number of bombs the character can place. */
     public void increaseBombCount(int bombCount) {
         this.bombCount += bombCount;
     }
 
+    /** Increases the explosion range of the character's bombs. */
     public void increaseBombRange(int bombRange) {
         this.bombRange += bombRange;
     }
 
+    /**
+     * Decreases the character's health. If health reaches 0, the character is marked as dead.
+     *
+     * @param health The amount of health to decrease.
+     */
     public void decreaseHealth(int health) {
         this.health -= health;
         if (this.health <= 0) {
@@ -77,170 +111,62 @@ public abstract class Character {
         }
     }
 
+    /** Marks the character as dead. */
     public void die() {
         this.alive = false;
     }
 
-    public float getX() {
-        return x;
-    }
-
-    public void setX(float x) {
-        this.x = x;
-    }
-
-    public float getY() {
-        return y;
-    }
-
-    public void setY(float y) {
-        this.y = y;
-    }
-
-    public float getSpeed() {
-        return speed;
-    }
-
-    public float getPrevX() {
-        return prevX;
-    }
-
-    public void setPrevX(float prevX) {
-        this.prevX = prevX;
-    }
-
-    public float getPrevY() {
-        return prevY;
-    }
-
-    public void setPrevY(float prevY) {
-        this.prevY = prevY;
-    }
-
-    public int getHealth() {
-        return health;
-    }
-
-    public boolean isAlive() {
-        return alive;
-    }
-
-    public int getBombCount() {
-        return bombCount;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    public void setSpeed(float speed) {
-        this.speed = speed;
-    }
-
+    // Position Getters and Setters
+    public float getX() { return x; }
+    public void setX(float x) { this.x = x; }
+    public float getY() { return y; }
+    public void setY(float y) { this.y = y; }
+    public float getPrevX() { return prevX; }
+    public void setPrevX(float prevX) { this.prevX = prevX; }
+    public float getPrevY() { return prevY; }
+    public void setPrevY(float prevY) { this.prevY = prevY; }
     public void setPosition(float x, float y) { this.x = x; this.y = y; }
+    public int[] getPosition() { return new int[]{(int) getX(), (int) getY()}; }
 
-    public int[] getPosition () { return new int[]{(int) getX(), (int) getY()}; }
+    // Character Stats Getters and Setters
+    public float getSpeed() { return speed; }
+    public void setSpeed(float speed) { this.speed = speed; }
+    public int getHealth() { return health; }
+    public void setHealth(int health) { this.health = health; }
+    public boolean isAlive() { return alive; }
+    public void setAlive(boolean alive) { this.alive = alive; }
+    public int getBombCount() { return bombCount; }
+    public void setBombCount(int bombCount) { this.bombCount = bombCount; }
+    public int getBombRange() { return bombRange; }
+    public void setBombRange(int bombRange) { this.bombRange = bombRange; }
 
-    public Texture getTexture() {
-        return texture;
-    }
+    // Animation and Movement State
+    public float getStateTime() { return stateTime; }
+    public void setStateTime(float stateTime) { this.stateTime = stateTime; }
+    public boolean isMoving() { return moving; }
+    public void setMoving(boolean moving) { this.moving = moving; }
 
-    public void setTexture(Texture texture) {
-        this.texture = texture;
-    }
+    // Texture Handling
+    public Texture getTexture() { return texture; }
+    public void setTexture(Texture texture) { this.texture = texture; }
 
-    public void setHealth(int health) {
-        this.health = health;
-    }
+    // Animations Getters and Setters
+    public Animation<TextureRegion> getWalkUpAnimation() { return walkUpAnimation; }
+    public void setWalkUpAnimation(Animation<TextureRegion> walkUpAnimation) { this.walkUpAnimation = walkUpAnimation; }
+    public Animation<TextureRegion> getWalkDownAnimation() { return walkDownAnimation; }
+    public void setWalkDownAnimation(Animation<TextureRegion> walkDownAnimation) { this.walkDownAnimation = walkDownAnimation; }
+    public Animation<TextureRegion> getWalkLeftAnimation() { return walkLeftAnimation; }
+    public void setWalkLeftAnimation(Animation<TextureRegion> walkLeftAnimation) { this.walkLeftAnimation = walkLeftAnimation; }
+    public Animation<TextureRegion> getWalkRightAnimation() { return walkRightAnimation; }
+    public void setWalkRightAnimation(Animation<TextureRegion> walkRightAnimation) { this.walkRightAnimation = walkRightAnimation; }
+    public Animation<TextureRegion> getStandingAnimation() { return standingAnimation; }
+    public void setStandingAnimation(Animation<TextureRegion> standingAnimation) { this.standingAnimation = standingAnimation; }
 
-    public void setAlive(boolean alive) {
-        this.alive = alive;
-    }
+    // Direction Getters and Setters
+    public Direction getCurrentDirection() { return currentDirection; }
+    public void setCurrentDirection(Direction currentDirection) { this.currentDirection = currentDirection; }
 
-    public void setBombCount(int bombCount) {
-        this.bombCount = bombCount;
-    }
-
-    public int getBombRange() {
-        return bombRange;
-    }
-
-    public void setBombRange(int bombRange) {
-        this.bombRange = bombRange;
-    }
-
-    public float getStateTime() {
-        return stateTime;
-    }
-
-    public void setStateTime(float stateTime) {
-        this.stateTime = stateTime;
-    }
-
-    public boolean isMoving() {
-        return moving;
-    }
-
-    public void setMoving(boolean moving) {
-        this.moving = moving;
-    }
-
-    public Animation<TextureRegion> getWalkUpAnimation() {
-        return walkUpAnimation;
-    }
-
-    public void setWalkUpAnimation(Animation<TextureRegion> walkUpAnimation) {
-        this.walkUpAnimation = walkUpAnimation;
-    }
-
-    public Animation<TextureRegion> getWalkDownAnimation() {
-        return walkDownAnimation;
-    }
-
-    public void setWalkDownAnimation(Animation<TextureRegion> walkDownAnimation) {
-        this.walkDownAnimation = walkDownAnimation;
-    }
-
-    public Animation<TextureRegion> getWalkLeftAnimation() {
-        return walkLeftAnimation;
-    }
-
-    public void setWalkLeftAnimation(Animation<TextureRegion> walkLeftAnimation) {
-        this.walkLeftAnimation = walkLeftAnimation;
-    }
-
-    public Animation<TextureRegion> getWalkRightAnimation() {
-        return walkRightAnimation;
-    }
-
-    public void setWalkRightAnimation(Animation<TextureRegion> walkRightAnimation) {
-        this.walkRightAnimation = walkRightAnimation;
-    }
-
-    public Direction getCurrentDirection() {
-        return currentDirection;
-    }
-
-    public void setCurrentDirection(Direction currentDirection) {
-        this.currentDirection = currentDirection;
-    }
-    public Rectangle getRectangle() {
-        return rectangle;
-    }
-
-    public Animation<TextureRegion> getStadingAnimation() {
-        return stadingAnimation;
-    }
-
-    public void setStadingAnimation(Animation<TextureRegion> stadingAnimation) {
-        this.stadingAnimation = stadingAnimation;
-    }
-
-    public void setRectangle(Rectangle rectangle) {
-        this.rectangle = rectangle;
-    }
+    // Collision Detection
+    public Rectangle getRectangle() { return rectangle; }
+    public void setRectangle(Rectangle rectangle) { this.rectangle = rectangle; }
 }
