@@ -11,6 +11,7 @@ Bomber Quest is an exciting and engaging game where players navigate through var
 - [Development](#development)
 - [Contributing](#contributing)
 - [License](#license)
+- [Bonus Points](#bonus-points)
 
 ## Installation
 
@@ -70,8 +71,8 @@ In Bomber Quest, players control a character who must navigate through a maze-li
 ### Project Structure
 
 - `core/src/de/tum/cit/ase/bomberquest/Characters/`: Contains character classes such as Player and Enemy.
-- `core/src/de/tum/cit/ase/bomberquest/map/`: Contains map-related classes.
-- `core/src/de/tum/cit/ase/bomberquest/texture/`: Contains texture and drawable classes.
+- `core/src/de/tum/cit/ase/bomberquest/MapManager/`: Contains map-related classes.
+- `core/src/de/tum/cit/ase/bomberquest/gameopbject/`: Contains texture and drawable classes.
 - `core/src/de/tum/cit/ase/bomberquest/screen/`: Contains screen classes for different game states.
 
 ### Key Classes
@@ -107,4 +108,26 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ---
 
+## Bonus Points
+1. Pause Screen with Option to Load a Map or Return to Menu
+The pause screen allows the player to pause the game and choose between loading a different map or returning to the main menu. This screen typically includes buttons for each option and handles the necessary transitions.  
+
+2. Semismart Enemies
+Semismart enemies have basic AI that allows them to navigate the game map, avoid obstacles, and pursue the player. We used A* to find the shortest path to the player or patrol predefined routes.  
+
+3. Credits Screen
+The credits screen displays information about the game's developers, contributors, and any other acknowledgments. It is accessible from the main menu.  
+
+4. Point System + Heart System in HUD
+The point system tracks the player's score based on their actions, such as getting a PowerUp. 
+The heart system represents the player's health, with each heart indicating a life. Both systems are displayed in the HUD (Heads-Up Display) to provide real-time feedback to the player.  
+
+5. Enemy Counter + Exit Lock in HUD
+The enemy counter in the HUD shows the number of remaining enemies in the current level. 
+The exit lock indicates whether the exit is locked or unlocked, often depending on whether all enemies have been defeated.  
+
+6. Menu Sound
+Menu sound refers to the background music or sound effects played while the player is navigating the game's menus. This enhances the user experience by providing audio feedback and setting the mood.
+
+---
 Thank you for playing Bomber Quest! We hope you enjoy the game as much as we enjoyed developing it.
