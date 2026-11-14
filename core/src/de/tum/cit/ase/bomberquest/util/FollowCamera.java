@@ -3,6 +3,7 @@ package de.tum.cit.ase.bomberquest.util;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import de.tum.cit.ase.bomberquest.MapManager.Map;
+import java.util.Vector;
 
 /**
  * The {@code FollowCamera} class is responsible for ensuring that the camera follows the player

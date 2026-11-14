@@ -124,7 +124,7 @@ public class GameScreen implements Screen {
         spawnPU();
 
         score  = 0;
-        time = 300;
+        time = 120;
         heart = 3;
         keyCount = 0;
         createUI();

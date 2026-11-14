@@ -31,7 +31,7 @@ public class BomberQuestGame extends Game {
 
     // Screens for different game states
     private GameScreen gameScreen;
-    private MenuScreen menuScreen;
+    private MenuScreen menuScreen; //UTTERLY POINTLESS BUT OKAY
     private WinScreen winScreen;
     private GameOverScreen gameOverScreen;
 
