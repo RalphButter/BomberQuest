@@ -97,7 +97,7 @@ BomberQuest/
 ## Credits
 
 Developed by **Ralph Butter** and **Jonas Wahl**  
-Technical University of Munich – Interactive Thinking and Programming, WS 2024/25
+Technical University of Munich, WS 2024/25
 
 ## License
 
