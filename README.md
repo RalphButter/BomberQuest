@@ -1,138 +1,112 @@
 # Bomber Quest
 
-Bomber Quest is an exciting and engaging game where players navigate through various levels, strategically placing bombs to defeat enemies and overcome obstacles. The game is developed using Java and the LibGDX framework, and it features a rich set of functionalities and an intuitive user interface.
+Bomber Quest is a 2D action game developed in Java with the [LibGDX](https://libgdx.com/) framework. Players navigate a tile-based maze, place bombs to destroy obstacles and defeat enemies, collect power-ups, and reach the exit before time runs out.
 
-## Table of Contents
-
-- [Installation](#installation)
-- [Gameplay](#gameplay)
-- [Features](#features)
-- [Controls](#controls)
-- [Development](#development)
-- [Contributing](#contributing)
-- [License](#license)
-- [Bonus Points](#bonus-points)
-
-## Installation
-
-### Prerequisites
-
-- Java Development Kit (JDK) 8 or higher
-- Gradle
-- Git
-
-### Steps
-
-1. Clone the repository:
-    ```sh
-    git clone https://github.com/RalphButter/BomberQuest.git
-    cd BomberQuest
-    ```
-
-2. Build the project using Gradle:
-    ```sh
-    ./gradlew build
-    ```
-
-3. Run the game:
-    ```sh
-    ./gradlew run
-    ```
-
-## Gameplay
-
-In Bomber Quest, players control a character who must navigate through a maze-like environment, placing bombs to destroy obstacles and defeat enemies. The goal is to clear all enemies and reach the exit to advance to the next level.
-
-### Objectives
-
-- Defeat all enemies in the level.
-- Avoid getting caught in bomb explosions.
-- Collect power-ups to enhance abilities.
-- Reach the exit to progress to the next level.
+Developed as a university project at the Technical University of Munich (TUM), 2024–2025.
 
 ## Features
 
-- **Multiple Levels**: Progress through increasingly challenging levels.
-- **Power-Ups**: Collect various power-ups to gain advantages.
-- **Enemies**: Face different types of enemies with unique behaviors.
-- **HUD**: A heads-up display showing important game information such as time, blast radius, concurrent bombs, and remaining enemies.
-- **Graphics**: Engaging 2D graphics with smooth animations.
-- **Sound**: Immersive sound effects and background music.
+The following features are verified from the source code:
+
+- **120-second countdown timer** – race to clear the level before time expires
+- **3-heart health system** – lose a heart on enemy contact or by your own blast; game over at zero hearts
+- **Bomb mechanics** – place bombs with configurable blast radius and concurrent bomb cap; explosions destroy destructible walls and kill enemies
+- **Two power-ups** – blast radius upgrade (`MaxRadiusPU`) and max concurrent bombs upgrade (`MaxBombPU`); both award points when collected
+- **A\* pathfinding enemies** – enemies navigate the maze autonomously using A* search to reach patrol targets
+- **Destructible and indestructible walls** – bombs carve paths through destructible blocks; indestructible walls stop blasts
+- **Locked exit** – the exit tile is locked until all enemies are defeated
+- **HUD** – live display of hearts, timer, score, blast radius, max bombs, enemy count, and exit status
+- **Pause screen** (ESC) – pause gameplay, load a different map via native file chooser, or return to the main menu
+- **Win screen and Game Over screen** – shown on level completion or when health/time runs out, displaying final score and time
+- **Credits screen** – accessible from the main menu
+- **Background music and sound effects** – separate tracks for menu and gameplay, plus sounds for bombs, blasts, item pickups, and death
+- **Two bundled maps** – `map-1.properties` and `map-2.properties` in `assets/maps/`
+
+## Technology Stack
+
+| Component | Version                  |
+|-----------|--------------------------|
+| Java      | 17                       |
+| LibGDX    | 1.13.0                   |
+| Backend   | LWJGL3                   |
+| Build     | Gradle (wrapper bundled) |
+
+## Requirements
+
+- **JDK 17** – the Gradle toolchain enforces `JavaLanguageVersion.of(17)`
+- Windows, macOS, or Linux desktop
+
+## Installation and Launch
+
+### Windows
+
+1. Clone the repository:
+   ```bat
+   git clone https://github.com/RalphButter/BomberQuest.git
+   cd BomberQuest
+   ```
+
+2. Run with the bundled Gradle wrapper (no separate Gradle or LibGDX installation needed):
+   ```bat
+   .\gradlew.bat :desktop:run
+   ```
+
+Dependencies are downloaded automatically on first run.
+
+### macOS / Linux
+
+```sh
+./gradlew :desktop:run
+```
+
+> macOS: the `-XstartOnFirstThread` JVM argument is added automatically by the Gradle task.
 
 ## Controls
 
-- **Arrow Keys**: Move the character.
-- **Space Bar**: Place a bomb.
-- **P**: Pause the game.
-- **R**: Restart the level.
+| Key           | Action                        |
+|---------------|-------------------------------|
+| W / A / S / D | Move up / left / down / right |
+| Space         | Place bomb                    |
+| ESC           | Pause / unpause               |
 
-## Development
+## Project Structure
 
-### Project Structure
+```
+BomberQuest/
+├── assets/                       # Runtime resources (working directory when the game runs)
+│   ├── maps/                     # Bundled map files (.properties)
+│   ├── skin/craftacular/         # Craftacular UI skin
+│   ├── texture/                  # Sprite sheets and textures
+│   ├── audio/                    # Background music
+│   └── sound/                    # Sound effects
+├── core/src/de/tum/cit/ase/bomberquest/
+│   ├── BomberQuestGame.java      # Main application class and screen manager
+│   ├── Characters/               # Player and Enemy entities
+│   ├── MapManager/               # Map loading and grid management
+│   ├── gameobject/               # Bombs, Blast, power-ups, Cell, CellType, CountdownTimer
+│   ├── map/                      # GameMap, Chest, Flowers
+│   ├── pathFinding/              # A* implementation (Node, PathFinding)
+│   ├── screen/                   # All game screens (Menu, Game, GameOver, Win, Credits)
+│   ├── texture/                  # SpriteSheet and animation helpers
+│   └── util/                     # FollowCamera, Manager, SoundsManager, Rectangle
+├── desktop/src/                  # Desktop launcher (LWJGL3)
+├── build.gradle                  # Multi-project Gradle configuration
+└── settings.gradle               # Gradle project settings
+```
 
-- `core/src/de/tum/cit/ase/bomberquest/audio/`: Contains the class MusicTrack
-- `core/src/de/tum/cit/ase/bomberquest/Characters/`: Contains character classes such as Player and Enemy.
-- `core/src/de/tum/cit/ase/bomberquest/gameopbject/`: Contains texture and drawable classes.
-- `core/src/de/tum/cit/ase/bomberquest/map/`: Contains Chest, Flowers and the GameMap
-- `core/src/de/tum/cit/ase/bomberquest/MapManager/`: Contains map-related classes.
-- `core/src/de/tum/cit/ase/bomberquest/pathFinding/`: Contains the Pathfinding and the Node class
-- `core/src/de/tum/cit/ase/bomberquest/screen/`: Contains screen classes for different game states.
-- `core/src/de/tum/cit/ase/bomberquest/texture/`: Contains texture classes for texture and animations handling
-- `core/src/de/tum/cit/ase/bomberquest/util/`: Contains certain util/auxiliary functions
+## Credits
 
-### Key Classes
-
-- **Player**: Represents the player character.
-- **Enemy**: Represents enemy characters.
-- **Hud**: Manages the heads-up display.
-- **GameScreen**: Manages the main game screen and game loop.
-
-### Building and Running
-
-To build and run the project, use the following Gradle commands:
-
-- **Build**: `./gradlew build`
-- **Run**: `./gradlew run`
-- **Test**: `./gradlew test`
-
-## Contributing
-
-We welcome contributions from the community! To contribute:
-
-1. Fork the repository.
-2. Create a new branch for your feature or bugfix.
-3. Make your changes and commit them with descriptive messages.
-4. Push your changes to your fork.
-5. Create a pull request to the main repository.
-
-Please ensure your code follows the project's coding standards and includes appropriate tests.
+Developed by **Ralph Butter** and **Jonas Wahl**  
+Technical University of Munich – Interactive Thinking and Programming, WS 2024/25
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+
+Third-party components included in this repository:
+- **LibGDX** (Apache License 2.0) – https://libgdx.com/
+- **Craftacular UI skin** by Raymond "Raeleus" Buckley – see `assets/skin/craftacular/`
 
 ---
 
-## Bonus Points
-1. Pause Screen with Option to Load a Map or Return to Menu
-The pause screen allows the player to pause the game and choose between loading a different map or returning to the main menu. This screen typically includes buttons for each option and handles the necessary transitions.  
-
-2. Semismart Enemies
-Semismart enemies have basic AI that allows them to navigate the game map, avoid obstacles, and pursue the player. We used A* to find the shortest path to the player or patrol predefined routes.  
-
-3. Credits Screen
-The credits screen displays information about the game's developers, contributors, and any other acknowledgments. It is accessible from the main menu.  
-
-4. Point System + Heart System in HUD
-The point system tracks the player's score based on their actions, such as getting a PowerUp. 
-The heart system represents the player's health, with each heart indicating a life. Both systems are displayed in the HUD (Heads-Up Display) to provide real-time feedback to the player.  
-
-5. Enemy Counter + Exit Lock in HUD
-The enemy counter in the HUD shows the number of remaining enemies in the current level. 
-The exit lock indicates whether the exit is locked or unlocked, often depending on whether all enemies have been defeated.  
-
-6. Menu Sound
-Menu sound refers to the background music or sound effects played while the player is navigating the game's menus. This enhances the user experience by providing audio feedback and setting the mood.
-
----
-Thank you for playing Bomber Quest! We hope you enjoy the game as much as we enjoyed developing it.
+*Thank you for playing Bomber Quest!*
