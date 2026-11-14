@@ -4,6 +4,10 @@ Bomber Quest is a 2D action game developed in Java with the [LibGDX](https://lib
 
 Developed as a university project at the Technical University of Munich (TUM), 2024–2025.
 
+The game's source code was written manually by the developers, without AI-generated code.
+
+The README documentation was revised on November 14, 2026, by Ralph Butter with assistance from Claude (Anthropic) to improve its structure, clarity, and presentation.
+
 ## Features
 
 The following features are verified from the source code:
